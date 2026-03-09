@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title>Cheese Platform v2.95</title>
+<title>Cheese Platform v3.0</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{--bg:#080b10;--surface:#0e1318;--surface2:#141c24;--surface3:#1a2430;--border:rgba(255,255,255,0.07);--accent:#f5c842;--accent2:#ff6b35;--text:#e8edf2;--muted:#5a6a7a;--green:#00e5a0;--red:#ff4d4d;}
@@ -122,12 +122,14 @@ body{font-family:Nunito,sans-serif;font-size:15px;background:var(--bg);color:var
 .sug-btn{font-size:.73rem;padding:5px 11px;border:1px solid var(--border);border-radius:20px;background:var(--surface2);color:var(--text);cursor:pointer;font-family:Nunito,sans-serif;transition:.2s;}
 .sug-btn:hover{border-color:var(--accent);color:var(--accent);}
 .msg{max-width:76%;padding:10px 14px;border-radius:16px;font-size:.86rem;line-height:1.65;word-break:break-word;animation:msgIn .22s ease;}
+.msg{animation:msgIn .22s cubic-bezier(.2,.8,.3,1) both;}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 .msg.user{align-self:flex-end;background:var(--accent);color:#080b10;border-radius:16px 16px 4px 16px;font-weight:600;}
-.msg.ai{align-self:flex-start;background:var(--surface2);border:1px solid var(--border);border-radius:16px 16px 16px 4px;white-space:pre-wrap;color:var(--text);}
+.msg.ai{align-self:flex-start;background:#1a2430;border:1px solid rgba(255,255,255,0.08);border-radius:16px 16px 16px 4px;white-space:pre-wrap;color:var(--text);}
 .msg.typing{align-self:flex-start;background:var(--surface2);border:1px solid var(--border);border-radius:16px 16px 16px 4px;padding:13px 16px;}
 .msg.err{align-self:center;background:rgba(255,77,77,.08);border:1px solid rgba(255,77,77,.15);color:#ff6b6b;font-size:.78rem;border-radius:10px;text-align:center;max-width:90%;}
 .typing-dots{display:inline-flex;gap:4px;align-items:center;}
-.typing-dots span{width:6px;height:6px;background:var(--muted);border-radius:50%;animation:dot 1.2s infinite;}
+.typing-dots span{width:7px;height:7px;background:var(--muted);border-radius:50%;animation:dot 1.2s infinite;}
 .typing-dots span:nth-child(2){animation-delay:.2s;}
 .typing-dots span:nth-child(3){animation-delay:.4s;}
 .msg-footer{display:flex;align-items:center;justify-content:space-between;margin-top:5px;gap:8px;}
@@ -318,6 +320,17 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
 </style>
 </head>
 <body>
+
+  <!-- SPLASH SCREEN -->
+  <div id="splashScreen" style="position:fixed;inset:0;background:#080b10;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <div style="animation:float 2s ease-in-out infinite;"><div style="font-size:4rem;">🧀</div></div>
+    <div style="font-family:Outfit,sans-serif;font-weight:800;font-size:1.5rem;color:#f5c842;margin-top:16px;">Cheese Platform</div>
+    <div style="font-size:.75rem;color:#5a6a7a;margin-top:4px;">v3.0 — K Studio</div>
+    <div style="margin-top:30px;width:160px;height:3px;background:#1a2430;border-radius:10px;overflow:hidden;">
+      <div id="splashBar" style="height:100%;width:0%;background:linear-gradient(90deg,#f5c842,#ff6b35);border-radius:10px;"></div>
+    </div>
+  </div>
+
 <div class="bg-glow one"></div>
 <div class="bg-glow two"></div>
 
@@ -336,7 +349,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
     <div class="auth-form active" id="loginForm">
       <div class="auth-error" id="loginError"></div>
       <div class="input-group"><label>Email</label><input type="email" id="loginEmail" placeholder="email@kamu.com"/></div>
-      <div class="input-group"><label>Password</label><input type="password" id="loginPass" placeholder="Password kamu" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      <div class="input-group"><label>Password</label><div style="position:relative;"><input type="password" id="loginPass" placeholder="Password kamu" onkeydown="if(event.key==='Enter')doLogin()" style="width:100%;padding-right:40px;box-sizing:border-box;"/><button type="button" onclick="togglePass('loginPass',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted);padding:0;line-height:1;">👁️</button></div></div>
       <button class="auth-btn" onclick="doLogin()">Masuk Sekarang</button>
       <div class="auth-divider">atau</div>
       <button class="google-btn" onclick="doGuestLogin()">👤 Lanjut sebagai Tamu</button>
@@ -346,7 +359,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
       <div class="auth-success" id="registerSuccess"></div>
       <div class="input-group"><label>Nama</label><input type="text" id="regName" placeholder="Nama kamu"/></div>
       <div class="input-group"><label>Email</label><input type="email" id="regEmail" placeholder="email@kamu.com"/></div>
-      <div class="input-group"><label>Password</label><input type="password" id="regPass" placeholder="Minimal 6 karakter" onkeydown="if(event.key==='Enter')doRegister()"/></div>
+      <div class="input-group"><label>Password</label><div style="position:relative;"><input type="password" id="regPass" placeholder="Minimal 6 karakter" onkeydown="if(event.key==='Enter')doRegister()" style="width:100%;padding-right:40px;box-sizing:border-box;"/><button type="button" onclick="togglePass('regPass',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted);padding:0;line-height:1;">👁️</button></div></div>
       <button class="auth-btn" onclick="doRegister()">Buat Akun</button>
       <div class="auth-divider">atau</div>
       <button class="google-btn" onclick="doGuestLogin()">👤 Lanjut sebagai Tamu</button>
@@ -407,7 +420,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
     <!-- HOME -->
     <div id="home" class="section active">
       <div class="welcome-banner">
-        <div class="welcome-tag">✨ Cheese Platform v2.9</div>
+        <div class="welcome-tag">✨ Cheese Platform v3.0</div>
         <h1>Halo, <span id="welcomeName">Bos</span>! 👋</h1>
         <p>Platform gaming & AI lokal terbaik. Semua fitur ada di sini!</p>
       </div>
@@ -425,15 +438,6 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
           <div id="streakCount" style="font-family:Outfit,sans-serif;font-weight:900;font-size:1.6rem;color:var(--accent);line-height:1;">1</div>
           <div style="font-size:.6rem;color:var(--muted);">hari</div>
         </div>
-      </div>
-
-      <!-- FITUR BARU 2: v3.0 Countdown -->
-      <div style="background:linear-gradient(135deg,rgba(88,101,242,.12),rgba(0,229,160,.06));border:1px solid rgba(88,101,242,.25);border-radius:14px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;">
-        <div>
-          <div style="font-family:Outfit,sans-serif;font-weight:800;font-size:.88rem;color:#5865f2;">🚀 Coming: v3.0</div>
-          <div style="font-size:.72rem;color:var(--muted);margin-top:2px;">AI Vision • Multiplayer • Store</div>
-        </div>
-        <div id="v3countdown" style="font-family:Outfit,sans-serif;font-weight:900;font-size:.85rem;color:#5865f2;text-align:right;"></div>
       </div>
 
       <div class="stats-grid">
@@ -463,7 +467,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
         <div class="qa-card" onclick="showSection('ai')"><div class="qa-icon" style="background:rgba(245,200,66,.1);">🤖</div><div><div style="font-weight:700;font-size:.88rem;margin-bottom:2px;">Chat AI</div><div style="font-size:.73rem;color:var(--muted);">Tanya Cheese AI apapun</div></div></div>
         <div class="qa-card" onclick="openGame('snake')"><div class="qa-icon" style="background:rgba(0,229,160,.1);">🐍</div><div><div style="font-weight:700;font-size:.88rem;margin-bottom:2px;">Snake</div><div style="font-size:.73rem;color:var(--muted);">Main sekarang!</div></div></div>
         <div class="qa-card" onclick="openGame('dino')"><div class="qa-icon" style="background:rgba(255,107,53,.1);">🦕</div><div><div style="font-weight:700;font-size:.88rem;margin-bottom:2px;">Dino Run</div><div style="font-size:.73rem;color:var(--muted);">Main sekarang!</div></div></div>
-        <div class="qa-card" onclick="openGame('quiz')"><div class="qa-icon" style="background:rgba(88,101,242,.15);">⚡</div><div><div style="font-weight:700;font-size:.88rem;margin-bottom:2px;">Quiz Gaul</div><div style="font-size:.73rem;color:var(--muted);">Uji pengetahuan lo!</div></div></div>
+        <div class="qa-card" onclick="openGame('quiz')"><div class="qa-icon" style="background:rgba(88,101,242,.15);">⚡</div><div><div style="font-weight:700;font-size:.88rem;margin-bottom:2px;">Quiz</div><div style="font-size:.73rem;color:var(--muted);">Uji pengetahuan lo!</div></div></div>
       </div>
     </div>
 
@@ -499,6 +503,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
             <button class="sug-btn" onclick="quickAsk('Tips investasi untuk pemula')">💰 Investasi</button>
           </div>
         </div>
+        <button id="scrollBtn" onclick="scrollToBottom()" style="display:none;position:absolute;bottom:80px;right:16px;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border);background:var(--surface2);color:var(--text);font-size:1rem;cursor:pointer;z-index:50;box-shadow:0 4px 12px rgba(0,0,0,.4);align-items:center;justify-content:center;">⬇️</button>
         <div class="chat-input-row">
           <button class="img-btn" onclick="document.getElementById('imgUpload').click()" title="Kirim Foto">📸</button>
           <input type="file" id="imgUpload" accept="image/*" style="display:none;" onchange="handleImgUpload(event)"/>
@@ -548,7 +553,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
           <div class="g-badge live">LIVE</div>
           <div style="padding:22px 18px;">
             <div style="font-size:1.9rem;margin-bottom:10px;">⚡</div>
-            <div style="font-family:Outfit,sans-serif;font-weight:700;font-size:.93rem;margin-bottom:3px;">Quiz Gaul</div>
+            <div style="font-family:Outfit,sans-serif;font-weight:700;font-size:.93rem;margin-bottom:3px;">Quiz</div>
             <div style="font-size:.73rem;color:var(--muted);">10 soal seru pengetahuan umum!</div>
           </div>
           <button class="play-btn" onclick="openGame('quiz')">▶ Main Sekarang</button>
@@ -598,21 +603,9 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
       </div>
       <div class="about-grid">
         <div class="about-card"><div style="font-size:1.5rem;margin-bottom:10px;">🤖</div><div style="font-family:Outfit,sans-serif;font-weight:700;font-size:.9rem;margin-bottom:5px;">Cheese AI</div><div style="font-size:.77rem;color:var(--muted);line-height:1.5;">AI gaul lokal dengan pengetahuan luas tentang dunia, politik, game, kesehatan, dan teknologi!</div></div>
-        <div class="about-card"><div style="font-size:1.5rem;margin-bottom:10px;">🎮</div><div style="font-family:Outfit,sans-serif;font-weight:700;font-size:.9rem;margin-bottom:5px;">4 Games Live</div><div style="font-size:.77rem;color:var(--muted);line-height:1.5;">Snake, Dino Run, Puzzle 15, dan Quiz Gaul! Semua bisa dimainkan sekarang!</div></div>
+        <div class="about-card"><div style="font-size:1.5rem;margin-bottom:10px;">🎮</div><div style="font-family:Outfit,sans-serif;font-weight:700;font-size:.9rem;margin-bottom:5px;">4 Games Live</div><div style="font-size:.77rem;color:var(--muted);line-height:1.5;">Snake, Dino Run, Puzzle 15, dan Quiz! Semua bisa dimainkan sekarang!</div></div>
         <div class="about-card"><div style="font-size:1.5rem;margin-bottom:10px;">💎</div><div style="font-family:Outfit,sans-serif;font-weight:700;font-size:.9rem;margin-bottom:5px;">Top Up</div><div style="font-size:.77rem;color:var(--muted);line-height:1.5;">Top Up ML & FF Diamond harga terbaik. Sistem QRIS segera hadir!</div></div>
         <div class="about-card"><div style="font-size:1.5rem;margin-bottom:10px;">🔐</div><div style="font-family:Outfit,sans-serif;font-weight:700;font-size:.9rem;margin-bottom:5px;">Akun Aman</div><div style="font-size:.77rem;color:var(--muted);line-height:1.5;">Sistem login/register aman dengan rate limiting & brute force protection.</div></div>
-      </div>
-      <div class="settings-card">
-        <div class="settings-card-title">🗺️ Roadmap</div>
-        <div style="margin-top:12px;">
-          <div class="roadmap-item"><div class="rm-dot done"></div><div><div style="font-weight:600;font-size:.84rem;">UI/UX Redesign</div><div style="font-size:.73rem;color:var(--muted);margin-top:2px;">Tampilan baru yang lebih keren ✅</div></div></div>
-          <div class="roadmap-item"><div class="rm-dot done"></div><div><div style="font-weight:600;font-size:.84rem;">Login & Register</div><div style="font-size:.73rem;color:var(--muted);margin-top:2px;">Sistem akun pengguna ✅</div></div></div>
-          <div class="roadmap-item"><div class="rm-dot done"></div><div><div style="font-weight:600;font-size:.84rem;">4 Games Live</div><div style="font-size:.73rem;color:var(--muted);margin-top:2px;">Snake, Dino, Puzzle, Quiz ✅</div></div></div>
-          <div class="roadmap-item"><div class="rm-dot done"></div><div><div style="font-weight:600;font-size:.84rem;">Search & D-Pad & Settings</div><div style="font-size:.73rem;color:var(--muted);margin-top:2px;">Fitur pencarian, kontrol game, dan pengaturan lengkap ✅</div></div></div>
-          <div class="roadmap-item"><div class="rm-dot wip"></div><div><div style="font-weight:600;font-size:.84rem;">Groq AI Integration</div><div style="font-size:.73rem;color:var(--muted);margin-top:2px;">Cheese AI powered by Groq — backend aman 🔒</div></div></div>
-          <div class="roadmap-item"><div class="rm-dot soon"></div><div><div style="font-weight:600;font-size:.84rem;">Top Up Beneran + QRIS</div><div style="font-size:.73rem;color:var(--muted);margin-top:2px;">Digiflazz + Tripay integration</div></div></div>
-          <div class="roadmap-item"><div class="rm-dot soon"></div><div><div style="font-weight:600;font-size:.84rem;">Domain Resmi</div><div style="font-size:.73rem;color:var(--muted);margin-top:2px;">cheeseplatform.my.id</div></div></div>
-        </div>
       </div>
     </div>
 
@@ -665,7 +658,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
             <span>⚔️ Battle 2D</span><span style="font-weight:700;color:var(--accent);" id="hs-battle">0</span>
           </div>
           <div style="display:flex;justify-content:space-between;align-items:center;font-size:.83rem;">
-            <span>⚡ Quiz Gaul</span><span style="font-weight:700;color:var(--accent);" id="hs-quiz">0</span>
+            <span>⚡ Quiz</span><span style="font-weight:700;color:var(--accent);" id="hs-quiz">0</span>
           </div>
         </div>
       </div>
@@ -789,6 +782,14 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
 
     <div id="settings" class="section">
       <div class="sec-title">Pengaturan ⚙️</div>
+
+      <div class="settings-card">
+        <div class="settings-card-title">🗺️ Roadmap</div>
+        <div style="margin-top:12px;">
+          <div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:.83rem;font-weight:700;">v3.0 — Splash + Animasi + Roadmap</span><span style="font-size:.72rem;color:var(--green);font-weight:700;">✅ Live</span></div><div style="height:6px;background:var(--surface3);border-radius:10px;overflow:hidden;"><div style="height:100%;width:100%;background:var(--green);border-radius:10px;"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:.83rem;font-weight:700;">v3.1 — Gemini AI + Global Rating</span><span style="font-size:.72rem;color:#5865f2;font-weight:700;">70%</span></div><div style="height:6px;background:var(--surface3);border-radius:10px;overflow:hidden;"><div style="height:100%;width:70%;background:#5865f2;border-radius:10px;animation:pulse 1.5s infinite;"></div></div></div>
+        </div>
+      </div>
       <div class="sec-sub">Kustomisasi Cheese Platform sesuai selera lo!</div>
 
       <!-- API KEY -->
@@ -867,8 +868,8 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
       <div class="settings-card">
         <div class="settings-card-title">ℹ️ Info Aplikasi</div>
         <div style="display:flex;flex-direction:column;gap:8px;font-size:.82rem;">
-          <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Versi</span><span style="font-weight:700;color:var(--accent);">v2.95</span></div>
-          <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Build</span><span style="font-weight:600;">2026.03b</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Versi</span><span style="font-weight:700;color:var(--accent);">v3.0</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Build</span><span style="font-weight:600;">2026.03c</span></div>
           <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">AI Engine</span><span style="font-weight:600;">Groq LLaMA 3.3</span></div>
           <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Developer</span><span style="font-weight:600;">K Studio 🧀</span></div>
           <div style="height:1px;background:var(--border);margin:4px 0;"></div>
@@ -1008,7 +1009,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
 // BACKEND URL — ganti dengan URL Cloudflare Worker lo!
 // Contoh: 'https://cheese-api.namalo.workers.dev'
 // ============================================================
-var BACKEND_URL = 'https://wise-spider-27.k-studio1.deno.net'; // <-- GANTI INI
+var BACKEND_URL = 'https://wise-spider-27.k-studio1.deno.net';
 
 var API_KEY = ''; // Tidak dipakai lagi — API key aman di backend
 var soundOn = true;
@@ -1024,7 +1025,7 @@ var gameScore = 0;
 
 // AI Settings defaults
 var aiSettings = {
-  style: 'gaul',
+  style: 'formal',
   nickname: 'Cheese AI',
   emoji: true,
   accent: '#f5c842',
@@ -1098,7 +1099,7 @@ function renderStyleGridPers() {
   var grid = document.getElementById('styleGridPers');
   if(!grid) return;
   var styles = [
-    {id:'gaul', label:'Gaul 🤙', desc:'Bahasa santai'},
+    {id:'gaul', label:'Gaul 🤙', desc:'Bahasa Indonesia gaul'},
     {id:'santai', label:'Santai 😊', desc:'Ramah & casual'},
     {id:'formal', label:'Formal 👔', desc:'Profesional'},
     {id:'lucu', label:'Lucu 😂', desc:'Humoris'},
@@ -1432,7 +1433,7 @@ var searchData = [
   {icon:'🐍',title:'Snake',sub:'Main game Snake',go:function(){openGame('snake');}},
   {icon:'🦕',title:'Dino Run',sub:'Main game Dino',go:function(){openGame('dino');}},
   {icon:'🧩',title:'Puzzle',sub:'Main game Puzzle',go:function(){openGame('puzzle');}},
-  {icon:'⚡',title:'Quiz Gaul',sub:'Main Quiz',go:function(){openGame('quiz');}},
+  {icon:'⚡',title:'Quiz',sub:'Main Quiz',go:function(){openGame('quiz');}},
   {icon:'💎',title:'Top Up ML',sub:'Mobile Legends Diamond',go:function(){showSection('topup');}},
   {icon:'🔥',title:'Top Up FF',sub:'Free Fire Diamond',go:function(){showSection('topup');}},
   {icon:'👤',title:'Profil',sub:'Lihat akun kamu',go:function(){showSection('profile');}},
@@ -1440,6 +1441,10 @@ var searchData = [
   {icon:'📞',title:'Contact',sub:'Hubungi kami',go:function(){showSection('contact');}},
   {icon:'⚙️',title:'Pengaturan',sub:'Konfigurasi platform',go:function(){showSection('settings');}},
   {icon:'🎙️',title:'AI Podcast',sub:'Generate podcast AI',go:function(){showSection('podcast');}},
+  {q:"Apa nama AI chatbot buatan Anthropic?",opts:["ChatGPT","Gemini","Claude","Copilot"],ans:2},
+  {q:"Siapa penyanyi 'Hati-Hati di Jalan'?",opts:["Hindia","Tulus","Rizky Febian","Pamungkas"],ans:0},
+  {q:"Apa kepanjangan dari 'Wi-Fi'?",opts:["Wireless Fidelity","Wide Frequency","Wireless Frequency","Wide Fidelity"],ans:0},
+  {q:"Game FPS legendaris buatan Valve?",opts:["Call of Duty","Battlefield","Counter-Strike","Rainbow Six"],ans:2},
 ];
 
 var searchGoFns = [];
@@ -1651,9 +1656,9 @@ function quickAsk(t) {
 function getSystemPrompt() {
   var nm = aiSettings.nickname || 'Cheese AI';
   var styles = {
-    gaul:   'Kamu adalah '+nm+', asisten super gaul Indonesia. Gunakan bahasa gaul: "bos", "gue", "lo", "wkwk", "gas", "mantul". Banyak pakai emoji.'+(!aiSettings.emoji?' (Jangan pakai emoji)':''),
+    gaul:   'Kamu adalah '+nm+', asisten AI dengan bahasa Indonesia gaul dan santai. Gunakan kata sehari-hari yang natural.'+(!aiSettings.emoji?' (Jangan pakai emoji)':''),
     santai: 'Kamu adalah '+nm+', asisten santai dan ramah. Bahasa Indonesia casual.'+(!aiSettings.emoji?' Jangan pakai emoji.':''),
-    formal: 'Kamu adalah '+nm+', asisten profesional. Gunakan bahasa Indonesia formal dan sopan. Hindari slang.'+(!aiSettings.emoji?' Jangan pakai emoji.':''),
+    formal: 'Kamu adalah '+nm+', asisten AI profesional. Jawab dengan bahasa Indonesia yang baik, jelas, dan informatif. Seperti AI asisten pada umumnya.'+(!aiSettings.emoji?' Jangan pakai emoji.':''),
     lucu:   'Kamu adalah '+nm+', asisten super humoris. Selalu sisipkan humor/jokes di setiap jawaban.'+(!aiSettings.emoji?' Jangan pakai emoji.':''),
     singkat:'Kamu adalah '+nm+'. Jawab singkat, padat, maksimal 3 kalimat.'+(!aiSettings.emoji?' Jangan pakai emoji.':'')
   };
@@ -1693,20 +1698,26 @@ async function sendMessage() {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        messages: chatHistory,
-        system: getSystemPrompt(),
-        max_tokens: 1024,
-        temperature: 0.85
+        messages: (function(){
+          var sys = getSystemPrompt();
+          var hist = chatHistory.slice();
+          if(hist.length && hist[0].role === 'user') {
+            hist[0] = {role:'user', content: sys + '\n\n' + hist[0].content};
+          } else {
+            hist.unshift({role:'user', content: sys});
+          }
+          return hist;
+        })(),
+        max_tokens: 1024
       })
     });
     var data = await res.json();
     if(typingEl && typingEl.parentNode) typingEl.remove();
     if(data.error) {
       chatHistory.pop();
-      addMsg('Error: ' + data.error.message, 'err');
+      addMsg('Error: ' + (data.error.message || data.error || 'Unknown error'), 'err');
     } else {
-      var reply = data.choices[0].message.content;
+      var reply = data.reply || (data.choices && data.choices[0] ? data.choices[0].message.content : '');
       chatHistory.push({role:'assistant', content:reply});
       addMsg(reply, 'ai');
       saveChatHistory();
@@ -1716,7 +1727,7 @@ async function sendMessage() {
   } catch(e) {
     if(typingEl && typingEl.parentNode) typingEl.remove();
     chatHistory.pop();
-    addMsg('Koneksi gagal bos! Cek internet kamu. 😅', 'err');
+    addMsg('AI lagi sibuk bos, coba lagi sebentar! 🙏', 'err');
   }
   if(false) { // offline brain tetap ada sebagai fallback
     // Offline brain
@@ -1960,7 +1971,7 @@ function openGame(type) {
   localStorage.setItem('cheeseStats', JSON.stringify(stats));
   document.getElementById('gamesPlayed').textContent = stats.games;
   currentGame = type; gameScore = 0;
-  var titles = {snake:'🐍 Snake', dino:'🦕 Dino Run', puzzle:'🧩 Puzzle 15', quiz:'⚡ Quiz Gaul'};
+  var titles = {snake:'🐍 Snake', dino:'🦕 Dino Run', puzzle:'🧩 Puzzle 15', quiz:'⚡ Quiz'};
   document.getElementById('gameModalTitle').textContent = titles[type] || type;
   document.getElementById('gameModal').classList.add('open');
   if(type==='snake') initSnake();
@@ -2024,7 +2035,7 @@ function showMotivasi(){
 
 // 3. RANDOM GAME SUGGESTION
 function suggestGame(){
-  var games = ['Snake', 'Dino Run', 'Battle 2D', 'Puzzle 15', 'Quiz Gaul'];
+  var games = ['Snake', 'Dino Run', 'Battle 2D', 'Puzzle 15', 'Quiz'];
   var g = games[Math.floor(Math.random()*games.length)];
   showToast('Coba main ' + g + ' sekarang!', 'info', 3000);
   sfxClick();
@@ -2100,7 +2111,7 @@ function checkStreakReward(){
 var OB_SLIDES = [
   {emoji:'🧀', title:'Selamat Datang!', desc:'Cheese Platform — tempat gaming, AI chat, dan top up game favorit lo semua dalam satu app!'},
   {emoji:'🤖', title:'Chat AI Canggih', desc:'Tanya apa aja ke Cheese AI! Mau belajar, ngobrol santai, atau minta bantuan coding — semua bisa!'},
-  {emoji:'🎮', title:'5 Mini Games', desc:'Main Snake, Dino Run, Battle 2D, Puzzle 15, dan Quiz Gaul. Kumpulin highscore lo!'},
+  {emoji:'🎮', title:'5 Mini Games', desc:'Main Snake, Dino Run, Battle 2D, Puzzle 15, dan Quiz. Kumpulin highscore lo!'},
   {emoji:'💎', title:'Top Up Murah', desc:'Top up diamond ML, UC PUBG, dan game lainnya dengan harga terjangkau langsung dari app ini!'},
   {emoji:'🚀', title:'Siap Jelajahi?', desc:'Gratis 10 pesan AI per 3 jam. Upgrade ke Cheese Full cuma Rp 2.000 untuk akses unlimited 24 jam!'},
 ];
@@ -2460,7 +2471,7 @@ function openGame(type){
   var modal = document.getElementById('gameModal');
   modal.classList.add('open');
 
-  var titles = {snake:'🐍 Snake', dino:'🦕 Dino Run', puzzle:'🧩 Puzzle 15', quiz:'⚡ Quiz Gaul'};
+  var titles = {snake:'🐍 Snake', dino:'🦕 Dino Run', puzzle:'🧩 Puzzle 15', quiz:'⚡ Quiz'};
   document.getElementById('gameModalTitle').textContent = titles[type] || type;
 
   // Stop any running game
@@ -2841,8 +2852,8 @@ function initBattle(canvas){
 
 
 // ===== PAYWALL SYSTEM =====
-var FREE_LIMIT = 30;
-var RESET_HOURS = 3;
+var FREE_LIMIT = 25;
+var RESET_HOURS = 3.5;
 var OWNER_WA = '6283182368363';
 var UNLOCK_CODES = ['CHEESE-FULL','CHEESE-2025','KEJU-PRO','KSTUDIO-VIP'];
 var TOPUP_CODES = ['KS-DQJ808-PA', 'KS-RUQ683-BP', 'KS-EDU589-RO', 'KS-VLM907-XC', 'KS-NEA962-AS', 'KS-UNT339-GG', 'KS-KWF183-AD', 'KS-AHP118-FH', 'KS-JGD173-LK', 'KS-XAD086-EO', 'KS-PWA693-AF', 'KS-JYG525-AB', 'KS-JSZ046-AM', 'KS-MSM648-LZ', 'KS-GLY591-OS', 'KS-DYS525-GR', 'KS-RJR199-YL', 'KS-YVA157-CB', 'KS-YDM162-CS', 'KS-TZS576-SS', 'KS-GGV129-IB', 'KS-RZZ437-GE', 'KS-DSJ163-VR', 'KS-ECX431-XW', 'KS-EDU310-LD', 'KS-MSK227-NF', 'KS-LXO235-AI', 'KS-CIK314-YP', 'KS-WQV062-CP', 'KS-WSX969-VN', 'KS-CWB059-JJ', 'KS-JPE224-JM', 'KS-BMH563-OO', 'KS-CYM688-FV', 'KS-TGR520-FH', 'KS-WOK802-NE', 'KS-QKQ264-TE', 'KS-QRU808-YX', 'KS-ENM926-ML', 'KS-MQF004-ON', 'KS-DDC351-SV', 'KS-CID627-TS', 'KS-TYP908-XW', 'KS-LHS989-FN', 'KS-RCD998-TB', 'KS-SEJ942-MS', 'KS-XOC964-QG', 'KS-NHE200-BY', 'KS-IZT160-QP', 'KS-ILI821-IU'];
@@ -3613,21 +3624,102 @@ function movePuzzle(i){
 // ---- QUIZ ----
 var quizQuestions, quizData;
 var quizBank=[
-  {q:"Ibu kota baru Indonesia adalah?",opts:["Jakarta","Surabaya","Nusantara","Bandung"],ans:2},
-  {q:"Presiden RI ke-8 adalah?",opts:["Joko Widodo","Prabowo Subianto","Anies Baswedan","Ganjar Pranowo"],ans:1},
-  {q:"Aplikasi edit video paling populer di HP?",opts:["Adobe Premiere","CapCut","iMovie","DaVinci"],ans:1},
-  {q:"Mobile Legends dibuat oleh perusahaan?",opts:["Tencent","Moonton","Garena","NetEase"],ans:1},
-  {q:"Kalori defisit artinya?",opts:["Makan lebih banyak dari kalori bakar","Kalori makan = kalori bakar","Makan lebih sedikit dari kalori bakar","Tidak makan sama sekali"],ans:2},
-  {q:"TDEE singkatan dari?",opts:["Total Daily Energy Expenditure","Total Diet Exercise Energy","Training Daily Energy Exercise","Total Diet Energy Expenditure"],ans:0},
-  {q:"Free Fire adalah game genre apa?",opts:["MOBA","Battle Royale","RPG","Strategy"],ans:1},
-  {q:"Bahasa pemrograman paling populer 2026?",opts:["Java","C++","Python","PHP"],ans:2},
-  {q:"Platform streaming musik paling populer?",opts:["Apple Music","YouTube Music","Spotify","JOOX"],ans:2},
-  {q:"Bitcoin diciptakan oleh?",opts:["Elon Musk","Satoshi Nakamoto","Vitalik Buterin","Bill Gates"],ans:1},
-  {q:"Instagram dimiliki oleh perusahaan?",opts:["Google","Twitter","Meta","Microsoft"],ans:2},
-  {q:"Protein ideal per kg BB untuk fitness?",opts:["0.5g","1.0g","1.6–2g","3g"],ans:2},
-  {q:"G20 adalah forum?",opts:["20 negara termiskin","20 negara ekonomi terbesar","20 negara Asia","20 negara NATO"],ans:1},
-  {q:"ChatGPT dibuat oleh perusahaan?",opts:["Google","Meta","OpenAI","Anthropic"],ans:2},
-  {q:"Shopee adalah perusahaan dari negara?",opts:["Indonesia","China","Singapura","Malaysia"],ans:2},
+  {q:"Planet terbesar di tata surya?",opts:["Bumi","Saturnus","Jupiter","Neptunus"],ans:2},
+  {q:"Berapa jumlah warna pelangi?",opts:["5","6","7","8"],ans:2},
+  {q:"Bahasa pemrograman yang dibuat oleh Guido van Rossum?",opts:["Java","Python","Ruby","Go"],ans:1},
+  {q:"Ibu kota Australia?",opts:["Sydney","Melbourne","Canberra","Brisbane"],ans:2},
+  {q:"Siapa penemu telepon?",opts:["Edison","Bell","Tesla","Marconi"],ans:1},
+  {q:"Apa kepanjangan dari HTML?",opts:["Hyper Text Markup Language","High Tech Modern Language","Home Tool Markup Language","Hyper Transfer Markup Logic"],ans:0},
+  {q:"Berapa jumlah provinsi di Indonesia (2024)?",opts:["34","36","37","38"],ans:3},
+  {q:"Game battle royale populer buatan Epic Games?",opts:["PUBG","Apex Legends","Fortnite","Warzone"],ans:2},
+  {q:"Aplikasi musik streaming terbesar di dunia?",opts:["Apple Music","Spotify","YouTube Music","Deezer"],ans:1},
+  {q:"Siapa CEO Tesla saat ini?",opts:["Bill Gates","Jeff Bezos","Elon Musk","Mark Zuckerberg"],ans:2},
+  {q:"CPU singkatan dari?",opts:["Central Processing Unit","Computer Personal Unit","Core Power Unit","Central Program Utility"],ans:0},
+  {q:"Mata uang Jepang?",opts:["Won","Yuan","Yen","Baht"],ans:2},
+  {q:"Berapa banyak string pada gitar standar?",opts:["4","5","6","7"],ans:2},
+  {q:"Siapa pencipta Facebook?",opts:["Steve Jobs","Bill Gates","Mark Zuckerberg","Larry Page"],ans:2},
+  {q:"Lagu 'Shape of You' dari?",opts:["Justin Bieber","Ed Sheeran","Bruno Mars","The Weeknd"],ans:1},
+  {q:"Apa nama OS buatan Apple untuk iPhone?",opts:["Android","Windows","iOS","HarmonyOS"],ans:2},
+  {q:"Benua terluas di dunia?",opts:["Amerika","Afrika","Asia","Eropa"],ans:2},
+  {q:"Siapa yang menemukan listrik?",opts:["Einstein","Newton","Franklin","Edison"],ans:2},
+  {q:"Apa itu RAM?",opts:["Random Access Memory","Read All Memory","Rapid Access Module","Run Access Memory"],ans:0},
+  {q:"Indonesia merdeka pada tahun?",opts:["1944","1945","1946","1947"],ans:1},
+  {q:"Game MOBA populer di mobile?",opts:["Free Fire","PUBG Mobile","Mobile Legends","COD Mobile"],ans:2},
+  {q:"YouTube dimiliki oleh?",opts:["Meta","Microsoft","Apple","Google"],ans:3},
+  {q:"Satuan kecepatan internet?",opts:["MB","Mbps","GHz","Hz"],ans:1},
+  {q:"Apa itu VPN?",opts:["Virtual Private Network","Video Processing Node","Visual Program Network","Verified Personal Node"],ans:0},
+  {q:"Siapa presiden pertama Indonesia?",opts:["Soeharto","Habibie","Soekarno","Megawati"],ans:2},
+  {q:"Bahasa resmi Brazil?",opts:["Spanyol","Portugis","Inggris","Prancis"],ans:1},
+  {q:"Planet terdekat dengan matahari?",opts:["Venus","Mars","Merkurius","Bumi"],ans:2},
+  {q:"Apa kepanjangan dari AI?",opts:["Automatic Intelligence","Artificial Intelligence","Advanced Interface","Automated Input"],ans:1},
+  {q:"Siapa yang menciptakan teori relativitas?",opts:["Newton","Darwin","Einstein","Hawking"],ans:2},
+  {q:"Aplikasi chat buatan Meta selain WhatsApp?",opts:["Telegram","Signal","Messenger","Line"],ans:2},
+  {q:"Berapa bit dalam 1 byte?",opts:["4","8","16","32"],ans:1},
+  {q:"Laut terluas di dunia?",opts:["Atlantik","Hindia","Arktik","Pasifik"],ans:3},
+  {q:"Apa nama karakter utama GTA V?",opts:["Niko Bellic","CJ","Trevor/Michael/Franklin","Tommy Vercetti"],ans:2},
+  {q:"OS Android dikembangkan oleh?",opts:["Apple","Samsung","Google","Microsoft"],ans:2},
+  {q:"Berapa jumlah pemain dalam satu tim sepak bola?",opts:["10","11","12","9"],ans:1},
+  {q:"Apa itu phishing?",opts:["Teknik memancing ikan","Serangan cyber curi data","Program antivirus","Jenis enkripsi"],ans:1},
+  {q:"Siapa penyanyi 'Blinding Lights'?",opts:["Drake","Travis Scott","The Weeknd","Post Malone"],ans:2},
+  {q:"Berapa lama satu hari di planet Mars?",opts:["22 jam","24 jam","24 jam 37 menit","26 jam"],ans:2},
+  {q:"Apa nama browser buatan Mozilla?",opts:["Chrome","Firefox","Safari","Opera"],ans:1},
+  {q:"Gunung tertinggi di Indonesia?",opts:["Rinjani","Semeru","Puncak Jaya","Kerinci"],ans:2},
+  {q:"Minecraft dibuat oleh?",opts:["EA","Ubisoft","Mojang","Valve"],ans:2},
+  {q:"Apa kepanjangan dari USB?",opts:["Universal Serial Bus","Ultra Speed Byte","Unified System Bridge","Universal Sync Board"],ans:0},
+  {q:"Berapa jumlah huruf alfabet Inggris?",opts:["24","25","26","27"],ans:2},
+  {q:"Siapa founder Amazon?",opts:["Elon Musk","Jeff Bezos","Bill Gates","Larry Ellison"],ans:1},
+  {q:"Apa arti 'open source'?",opts:["Software berbayar","Kode program terbuka","Aplikasi online","Program buatan pemerintah"],ans:1},
+  {q:"Negara dengan populasi terbesar di dunia?",opts:["Amerika","India","China","Indonesia"],ans:1},
+  {q:"Game battle royale buatan PUBG Corp?",opts:["Fortnite","Free Fire","PUBG","Apex Legends"],ans:2},
+  {q:"Siapa yang mendirikan Microsoft?",opts:["Steve Jobs","Bill Gates & Paul Allen","Mark Zuckerberg","Larry Page"],ans:1},
+  {q:"Apa itu SSD?",opts:["Super Speed Disk","Solid State Drive","System Storage Device","Secondary Sync Drive"],ans:1},
+  {q:"Danau terluas di Indonesia?",opts:["Danau Toba","Danau Singkarak","Danau Maninjau","Danau Poso"],ans:0},
+  {q:"Siapa karakter utama game God of War?",opts:["Kratos","Zeus","Ares","Thor"],ans:0},
+  {q:"Berapa Hz layar gaming yang umum?",opts:["30Hz","60Hz","120Hz","144Hz"],ans:3},
+  {q:"Aplikasi edit video populer di HP?",opts:["Photoshop","CapCut","Lightroom","Canva"],ans:1},
+  {q:"Apa nama mata uang kripto pertama?",opts:["Ethereum","Dogecoin","Bitcoin","Litecoin"],ans:2},
+  {q:"Siapa pencipta game Among Us?",opts:["Mojang","Innersloth","Epic Games","Valve"],ans:1},
+  {q:"Kecepatan cahaya sekitar?",opts:["100.000 km/s","300.000 km/s","500.000 km/s","1 juta km/s"],ans:1},
+  {q:"Apa nama layanan streaming film Netflix dalam bahasa?",opts:["StreamFlix","NetStream","Netflix","CineMax"],ans:2},
+  {q:"Sungai terpanjang di dunia?",opts:["Amazon","Mississippi","Nil","Yangtze"],ans:2},
+  {q:"Apa itu GPU?",opts:["General Processing Unit","Graphics Processing Unit","Global Program Utility","Game Power Unit"],ans:1},
+  {q:"Siapa yang menyanyikan 'Levitating'?",opts:["Ariana Grande","Dua Lipa","Billie Eilish","Olivia Rodrigo"],ans:1},
+  {q:"Free Fire dikembangkan oleh?",opts:["Tencent","Garena","PUBG Corp","Epic Games"],ans:1},
+  {q:"Apa kepanjangan dari URL?",opts:["Uniform Resource Locator","Universal Record Link","Unified Resource Layer","User Request Link"],ans:0},
+  {q:"Berapa jumlah nada dalam satu oktaf?",opts:["7","8","12","14"],ans:2},
+  {q:"Siapa pendiri Apple?",opts:["Bill Gates","Steve Jobs & Steve Wozniak","Elon Musk","Jeff Bezos"],ans:1},
+  {q:"Game RPG populer dari Hoyoverse?",opts:["Honor of Kings","PUBG","Genshin Impact","Clash of Clans"],ans:2},
+  {q:"Apa itu firewall?",opts:["Software untuk edit foto","Sistem keamanan jaringan","Aplikasi streaming","Browser internet"],ans:1},
+  {q:"Ibu kota Korea Selatan?",opts:["Busan","Seoul","Incheon","Daegu"],ans:1},
+  {q:"Siapa penulis novel Harry Potter?",opts:["Stephen King","J.K. Rowling","Tolkien","George R.R. Martin"],ans:1},
+  {q:"Apa kepanjangan dari API?",opts:["Application Programming Interface","Automatic Process Input","Advanced Program Integration","Application Proxy Interface"],ans:0},
+  {q:"Berapa jumlah bendera putih dan merah di bendera Indonesia?",opts:["Merah atas putih bawah","Putih atas merah bawah","Merah kiri putih kanan","Putih kiri merah kanan"],ans:0},
+  {q:"Siapa penyanyi 'Dynamite' yang viral?",opts:["EXO","BTS","BLACKPINK","Stray Kids"],ans:1},
+  {q:"Apa nama chip buatan Apple untuk iPhone?",opts:["Snapdragon","Dimensity","Exynos","A-series Bionic"],ans:3},
+  {q:"Game strategi populer di PC?",opts:["FIFA","Age of Empires","NBA 2K","Madden NFL"],ans:1},
+  {q:"Berapa jumlah planet di tata surya?",opts:["7","8","9","10"],ans:1},
+  {q:"Siapa CEO Meta (Facebook)?",opts:["Jeff Bezos","Tim Cook","Mark Zuckerberg","Satya Nadella"],ans:2},
+  {q:"Apa nama protokol keamanan website (HTTPS)?",opts:["Hyper Text Transfer Protocol Secure","High Tech Transfer Protocol System","Home Transfer Protocol Safe","Hyper Transfer Proxy Secure"],ans:0},
+  {q:"Bahasa pemrograman yang dipakai untuk web frontend?",opts:["Python","Java","JavaScript","C++"],ans:2},
+  {q:"Siapa founder Twitter/X?",opts:["Mark Zuckerberg","Jack Dorsey","Elon Musk","Evan Spiegel"],ans:1},
+  {q:"Berapa lama cahaya matahari sampai ke bumi?",opts:["1 menit","8 menit","30 menit","1 jam"],ans:1},
+  {q:"Apa nama karakter utama The Legend of Zelda?",opts:["Zelda","Link","Ganon","Sheik"],ans:1},
+  {q:"Framework CSS populer untuk web?",opts:["React","Vue","Tailwind","Angular"],ans:2},
+  {q:"Organ tubuh manusia yang paling besar?",opts:["Hati","Paru-paru","Kulit","Otak"],ans:2},
+  {q:"Apa nama tombol 'delete' di Mac?",opts:["Delete","Backspace","Clear","Erase"],ans:1},
+  {q:"Siapa penyanyi lagu 'Juicy Luicy'?",opts:["Hindia","Tulus","Pamungkas","Juicy Luicy"],ans:3},
+  {q:"Apa singkatan dari 'DNS'?",opts:["Dynamic Network System","Domain Name System","Data Node Server","Digital Name Service"],ans:1},
+  {q:"Berapa FPS yang nyaman untuk gaming?",opts:["15 FPS","30 FPS","60 FPS","10 FPS"],ans:2},
+  {q:"Siapa yang menyanyikan 'Riptide'?",opts:["Ed Sheeran","Vance Joy","John Mayer","James Bay"],ans:1},
+  {q:"Apa nama game online buatan Valve?",opts:["League of Legends","Dota 2","Smite","Heroes of the Storm"],ans:1},
+  {q:"RAM berapa yang standar untuk HP gaming?",opts:["2GB","4GB","8GB","1GB"],ans:2},
+  {q:"Apa bahasa resmi India?",opts:["Hindi & Inggris","Urdu","Bengali","Tamil"],ans:0},
+  {q:"Siapa yang membuat WhatsApp?",opts:["Mark Zuckerberg","Jan Koum & Brian Acton","Jack Dorsey","Kevin Systrom"],ans:1},
+  {q:"Apa nama chip AI buatan Google?",opts:["M-series","TPU","NPU","Tensor Core"],ans:1},
+  {q:"Berapa jumlah kartu dalam satu deck standar?",opts:["48","52","54","56"],ans:1},
+  {q:"Siapa penyanyi 'Flowers'?",opts:["Taylor Swift","Ariana Grande","Miley Cyrus","Selena Gomez"],ans:2},
+  {q:"Framework JavaScript buatan Meta?",opts:["Vue","Angular","Svelte","React"],ans:3},
+  {q:"Apa kepanjangan dari IoT?",opts:["Internet of Things","Input Output Technology","Integrated Open Tech","Internet Object Transfer"],ans:0},
 ];
 function initQuiz(){
   document.getElementById('gameContent').innerHTML='<div id="quizArea" class="quiz-wrap"></div>';
@@ -3696,7 +3788,7 @@ async function generatePodcast() {
       })
     });
     var data=await res.json();
-    var text=data.choices&&data.choices[0]?data.choices[0].message.content:'Gagal generate.';
+    var text=data.reply||(data.choices&&data.choices[0]?data.choices[0].message.content:'Gagal generate.');
     displayPodcast(topic,text);
   }catch(e){
     displayPodcast(topic,'🎙️ Cheese AI Podcast\n\nTopik: '+topic+'\n\n[Gagal konek ke server. Cek internet bos!]');
@@ -3794,6 +3886,9 @@ function copyPodcast(){
 // ===== v2.8 — 5 FITUR BARU =====
 
 // FITUR 1: Daily Streak
+var notifs = [];
+try{ notifs = JSON.parse(localStorage.getItem('cheeseNotifs')||'[]'); }catch(e){}
+
 (function initStreak(){
   var today = new Date().toDateString();
   var last = localStorage.getItem('cheeseLastLogin');
@@ -3813,28 +3908,6 @@ function copyPodcast(){
   if(streak>1 && last!==today){
     pushNotif('🔥 Streak '+streak+' hari! Keren bos!');
   }
-})();
-
-// FITUR 2: v3.0 Countdown (target 30 hari dari sekarang)
-(function initCountdown(){
-  var target = localStorage.getItem('cheeseV3Target');
-  if(!target){
-    var d = new Date(); d.setDate(d.getDate()+30);
-    target = d.toISOString();
-    localStorage.setItem('cheeseV3Target', target);
-  }
-  function updateCD(){
-    var el = document.getElementById('v3countdown');
-    if(!el) return;
-    var diff = new Date(target)-new Date();
-    if(diff<=0){ el.textContent='Launching! 🚀'; return; }
-    var days=Math.floor(diff/(1000*60*60*24));
-    var hrs=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-    var mins=Math.floor((diff%(1000*60*60))/(1000*60));
-    el.innerHTML = days+'h '+hrs+'j '+mins+'m<br><span style="font-size:.6rem;color:var(--muted);">menuju v3.0</span>';
-  }
-  updateCD();
-  setInterval(updateCD, 60000);
 })();
 
 // FITUR 3: Light/Dark Mode Toggle
@@ -3956,6 +4029,61 @@ setTimeout(function(){
 }, 1500);
 
 renderNotifs();
+
+
+// ============================================================
+// SPLASH SCREEN
+// ============================================================
+(function(){
+  var bar = document.getElementById('splashBar');
+  var splash = document.getElementById('splashScreen');
+  var w = 0;
+  var iv = setInterval(function(){
+    w += 2.5;
+    if(bar) bar.style.width = Math.min(w,100)+'%';
+    if(w >= 100){
+      clearInterval(iv);
+      setTimeout(function(){
+        if(splash){ splash.style.transition='opacity .4s'; splash.style.opacity='0'; setTimeout(function(){ splash.style.display='none'; },400); }
+      }, 150);
+    }
+  }, 18);
+})();
+
+// ============================================================
+// SCROLL TO BOTTOM
+// ============================================================
+function scrollToBottom(){
+  var cb = document.getElementById('chatBox');
+  if(cb) cb.scrollTo({top:cb.scrollHeight, behavior:'smooth'});
+}
+(function(){
+  var cb = document.getElementById('chatBox');
+  if(!cb) return;
+  cb.addEventListener('scroll', function(){
+    var btn = document.getElementById('scrollBtn');
+    if(!btn) return;
+    var dist = cb.scrollHeight - cb.scrollTop - cb.clientHeight;
+    if(dist > 120){ btn.style.display='flex'; btn.style.alignItems='center'; btn.style.justifyContent='center'; }
+    else { btn.style.display='none'; }
+  });
+})();
+
+
+function togglePass(id, btn) {
+  var inp = document.getElementById(id);
+  if(!inp) return;
+  if(inp.type === 'password') {
+    inp.type = 'text';
+    btn.textContent = '🙈';
+    btn.style.color = 'var(--accent)';
+  } else {
+    inp.type = 'password';
+    btn.textContent = '👁️';
+    btn.style.color = 'var(--muted)';
+  }
+}
+
 </script>
 
 
@@ -4062,4 +4190,4 @@ renderNotifs();
     </div>
   </div>
 </body>
-                                                                                                                                                                                                                                                                                      </html>
+    </html>
