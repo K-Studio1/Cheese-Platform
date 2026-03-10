@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title>Cheese Platform v3.0</title>
+<title>Cheese Platform v3.1</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{--bg:#080b10;--surface:#0e1318;--surface2:#141c24;--surface3:#1a2430;--border:rgba(255,255,255,0.07);--accent:#f5c842;--accent2:#ff6b35;--text:#e8edf2;--muted:#5a6a7a;--green:#00e5a0;--red:#ff4d4d;}
@@ -159,14 +159,14 @@ body{font-family:Nunito,sans-serif;font-size:15px;background:var(--bg);color:var
 .play-btn:hover{background:rgba(245,200,66,.12);}
 
 /* ===GAME MODAL=== */
-.game-modal{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px);}
+.game-modal{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.95);display:none;align-items:stretch;justify-content:center;padding:0;backdrop-filter:blur(6px);}
 .game-modal.open{display:flex;}
-.game-modal-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;width:100%;max-width:500px;animation:fadeIn .3s ease;}
-.game-modal-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.game-modal-box{background:var(--surface);border:none;border-radius:0;overflow:hidden;width:100%;max-width:100%;height:100%;display:flex;flex-direction:column;animation:fadeIn .2s ease;}
+.game-modal-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .gm-title{font-family:Outfit,sans-serif;font-weight:700;font-size:.98rem;}
 .close-modal{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.2rem;transition:.2s;padding:4px 8px;border-radius:8px;}
 .close-modal:hover{color:var(--red);}
-.game-canvas-wrap{padding:14px;display:flex;flex-direction:column;align-items:center;gap:10px;background:var(--bg);}
+.game-canvas-wrap{padding:12px;overflow-y:auto;flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;background:var(--bg);}
 canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;display:block;max-width:100%;}
 .score-row{display:flex;align-items:center;justify-content:space-between;width:100%;}
 .g-score{font-family:Outfit,sans-serif;font-weight:700;font-size:.95rem;color:var(--accent);}
@@ -298,7 +298,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
   .quick-actions,.games-grid,.about-grid{grid-template-columns:1fr 1fr;}
   .welcome-banner h1{font-size:1.3rem;}
   #chatBox{height:calc(100dvh - 260px);}
-  .profile-header{flex-direction:column;text-align:center;}
+  .profile-header{flex-direction:row;text-align:left;}
   /* Topbar mobile fix */
   .topbar{padding:0 10px;gap:6px;overflow:hidden;}
   .topbar-title{font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70px;}
@@ -325,7 +325,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
   <div id="splashScreen" style="position:fixed;inset:0;background:#080b10;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;">
     <div style="animation:float 2s ease-in-out infinite;"><div style="font-size:4rem;">🧀</div></div>
     <div style="font-family:Outfit,sans-serif;font-weight:800;font-size:1.5rem;color:#f5c842;margin-top:16px;">Cheese Platform</div>
-    <div style="font-size:.75rem;color:#5a6a7a;margin-top:4px;">v3.0 — K Studio</div>
+    <div style="font-size:.75rem;color:#5a6a7a;margin-top:4px;">v3.1 — K Studio</div>
     <div style="margin-top:30px;width:160px;height:3px;background:#1a2430;border-radius:10px;overflow:hidden;">
       <div id="splashBar" style="height:100%;width:0%;background:linear-gradient(90deg,#f5c842,#ff6b35);border-radius:10px;"></div>
     </div>
@@ -348,8 +348,8 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
     </div>
     <div class="auth-form active" id="loginForm">
       <div class="auth-error" id="loginError"></div>
-      <div class="input-group"><label>Email</label><input type="email" id="loginEmail" placeholder="email@kamu.com"/></div>
-      <div class="input-group"><label>Password</label><div style="position:relative;"><input type="password" id="loginPass" placeholder="Password kamu" onkeydown="if(event.key==='Enter')doLogin()" style="width:100%;padding-right:40px;box-sizing:border-box;"/><button type="button" onclick="togglePass('loginPass',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted);padding:0;line-height:1;">👁️</button></div></div>
+      <div class="input-group"><label>Email</label><input type="email" id="loginEmail" placeholder="email@Anda.com"/></div>
+      <div class="input-group"><label>Password</label><div style="position:relative;"><input type="password" id="loginPass" placeholder="Password Anda" onkeydown="if(event.key==='Enter')doLogin()" style="width:100%;padding-right:40px;box-sizing:border-box;"/><button type="button" onclick="togglePass('loginPass',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted);padding:0;line-height:1;">👁️</button></div></div>
       <button class="auth-btn" onclick="doLogin()">Masuk Sekarang</button>
       <div class="auth-divider">atau</div>
       <button class="google-btn" onclick="doGuestLogin()">👤 Lanjut sebagai Tamu</button>
@@ -357,8 +357,8 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
     <div class="auth-form" id="registerForm">
       <div class="auth-error" id="registerError"></div>
       <div class="auth-success" id="registerSuccess"></div>
-      <div class="input-group"><label>Nama</label><input type="text" id="regName" placeholder="Nama kamu"/></div>
-      <div class="input-group"><label>Email</label><input type="email" id="regEmail" placeholder="email@kamu.com"/></div>
+      <div class="input-group"><label>Nama</label><input type="text" id="regName" placeholder="Nama Anda"/></div>
+      <div class="input-group"><label>Email</label><input type="email" id="regEmail" placeholder="email@Anda.com"/></div>
       <div class="input-group"><label>Password</label><div style="position:relative;"><input type="password" id="regPass" placeholder="Minimal 6 karakter" onkeydown="if(event.key==='Enter')doRegister()" style="width:100%;padding-right:40px;box-sizing:border-box;"/><button type="button" onclick="togglePass('regPass',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted);padding:0;line-height:1;">👁️</button></div></div>
       <button class="auth-btn" onclick="doRegister()">Buat Akun</button>
       <div class="auth-divider">atau</div>
@@ -373,7 +373,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
     <div class="sidebar-top">
       <div class="logo-row">
         <div class="logo-icon-wrap">🧀</div>
-        <div class="logo-text"><div class="t">Cheese</div><div class="s">Platform v2.9</div></div>
+        <div class="logo-text"><div class="t">Cheese</div><div class="s">Platform v3.1</div></div>
       </div>
       <div class="user-card">
         <div class="user-avatar" id="sidebarAvatar">?</div>
@@ -406,7 +406,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
       <div class="topbar-right">
         <div class="search-wrap">
           <span class="search-icon-lbl">🔍</span>
-          <input class="search-input" id="searchInput" placeholder="Cari..." oninput="doSearch(this.value)" onblur="setTimeout(()=>document.getElementById('searchDrop').style.display='none',200)"/>
+          <input class="search-input" id="searchInput" placeholder="Cari..." oninput="doSearch(this.value)" onblur="setTimeout(function(){var d=document.getElementById('searchDrop');if(d)d.style.display='none';},200)"/>
           <div class="search-results" id="searchDrop"></div>
         </div>
         <button id="soundToggleBtn" onclick="toggleSound()" style="background:var(--surface2);border:1.5px solid var(--border);color:var(--text);border-radius:9px;width:34px;height:34px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;" title="Toggle Sound">🔊</button>
@@ -420,7 +420,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
     <!-- HOME -->
     <div id="home" class="section active">
       <div class="welcome-banner">
-        <div class="welcome-tag">✨ Cheese Platform v3.0</div>
+        <div class="welcome-tag">✨ Cheese Platform v3.1</div>
         <h1>Halo, <span id="welcomeName">Bos</span>! 👋</h1>
         <p>Platform gaming & AI lokal terbaik. Semua fitur ada di sini!</p>
       </div>
@@ -467,7 +467,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
         <div class="qa-card" onclick="showSection('ai')"><div class="qa-icon" style="background:rgba(245,200,66,.1);">🤖</div><div><div style="font-weight:700;font-size:.88rem;margin-bottom:2px;">Chat AI</div><div style="font-size:.73rem;color:var(--muted);">Tanya Cheese AI apapun</div></div></div>
         <div class="qa-card" onclick="openGame('snake')"><div class="qa-icon" style="background:rgba(0,229,160,.1);">🐍</div><div><div style="font-weight:700;font-size:.88rem;margin-bottom:2px;">Snake</div><div style="font-size:.73rem;color:var(--muted);">Main sekarang!</div></div></div>
         <div class="qa-card" onclick="openGame('dino')"><div class="qa-icon" style="background:rgba(255,107,53,.1);">🦕</div><div><div style="font-weight:700;font-size:.88rem;margin-bottom:2px;">Dino Run</div><div style="font-size:.73rem;color:var(--muted);">Main sekarang!</div></div></div>
-        <div class="qa-card" onclick="openGame('quiz')"><div class="qa-icon" style="background:rgba(88,101,242,.15);">⚡</div><div><div style="font-weight:700;font-size:.88rem;margin-bottom:2px;">Quiz</div><div style="font-size:.73rem;color:var(--muted);">Uji pengetahuan lo!</div></div></div>
+        <div class="qa-card" onclick="openGame('quiz')"><div class="qa-icon" style="background:rgba(88,101,242,.15);">⚡</div><div><div style="font-weight:700;font-size:.88rem;margin-bottom:2px;">Quiz</div><div style="font-size:.73rem;color:var(--muted);">Uji pengetahuan Anda!</div></div></div>
       </div>
     </div>
 
@@ -507,7 +507,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
         <div class="chat-input-row">
           <button class="img-btn" onclick="document.getElementById('imgUpload').click()" title="Kirim Foto">📸</button>
           <input type="file" id="imgUpload" accept="image/*" style="display:none;" onchange="handleImgUpload(event)"/>
-          <input type="text" id="userInput" placeholder="Tulis pesan ke Cheese AI..." onkeydown="if(event.key==='Enter'){event.preventDefault();sendMessage();}"/>
+          <input type="text" id="userInput" placeholder="Tulis pesan..." onkeydown="if(event.key==='Enter'){event.preventDefault();sendMessage();}"/>
           <button class="send-btn" id="sendBtn" onclick="sendMessage()">&#9658;</button>
         </div>
       </div>
@@ -520,7 +520,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
         <span style="font-size:.8rem;">🏆 Skor terakhir: <strong id="lastScoreDisplay">0</strong></span>
         <button onclick="shareScore()" style="padding:6px 12px;border-radius:8px;border:none;background:var(--green);color:#070a0f;font-weight:700;font-size:.73rem;cursor:pointer;">📤 Share</button>
       </div>
-      <div class="sec-sub">Semua game udah live bos! Gas mainin! 🔥</div>
+      <div class="sec-sub">Semua game udah live. Gas mainin! 🔥</div>
       <div class="games-grid">
         <div class="game-card">
           <div class="g-badge live">LIVE</div>
@@ -612,20 +612,27 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
     <!-- PROFILE -->
     <div id="profile" class="section">
       <!-- PROFILE HEADER -->
-      <div class="profile-header" style="position:relative;">
-        <div style="position:relative;display:inline-block;">
-          <div class="profile-avatar-big" id="profileAvatar" onclick="openAvatarPicker()" style="cursor:pointer;" title="Ganti avatar">?</div>
-          <div onclick="openAvatarPicker()" style="position:absolute;bottom:0;right:0;background:var(--accent);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.7rem;cursor:pointer;border:2px solid var(--bg);">✏️</div>
-        </div>
-        <div style="flex:1;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div style="font-family:Outfit,sans-serif;font-weight:800;font-size:1.2rem;" id="profileName">-</div>
-            <button onclick="openEditName()" style="background:none;border:none;color:var(--muted);font-size:.85rem;cursor:pointer;padding:2px;">✏️</button>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:20px;margin-bottom:14px;">
+        <div style="display:flex;align-items:center;gap:16px;">
+          <!-- Avatar -->
+          <div style="position:relative;flex-shrink:0;">
+            <div id="profileAvatarWrap" onclick="onAvatarTap()" style="cursor:pointer;width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#f5c842,#ff6b35);display:flex;align-items:center;justify-content:center;font-size:2rem;overflow:hidden;border:3px solid var(--accent);position:relative;">
+              <span id="profileAvatar">?</span>
+              <img id="profileAvatarImg" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" />
+            </div>
+            <div onclick="openAvatarPicker()" style="position:absolute;bottom:0;right:0;background:var(--accent);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.65rem;cursor:pointer;border:2px solid var(--bg);">📷</div>
           </div>
-          <div style="font-size:.79rem;color:var(--muted);margin-top:3px;" id="profileEmail">-</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px;">
-            <div id="memberBadge" style="display:inline-block;font-size:.63rem;padding:3px 10px;border-radius:20px;background:rgba(245,200,66,.1);color:var(--accent);border:1px solid rgba(245,200,66,.2);">🧀 Member</div>
-            <div id="premiumBadge" style="display:none;font-size:.63rem;padding:3px 10px;border-radius:20px;background:rgba(0,229,160,.1);color:var(--green);border:1px solid rgba(0,229,160,.2);">⭐ Premium</div>
+          <!-- Info -->
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <div style="font-family:Outfit,sans-serif;font-weight:800;font-size:1.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="profileName">-</div>
+              <button onclick="openEditName()" style="background:none;border:none;color:var(--muted);font-size:.8rem;cursor:pointer;padding:2px;flex-shrink:0;">✏️</button>
+            </div>
+            <div style="font-size:.78rem;color:var(--muted);margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="profileEmail">-</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <div id="memberBadge" style="display:inline-block;font-size:.63rem;padding:3px 10px;border-radius:20px;background:rgba(245,200,66,.1);color:var(--accent);border:1px solid rgba(245,200,66,.2);">🧀 Member</div>
+              <div id="premiumBadge" style="display:none;font-size:.63rem;padding:3px 10px;border-radius:20px;background:rgba(0,229,160,.1);color:var(--green);border:1px solid rgba(0,229,160,.2);">⭐ Premium</div>
+            </div>
           </div>
         </div>
       </div>
@@ -668,8 +675,15 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
 
     <!-- AVATAR PICKER MODAL -->
     <div id="avatarModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:8000;align-items:flex-end;justify-content:center;">
-      <div style="background:var(--surface);border-radius:20px 20px 0 0;padding:20px;width:100%;max-width:480px;">
-        <div style="font-family:Outfit,sans-serif;font-weight:800;font-size:1rem;margin-bottom:16px;text-align:center;">Pilih Avatar</div>
+      <div style="background:var(--surface);border-radius:20px 20px 0 0;padding:20px;padding-bottom:80px;width:100%;max-width:480px;max-height:82vh;overflow-y:auto;">
+        <div style="font-family:Outfit,sans-serif;font-weight:800;font-size:1rem;margin-bottom:16px;text-align:center;">Ganti Foto Profil</div>
+        <!-- Upload Foto -->
+        <div onclick="document.getElementById('avatarFileInput').click()" style="display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border-radius:14px;background:rgba(245,200,66,.08);border:1.5px dashed rgba(245,200,66,.4);cursor:pointer;margin-bottom:16px;">
+          <span style="font-size:1.4rem;">📷</span>
+          <span style="font-size:.88rem;font-weight:700;color:var(--accent);">Upload Foto dari Galeri</span>
+        </div>
+        <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" onchange="uploadAvatarPhoto(this)"/>
+        <div style="font-size:.75rem;color:var(--muted);text-align:center;margin-bottom:12px;">— atau pilih avatar emoji —</div>
         <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px;">
           <div onclick="setAvatar('🧀')" style="font-size:1.8rem;text-align:center;cursor:pointer;padding:8px;border-radius:12px;background:var(--surface2);">🧀</div>
           <div onclick="setAvatar('😎')" style="font-size:1.8rem;text-align:center;cursor:pointer;padding:8px;border-radius:12px;background:var(--surface2);">😎</div>
@@ -684,7 +698,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
           <div onclick="setAvatar('🦁')" style="font-size:1.8rem;text-align:center;cursor:pointer;padding:8px;border-radius:12px;background:var(--surface2);">🦁</div>
           <div onclick="setAvatar('🐉')" style="font-size:1.8rem;text-align:center;cursor:pointer;padding:8px;border-radius:12px;background:var(--surface2);">🐉</div>
         </div>
-        <button onclick="document.getElementById('avatarModal').style.display='none'" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:Nunito,sans-serif;font-weight:700;cursor:pointer;">Batal</button>
+        <button onclick="document.getElementById('avatarModal').style.display='none'" style="width:100%;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:Nunito,sans-serif;font-weight:700;cursor:pointer;font-size:.95rem;">Batal</button>
       </div>
     </div>
 
@@ -692,7 +706,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
     <div id="editNameModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:8000;align-items:center;justify-content:center;">
       <div style="background:var(--surface);border-radius:20px;padding:24px;width:90%;max-width:320px;">
         <div style="font-family:Outfit,sans-serif;font-weight:800;font-size:1rem;margin-bottom:16px;">✏️ Ganti Nama</div>
-        <input id="newNameInput" type="text" maxlength="20" placeholder="Nama kamu..." style="width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text);font-family:Nunito,sans-serif;font-size:.9rem;outline:none;margin-bottom:12px;"/>
+        <input id="newNameInput" type="text" maxlength="20" placeholder="Nama Anda..." style="width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text);font-family:Nunito,sans-serif;font-size:.9rem;outline:none;margin-bottom:12px;"/>
         <div style="display:flex;gap:8px;">
           <button onclick="saveNewName()" style="flex:1;padding:11px;border-radius:12px;border:none;background:var(--accent);color:#070a0f;font-family:Nunito,sans-serif;font-weight:800;cursor:pointer;">Simpan</button>
           <button onclick="document.getElementById('editNameModal').style.display='none'" style="flex:1;padding:11px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:Nunito,sans-serif;font-weight:700;cursor:pointer;">Batal</button>
@@ -703,7 +717,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
     <!-- CONTACT -->
     <div id="contact" class="section">
       <div class="sec-title">Contact Us 📞</div>
-      <div class="sec-sub">Hubungi kami lewat platform favorit lo!</div>
+      <div class="sec-sub">Hubungi kami lewat platform favorit Anda!</div>
       <a class="contact-card" href="https://instagram.com/cheese_platform" target="_blank"><div class="contact-ic" style="background:rgba(245,200,66,.1);">📸</div><div><div style="font-weight:600;font-size:.87rem;">Instagram</div><div style="font-size:.73rem;color:var(--muted);">@cheese_platform</div></div></a>
       <a class="contact-card" href="#"><div class="contact-ic" style="background:rgba(0,229,160,.1);">💬</div><div><div style="font-weight:600;font-size:.87rem;">WhatsApp</div><div style="font-size:.73rem;color:var(--muted);">Segera hadir</div></div></a>
       <a class="contact-card" href="#"><div class="contact-ic" style="background:rgba(88,101,242,.15);">🎮</div><div><div style="font-weight:600;font-size:.87rem;">Discord</div><div style="font-size:.73rem;color:var(--muted);">Segera hadir</div></div></a>
@@ -714,7 +728,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
     <!-- PERSONALISASI -->
     <div id="personalisasi" class="section">
       <div class="sec-title">Personalisasi 🎨</div>
-      <div class="sec-sub">Sesuaikan Cheese AI dengan gaya kamu!</div>
+      <div class="sec-sub">Sesuaikan Cheese AI dengan gaya Anda!</div>
 
       <!-- GAYA & NADA -->
       <div class="settings-card">
@@ -745,8 +759,8 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
       <!-- INSTRUKSI KHUSUS -->
       <div class="settings-card">
         <div class="settings-card-title">📝 Instruksi Khusus</div>
-        <div class="settings-card-sub">Hal yang perlu dipertimbangkan AI dalam responnya</div>
-        <textarea id="customInstructionInput" placeholder="Contoh: Selalu jawab dengan singkat. Jangan pernah bahas politik..." style="width:100%;min-height:90px;padding:12px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text);font-family:Nunito,sans-serif;font-size:.86rem;outline:none;resize:none;line-height:1.5;transition:.2s;box-sizing:border-box;" onfocus="this.style.borderColor='rgba(245,200,66,.4)'" onblur="this.style.borderColor='var(--border)'" oninput="savePersonalisasi()"></textarea>
+        <div class="settings-card-sub">Hal yang perAnda dipertimbangkan AI dalam responnya</div>
+        <textarea id="customInstructionInput" placeholder="Contoh: SelaAnda jawab dengan singkat. Jangan pernah bahas politik..." style="width:100%;min-height:90px;padding:12px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text);font-family:Nunito,sans-serif;font-size:.86rem;outline:none;resize:none;line-height:1.5;transition:.2s;box-sizing:border-box;" onfocus="this.style.borderColor='rgba(245,200,66,.4)'" onblur="this.style.borderColor='var(--border)'" oninput="savePersonalisasi()"></textarea>
       </div>
 
       <!-- INFO PENGGUNA -->
@@ -755,7 +769,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
         <div class="settings-card-sub">Biar AI lebih personal dan relevan</div>
         <div style="margin-bottom:12px;">
           <div style="font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;">Nama Panggilan</div>
-          <input type="text" id="userNameInput" placeholder="Nama kamu..." maxlength="30" style="width:100%;padding:11px 14px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text);font-family:Nunito,sans-serif;font-size:.86rem;outline:none;transition:.2s;box-sizing:border-box;" onfocus="this.style.borderColor='rgba(245,200,66,.4)'" onblur="this.style.borderColor='var(--border)'" oninput="savePersonalisasi()"/>
+          <input type="text" id="userNameInput" placeholder="Nama Anda..." maxlength="30" style="width:100%;padding:11px 14px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text);font-family:Nunito,sans-serif;font-size:.86rem;outline:none;transition:.2s;box-sizing:border-box;" onfocus="this.style.borderColor='rgba(245,200,66,.4)'" onblur="this.style.borderColor='var(--border)'" oninput="savePersonalisasi()"/>
         </div>
         <div style="margin-bottom:12px;">
           <div style="font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;">Pekerjaan / Aktivitas</div>
@@ -763,7 +777,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
         </div>
         <div>
           <div style="font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;">Selengkapnya Tentang Kamu</div>
-          <textarea id="userBioInput" placeholder="Minat, nilai, atau preferensi yang perlu diingat AI..." maxlength="200" style="width:100%;min-height:80px;padding:12px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text);font-family:Nunito,sans-serif;font-size:.86rem;outline:none;resize:none;line-height:1.5;transition:.2s;box-sizing:border-box;" onfocus="this.style.borderColor='rgba(245,200,66,.4)'" onblur="this.style.borderColor='var(--border)'" oninput="savePersonalisasi()"></textarea>
+          <textarea id="userBioInput" placeholder="Minat, nilai, atau preferensi yang perAnda diingat AI..." maxlength="200" style="width:100%;min-height:80px;padding:12px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text);font-family:Nunito,sans-serif;font-size:.86rem;outline:none;resize:none;line-height:1.5;transition:.2s;box-sizing:border-box;" onfocus="this.style.borderColor='rgba(245,200,66,.4)'" onblur="this.style.borderColor='var(--border)'" oninput="savePersonalisasi()"></textarea>
         </div>
       </div>
 
@@ -786,11 +800,11 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
       <div class="settings-card">
         <div class="settings-card-title">🗺️ Roadmap</div>
         <div style="margin-top:12px;">
-          <div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:.83rem;font-weight:700;">v3.0 — Splash + Animasi + Roadmap</span><span style="font-size:.72rem;color:var(--green);font-weight:700;">✅ Live</span></div><div style="height:6px;background:var(--surface3);border-radius:10px;overflow:hidden;"><div style="height:100%;width:100%;background:var(--green);border-radius:10px;"></div></div></div>
-          <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:.83rem;font-weight:700;">v3.1 — Gemini AI + Global Rating</span><span style="font-size:.72rem;color:#5865f2;font-weight:700;">70%</span></div><div style="height:6px;background:var(--surface3);border-radius:10px;overflow:hidden;"><div style="height:100%;width:70%;background:#5865f2;border-radius:10px;animation:pulse 1.5s infinite;"></div></div></div>
+          <div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:.83rem;font-weight:700;">v3.1 — Multi AI Engine + Formal UI</span><span style="font-size:.72rem;color:var(--green);font-weight:700;">✅ 100%</span></div><div style="height:6px;background:var(--surface3);border-radius:10px;overflow:hidden;"><div style="height:100%;width:100%;background:var(--green);border-radius:10px;"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:.83rem;font-weight:700;">v3.2 — Coming Soon</span><span style="font-size:.72rem;color:var(--muted);font-weight:700;">🔜</span></div><div style="height:6px;background:var(--surface3);border-radius:10px;overflow:hidden;"><div style="height:100%;width:0%;background:#5865f2;border-radius:10px;"></div></div></div>
         </div>
       </div>
-      <div class="sec-sub">Kustomisasi Cheese Platform sesuai selera lo!</div>
+      <div class="sec-sub">Kustomisasi Cheese Platform sesuai selera Anda!</div>
 
       <!-- API KEY -->
       
@@ -798,7 +812,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
       <!-- AI KARAKTERISTIK -->
       <div class="settings-card">
         <div class="settings-card-title">🤖 Karakteristik Cheese AI</div>
-        <div class="settings-card-sub">Atur gaya bicara AI sesuai keinginan lo</div>
+        <div class="settings-card-sub">Atur gaya bicara AI sesuai keinginan Anda</div>
         <div style="margin-bottom:14px;">
           <div style="font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px;">Nama AI</div>
           <input type="text" class="settings-input" id="aiNicknameInput" placeholder="Cheese AI" maxlength="20" oninput="saveAISettings()"/>
@@ -868,9 +882,9 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
       <div class="settings-card">
         <div class="settings-card-title">ℹ️ Info Aplikasi</div>
         <div style="display:flex;flex-direction:column;gap:8px;font-size:.82rem;">
-          <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Versi</span><span style="font-weight:700;color:var(--accent);">v3.0</span></div>
-          <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Build</span><span style="font-weight:600;">2026.03c</span></div>
-          <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">AI Engine</span><span style="font-weight:600;">Groq LLaMA 3.3</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Versi</span><span style="font-weight:700;color:var(--accent);">v3.1</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Build</span><span style="font-weight:600;">2026.03d</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">AI Engine</span><span style="font-weight:600;" id="aiEngineDisplay">Mendeteksi...</span></div>
           <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Developer</span><span style="font-weight:600;">K Studio 🧀</span></div>
           <div style="height:1px;background:var(--border);margin:4px 0;"></div>
           <div style="font-size:.72rem;color:var(--muted);text-align:center;">Platform gaming & AI lokal Indonesia 🇮🇩</div>
@@ -1006,10 +1020,10 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
 // GLOBALS & STATE
 // ============================================================
 // ============================================================
-// BACKEND URL — ganti dengan URL Cloudflare Worker lo!
+// BACKEND URL — ganti dengan URL Cloudflare Worker Anda!
 // Contoh: 'https://cheese-api.namalo.workers.dev'
 // ============================================================
-var BACKEND_URL = 'https://wise-spider-27.k-studio1.deno.net';
+var BACKEND_URL = 'https://fine-tiger-30.k-studio1.deno.net';
 
 var API_KEY = ''; // Tidak dipakai lagi — API key aman di backend
 var soundOn = true;
@@ -1018,6 +1032,7 @@ var currentUser = null;
 var stats = {games:0, chats:0};
 var chatStarted = false;
 var chatHistory = [];
+var currentMsgs = [];
 var currentGame = null;
 var gameInterval = null;
 var dinoRAF = null;
@@ -1152,14 +1167,8 @@ function saveConversations(convs) {
 }
 
 function saveCurrentConversation() {
-  var cb = document.getElementById('chatBox');
-  if(!cb) return;
-  var msgs = [];
-  cb.querySelectorAll('.msg:not(.typing)').forEach(function(m) {
-    var type = m.classList.contains('user') ? 'user' : m.classList.contains('err') ? 'err' : 'ai';
-    var textEl = m.querySelector('.msg-text') || m;
-    msgs.push({ type: type, text: textEl.innerText || textEl.textContent });
-  });
+  if(!currentMsgs || !currentMsgs.length) return;
+  var msgs = currentMsgs.filter(function(m){ return m.type !== 'err'; });
   if(!msgs.length) return;
 
   var convs = getConversations();
@@ -1186,17 +1195,23 @@ function loadConversation(id) {
   var conv = convs.find(function(c) { return c.id === id; });
   if(!conv) return;
 
+  // Pindah ke section chat dulu
+  showSection('chat');
+  closeRiwayat();
+
+  showSection('ai');
   currentConvId = id;
   var cb = document.getElementById('chatBox');
   if(!cb) return;
   cb.innerHTML = '';
   chatHistory = [];
   chatStarted = false;
+  currentMsgs = [];
 
   var es = document.getElementById('emptyState'); if(es) es.remove();
   var sw = document.getElementById('sugWrap'); if(sw) sw.style.display = 'none';
 
-  conv.msgs.forEach(function(m) { addMsg(m.text, m.type); });
+  conv.msgs.forEach(function(m) { addMsg(m.text, m.type); currentMsgs.push({type:m.type, text:m.text}); });
   chatStarted = true;
 
   // Rebuild chatHistory for AI context
@@ -1204,7 +1219,6 @@ function loadConversation(id) {
     chatHistory.push({ role: m.type === 'user' ? 'user' : 'assistant', content: m.text });
   });
 
-  closeRiwayat();
   showToast('📂 Percakapan dibuka!', 'success', 2000);
 }
 
@@ -1219,11 +1233,12 @@ function deleteConversation(id, event) {
 
 function newConversation() {
   if(chatStarted) saveCurrentConversation();
+  currentMsgs = [];
   currentConvId = null;
   chatStarted = false;
   chatHistory = [];
   var cb = document.getElementById('chatBox');
-  if(cb) cb.innerHTML = '<div id="emptyState" style="text-align:center;padding:40px 20px;color:var(--muted);"><div style="font-size:3rem;margin-bottom:12px;">🧀</div><div style="font-family:Outfit,sans-serif;font-weight:700;font-size:1rem;margin-bottom:6px;">Halo! Gue Cheese AI</div><div style="font-size:.82rem;line-height:1.6;">Tanya apa aja, gue siap bantu!</div></div>';
+  if(cb) cb.innerHTML = '<div id="emptyState" style="text-align:center;padding:40px 20px;color:var(--muted);"><div style="font-size:3rem;margin-bottom:12px;">🧀</div><div style="font-family:Outfit,sans-serif;font-weight:700;font-size:1rem;margin-bottom:6px;">Halo! Gue Cheese AI</div><div style="font-size:.82rem;line-height:1.6;">Tanya apa aja, kami siap bantu!</div></div>';
   var sw = document.getElementById('sugWrap'); if(sw) sw.style.display = 'flex';
   closeRiwayat();
   showToast('✨ Percakapan baru dimulai!', 'success', 2000);
@@ -1324,7 +1339,7 @@ function doRegister() {
   var pass = document.getElementById('regPass').value;
   if(!name || !email || !pass) { showAuthErr('registerError','Semua field harus diisi!'); return; }
   if(pass.length < 6) { showAuthErr('registerError','Password minimal 6 karakter!'); return; }
-  if(!checkRegisterLimit()) { showAuthErr('registerError','Terlalu banyak pendaftaran! Coba lagi nanti. 🚫'); return; }
+  if(!checkRegisterLimit()) { showAuthErr('registerError','TerlaAnda banyak pendaftaran! Silakan coba lagi nanti. 🚫'); return; }
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAuthErr('registerError','Format email tidak valid!'); return; }
   var users = getUsers();
   if(users.find(function(u){ return u.email === email; })) { showAuthErr('registerError','Email sudah terdaftar!'); return; }
@@ -1338,7 +1353,7 @@ function doLogin() {
   var email = document.getElementById('loginEmail').value.trim();
   var pass = document.getElementById('loginPass').value;
   if(!email || !pass) { showAuthErr('loginError','Isi semua field!'); return; }
-  if(!checkLoginAttempts(email)) { showAuthErr('loginError','Terlalu banyak percobaan! Tunggu 1 menit. 🚫'); return; }
+  if(!checkLoginAttempts(email)) { showAuthErr('loginError','TerlaAnda banyak percobaan! Tunggu 1 menit. 🚫'); return; }
   var users = getUsers();
   var user = users.find(function(u){ return u.email === email && u.pass === pass; });
   if(!user) { showAuthErr('loginError','Email atau password salah!'); return; }
@@ -1436,7 +1451,7 @@ var searchData = [
   {icon:'⚡',title:'Quiz',sub:'Main Quiz',go:function(){openGame('quiz');}},
   {icon:'💎',title:'Top Up ML',sub:'Mobile Legends Diamond',go:function(){showSection('topup');}},
   {icon:'🔥',title:'Top Up FF',sub:'Free Fire Diamond',go:function(){showSection('topup');}},
-  {icon:'👤',title:'Profil',sub:'Lihat akun kamu',go:function(){showSection('profile');}},
+  {icon:'👤',title:'Profil',sub:'Lihat akun Anda',go:function(){showSection('profile');}},
   {icon:'ℹ️',title:'About',sub:'Info Cheese Platform',go:function(){showSection('about');}},
   {icon:'📞',title:'Contact',sub:'Hubungi kami',go:function(){showSection('contact');}},
   {icon:'⚙️',title:'Pengaturan',sub:'Konfigurasi platform',go:function(){showSection('settings');}},
@@ -1497,45 +1512,45 @@ function checkRateLimit() {
 // ============================================================
 var cheeseBrain = {
   knowledge:[
-    {keys:["halo","hai","hello","hey","hi","pagi","siang","malam"],ans:["Heyy bos! Gimana kabar? 😄🧀","Halo! Cheese AI siap membantu! 🧀✨","Haiii! Seneng banget lo mampir! 🔥"]},
-    {keys:["siapa kamu","nama kamu","kamu apa","lo siapa","cheese ai"],ans:["Gue Cheese AI 🧀! AI buatan Cheese Platform — tau banyak hal dari politik, game, teknologi, sampe kesehatan! 💪"]},
+    {keys:["halo","hai","hello","hey","hi","pagi","siang","malam"],ans:["Heyy. Gimana kabar? 😄🧀","Halo! Cheese AI siap membantu! 🧀✨","Haiii! Seneng banget Anda mampir! 🔥"]},
+    {keys:["siapa Anda","nama Anda","Anda apa","lo siapa","cheese ai"],ans:["Gue Cheese AI 🧀! AI buatan Cheese Platform — tau banyak hal dari politik, game, teknologi, sampe kesehatan! 💪"]},
     {keys:["cheese platform","platform ini","website ini","fitur apa"],ans:["Cheese Platform punya: AI Chat, 4 game live (Snake, Dino, Puzzle, Quiz), Top Up ML & FF, Podcast, dan Settings lengkap! 🚀🧀"]},
-    {keys:["joke","lucu","ngakak","humor","bercanda"],ans:["Kenapa programmer suka kopi? Karena gak bisa kerja tanpa Java! ☕😂","Debugging itu kayak jadi detektif di film kriminal di mana lo sendiri yang jadi pelakunya! 🕵️😂"]},
-    {keys:["politik","presiden","prabowo","jokowi","pemilu","dpri","pemerintah","partai","demokrasi","korupsi"],ans:["Soal politik Indonesia — Presiden Prabowo Subianto menjabat sejak Oktober 2024, sekarang tahun 2026. Sistem kita demokrasi dengan pemilu 5 tahunan. Isu sering dibahas: korupsi, infrastruktur, dan kesejahteraan rakyat. Mau bahas yang mana bos? 🗳️"]},
-    {keys:["kalori defisit","kalori","diet","turun berat badan","berat badan","cutting","tdee","bmr"],ans:["Kalori defisit = kalori makan LEBIH SEDIKIT dari kalori bakar!\n\n📊 Tips:\n✅ Defisit ideal: 300-500 kal/hari\n✅ Hitung TDEE dulu\n✅ Perbanyak protein\n✅ Jangan defisit terlalu ekstrem\n\nContoh: TDEE 2000 kal → makan 1500-1700 kal/hari 💪"]},
-    {keys:["olahraga","gym","fitness","protein","otot","kardio"],ans:["Tips fitness bos:\n💪 Latihan beban 3-4x seminggu\n🏃 Kardio 2-3x seminggu\n🥩 Protein 1.6-2g/kg berat badan\n😴 Tidur 7-8 jam\n💧 Air 2-3 liter/hari"]},
-    {keys:["game populer","mobile legend","free fire","valorant","minecraft","pubg"],ans:["Game populer 2026:\n🥇 Mobile Legends — MOBA raja Asia Tenggara\n🥈 Free Fire — Battle royale HP mid-range\n🥉 Valorant — FPS kompetitif\n🎮 Minecraft — Sandbox legendaris\n\nLo main yang mana bos? 🎮"]},
+    {keys:["joke","lucu","ngakak","humor","bercanda"],ans:["Kenapa programmer suka kopi? Karena gak bisa kerja tanpa Java! ☕😂","Debugging itu kayak jadi detektif di film kriminal di mana Anda sendiri yang jadi pelakunya! 🕵️😂"]},
+    {keys:["politik","presiden","prabowo","jokowi","pemilu","dpri","pemerintah","partai","demokrasi","korupsi"],ans:["Soal politik Indonesia — Presiden Prabowo Subianto menjabat sejak Oktober 2024, sekarang tahun 2026. Sistem kita demokrasi dengan pemilu 5 tahunan. Isu sering dibahas: korupsi, infrastruktur, dan kesejahteraan rakyat. Ingin membahas yang mana? 🗳️"]},
+    {keys:["kalori defisit","kalori","diet","turun berat badan","berat badan","cutting","tdee","bmr"],ans:["Kalori defisit = kalori makan LEBIH SEDIKIT dari kalori bakar!\n\n📊 Tips:\n✅ Defisit ideal: 300-500 kal/hari\n✅ Hitung TDEE dulu\n✅ Perbanyak protein\n✅ Jangan defisit terlaAnda ekstrem\n\nContoh: TDEE 2000 kal → makan 1500-1700 kal/hari 💪"]},
+    {keys:["olahraga","gym","fitness","protein","otot","kardio"],ans:["Tips fitness:\n💪 Latihan beban 3-4x seminggu\n🏃 Kardio 2-3x seminggu\n🥩 Protein 1.6-2g/kg berat badan\n😴 Tidur 7-8 jam\n💧 Air 2-3 liter/hari"]},
+    {keys:["game populer","mobile legend","free fire","valorant","minecraft","pubg"],ans:["Game populer 2026:\n🥇 Mobile Legends — MOBA raja Asia Tenggara\n🥈 Free Fire — Battle royale HP mid-range\n🥉 Valorant — FPS kompetitif\n🎮 Minecraft — Sandbox legendaris\n\nAnda memainkan yang mana? 🎮"]},
     {keys:["coding","programming","belajar coding","javascript","python","html","css"],ans:["Roadmap web dev bos:\n1️⃣ HTML & CSS (tampilan)\n2️⃣ JavaScript (interaktif)\n3️⃣ Framework: React/Vue\n4️⃣ Backend: Node.js/Python\n5️⃣ Database: MySQL/MongoDB\n\nBelajar gratis di: freeCodeCamp, The Odin Project! 💻"]},
     {keys:["investasi","kripto","bitcoin","nabung","saham","reksa dana"],ans:["Tips investasi pemula:\n1️⃣ Dana darurat dulu (3-6 bulan pengeluaran)\n2️⃣ Reksa dana pasar uang untuk pemula\n3️⃣ Saham blue chip kalau mau lebih berisiko\n4️⃣ Diversifikasi!\n5️⃣ Kripto hanya uang siap hilang 💰"]},
-    {keys:["motivasi","semangat","galau","sedih","down","mager"],ans:["Bos, setiap orang sukses pernah ngerasa kayak lo sekarang. Yang bedain mereka — mereka tetap jalan meski susah. Lo PASTI bisa! 💪🔥"]},
-    {keys:["makasih","thanks","terima kasih","thx"],ans:["Sama-sama bos! 🧀🔥","No problem! Gue selalu siap! 😄✨"]},
-    {keys:["bye","dadah","cabut","sampai jumpa"],ans:["Dadah bos! Balik lagi ya! 🧀👋"]},
+    {keys:["motivasi","semangat","galau","sedih","down","mager"],ans:["Bos, setiap orang sukses pernah ngerasa kayak Anda sekarang. Yang bedain mereka — mereka tetap jalan meski susah. Anda PASTI bisa! 💪🔥"]},
+    {keys:["makasih","thanks","terima kasih","thx"],ans:["Sama-sama. 🧀🔥","No problem! Gue selaAnda siap! 😄✨"]},
+    {keys:["bye","dadah","cabut","sampai jumpa"],ans:["Dadah. Balik lagi ya! 🧀👋"]},
     {keys:["topup","diamond","beli diamond","isi diamond"],ans:["Top Up di Cheese Platform:\n💎 ML Diamond mulai Rp 19.000\n🔥 FF Diamond mulai Rp 9.000\n\nCek menu Top Up! QRIS segera hadir! 🚀"]},
-    {keys:["cuaca","hujan","panas","mendung"],ans:["Cuaca hari ini cek widget di Home bos! 🌤️"]},
-    {keys:["resep","masak","lapar","makan"],ans:["Resep simpel bos:\n🍳 Nasi goreng: nasi+telur+kecap+bawang\n🍜 Mie goreng: mie+bumbu+sayur\n🥚 Telur dadar: telur+garam+minyak\n\nMau resep lain? 😋"]},
-    {keys:["pacaran","gebetan","pdkt","galau cinta","putus"],ans:["Soal percintaan:\n❤️ Komunikasi jujur\n🤝 Saling respek\n⏰ Sabar & konsisten\n\nSemangat bos! 💪"]},
+    {keys:["cuaca","hujan","panas","mendung"],ans:["Cuaca hari ini cek widget di Home. 🌤️"]},
+    {keys:["resep","masak","lapar","makan"],ans:["Resep simpel:\n🍳 Nasi goreng: nasi+telur+kecap+bawang\n🍜 Mie goreng: mie+bumbu+sayur\n🥚 Telur dadar: telur+garam+minyak\n\nIngin resep lain? 😋"]},
+    {keys:["pacaran","gebetan","pdkt","galau cinta","putus"],ans:["Soal percintaan:\n❤️ Komunikasi jujur\n🤝 Saling respek\n⏰ Sabar & konsisten\n\nSemangat. 💪"]},
     {keys:["tidur","insomnia","begadang","susah tidur"],ans:["Tips tidur nyenyak:\n📵 HP jauh 1 jam sebelum tidur\n🌡️ Kamar sejuk & gelap\n⏰ Tidur jam yang sama tiap hari\n☕ Hindari kafein setelah sore"]},
     {keys:["belajar","ujian","pr","tugas","sekolah","kuliah"],ans:["Tips belajar efektif:\n📚 Pomodoro: 25 menit fokus + 5 menit istirahat\n✍️ Tulis poin penting\n🔄 Review sebelum tidur\n💡 Pahami konsep, bukan hafal!"]},
-    {keys:["uang","duit","bokek","gaji","cari uang","cuan"],ans:["Cara cari cuan digital:\n💻 Freelance (Fiverr, Upwork)\n📱 Konten kreator (TikTok, YouTube)\n🛒 Jualan online (Shopee, Tokopedia)\n📊 Affiliate marketing\n\nMulai dari yang lo kuasai! 💰"]},
-    {keys:["sakit","demam","flu","batuk","pilek","kesehatan"],ans:["Kalau ga enak badan:\n💊 Istirahat cukup (paling penting!)\n💧 Minum air putih banyak\n🍊 Vitamin C\n🌡️ Demam > 38°C lebih 2 hari → ke dokter!\n\nSemoga cepet sembuh bos! 🙏"]},
-    {keys:["musik","lagu","spotify","playlist"],ans:["Rekomendasi playlist:\n🎵 Fokus belajar: Lo-fi Hip Hop\n🔥 Semangat: Pop/R&B\n😴 Tidur: Ambient sounds\n🎮 Gaming: EDM\n\nLo suka genre apa? 🎧"]},
+    {keys:["uang","duit","bokek","gaji","cari uang","cuan"],ans:["Cara cari cuan digital:\n💻 Freelance (Fiverr, Upwork)\n📱 Konten kreator (TikTok, YouTube)\n🛒 Jualan online (Shopee, Tokopedia)\n📊 Affiliate marketing\n\nMulai dari yang Anda kuasai! 💰"]},
+    {keys:["sakit","demam","flu","batuk","pilek","kesehatan"],ans:["Kalau ga enak badan:\n💊 Istirahat cukup (paling penting!)\n💧 Minum air putih banyak\n🍊 Vitamin C\n🌡️ Demam > 38°C lebih 2 hari → ke dokter!\n\nSemoga cepet sembuh. 🙏"]},
+    {keys:["musik","lagu","spotify","playlist"],ans:["Rekomendasi playlist:\n🎵 Fokus belajar: Lo-fi Hip Hop\n🔥 Semangat: Pop/R&B\n😴 Tidur: Ambient sounds\n🎮 Gaming: EDM\n\nAnda suka genre apa? 🎧"]},
     {keys:["film","movie","series","netflix","nonton"],ans:["Rekomendasi tontonan:\n🎬 Film: Interstellar, Parasite, The Dark Knight\n📺 Series: Breaking Bad, Money Heist, Squid Game\n🎌 Anime: AOT, Jujutsu Kaisen\n🇮🇩 Indo: KKN di Desa Penari, Dilan\n\nMau genre apa? 🍿"]},
-    {keys:["startup","bisnis","usaha","jualan","modal","entrepreneur"],ans:["Tips mulai bisnis:\n💡 Solve masalah nyata\n🎯 Validasi ide dulu\n🏃 MVP dulu, sempurnain belakangan\n💰 Modal bisa dari tabungan atau investor\n\nIde bisnis lo apa? 🚀"]},
-    {keys:["stress","anxiety","mental health","overthinking","burnout","depresi"],ans:["Kesehatan mental penting bos! 💚\n\nTips:\n🧘 Meditasi 10 menit/hari\n📓 Journaling\n🏃 Olahraga rutin\n👥 Cerita ke orang dipercaya\n\nKalau parah, ke psikolog ya! Minta bantuan itu tanda kuat! 💪"]},
-    {keys:["canva","figma","desain","design","ui ux","logo"],ans:["Tools desain recommended:\n🎨 Canva - mudah untuk pemula (gratis!)\n🖌️ Figma - UI/UX profesional\n🖼️ Photoshop - editing foto\n\nMulai dari Canva dulu bos! 🎨"]},
-    {keys:["interview","cv","resume","lamaran kerja","magang"],ans:["Tips interview kerja:\n📄 CV: 1 halaman, jelas, no typo\n👔 Pakaian rapi\n🧠 Research perusahaan dulu\n💬 STAR method untuk jawab pertanyaan\n\nSemangat! Lo pasti bisa! 💪"]},
-    {keys:["revan","kevin","k studio","siapa yang buat","pembuat","developer"],ans:["Cheese Platform dibuat oleh Kevin (K Studio) 🧀🔥\n\nK Studio adalah studio indie yang fokus bikin platform gaming & AI keren untuk Indonesia! Support K Studio dengan donasi di Settings ya bos! ❤️"]},
-    {keys:["versi","update","v2.8","changelog","fitur baru"],ans:["Cheese Platform v2.9 — update terbaru:\n⚔️ Battle 2P — 2 Player Fight!\n💬 History Chat tersimpan\n⭐ Feedback & rating sistem\n🕹️ D-pad mobile Battle 2P\n🆕 5 Fitur baru v2.8!\n\nMasih terus update bos! 🔥"]},
+    {keys:["startup","bisnis","usaha","jualan","modal","entrepreneur"],ans:["Tips mulai bisnis:\n💡 Solve masalah nyata\n🎯 Validasi ide dulu\n🏃 MVP dulu, sempurnain belakangan\n💰 Modal bisa dari tabungan atau investor\n\nIde bisnis Anda apa? 🚀"]},
+    {keys:["stress","anxiety","mental health","overthinking","burnout","depresi"],ans:["Kesehatan mental penting. 💚\n\nTips:\n🧘 Meditasi 10 menit/hari\n📓 Journaling\n🏃 Olahraga rutin\n👥 Cerita ke orang dipercaya\n\nKalau parah, ke psikolog ya! Minta bantuan itu tanda kuat! 💪"]},
+    {keys:["canva","figma","desain","design","ui ux","logo"],ans:["Tools desain recommended:\n🎨 Canva - mudah untuk pemula (gratis!)\n🖌️ Figma - UI/UX profesional\n🖼️ Photoshop - editing foto\n\nMulai dari Canva dulu. 🎨"]},
+    {keys:["interview","cv","resume","lamaran kerja","magang"],ans:["Tips interview kerja:\n📄 CV: 1 halaman, jelas, no typo\n👔 Pakaian rapi\n🧠 Research perusahaan dulu\n💬 STAR method untuk jawab pertanyaan\n\nSemangat! Anda pasti bisa! 💪"]},
+    {keys:["revan","kevin","k studio","siapa yang buat","pembuat","developer"],ans:["Cheese Platform dibuat oleh Kevin (K Studio) 🧀🔥\n\nK Studio adalah studio indie yang fokus bikin platform gaming & AI keren untuk Indonesia! Support K Studio dengan donasi di Settings ya. ❤️"]},
+    {keys:["versi","update","v3.1","changelog","fitur baru"],ans:["Cheese Platform v3.1 — update terbaru:\n🤖 Gemini 2.0 Flash (AI utama)\n🔄 OpenRouter fallback ke-3\n📅 AI mengetahui tanggal hari ini\n💼 Tampilan lebih formal & profesional\n\nTerus diperbarui!"]},
     {keys:["snake","dino","battle","puzzle","quiz","tips game"],ans:["Game di Cheese Platform:\n🐍 Snake - spiral dari pinggir ke tengah!\n🦕 Dino - timing lompat yang pas!\n⚔️ Battle 2D - gunakan power-up!\n🧩 Puzzle 15 - mulai dari pojok!\n⚡ Quiz - baca soal pelan-pelan!\n\nMau tips detail game mana? 🎮"]},
     {keys:["ai","chatgpt","openai","groq","llama","artificial intelligence"],ans:["Dunia AI lagi booming! 🤖\n\nModel populer:\n• ChatGPT (OpenAI) - paling terkenal\n• Gemini (Google) - integrasi Google\n• Claude (Anthropic) - fokus safety\n• Groq + LLaMA - SUPER CEPAT (yang Cheese AI pake!)\n\nMau tau lebih dalam? 💡"]},
-    {keys:["indonesia","jakarta","bandung","surabaya","bali","kota"],ans:["Indonesia negara luar biasa! 🇮🇩\n\nFakta seru:\n🏝️ 17.000+ pulau\n🗣️ 700+ bahasa daerah\n🌴 Keanekaragaman hayati terkaya ke-2 di dunia\n🏙️ Jakarta ibu kota (sementara Nusantara di Kalimantan sedang dibangun!)\n\nLo dari mana bos?"]},
+    {keys:["indonesia","jakarta","bandung","surabaya","bali","kota"],ans:["Indonesia negara luar biasa! 🇮🇩\n\nFakta seru:\n🏝️ 17.000+ pulau\n🗣️ 700+ bahasa daerah\n🌴 Keanekaragaman hayati terkaya ke-2 di dunia\n🏙️ Jakarta ibu kota (sementara Nusantara di Kalimantan sedang dibangun!)\n\nAnda berasal dari mana?"]},
   ],
   fallback:[
-    "Hmm, gue belum punya data spesifik soal itu bos! Coba tanya dengan kata kunci lain ya! 🧀",
-    "Wah pertanyaan bagus! Tapi otak keju gue butuh info lebih. Coba spesifikasiin pertanyaan lo bos! 💡",
-    "Itu agak di luar database gue sekarang. Coba tanya soal: game, coding, kesehatan, musik, film, bisnis, atau motivasi! 🎯",
-    "Good question bos! Cheese AI lagi mikir keras nih, coba tanya ulang dengan kata kunci berbeda ya! 🚀",
-    "Gue tau banyak hal bos tapi ini di luar jangkauan gue sekarang. Ada yang lain yang bisa gue bantu? 😊",
+    "Hmm, kami belum punya data spesifik soal itu. Coba tanya dengan kata kunci lain ya! 🧀",
+    "Wah pertanyaan bagus! Tapi otak keju kami butuh info lebih. Coba spesifikasiin pertanyaan Anda. 💡",
+    "Itu agak di luar database kami sekarang. Coba tanya soal: game, coding, kesehatan, musik, film, bisnis, atau motivasi! 🎯",
+    "Good question. Cheese AI lagi mikir keras nih, coba tanya ulang dengan kata kunci berbeda ya! 🚀",
+    "Gue tau banyak hal tapi ini di luar jangkauan kami sekarang. Ada yang lain yang bisa kami bantu? 😊",
   ],
   getReply: function(input) {
     var txt = input.toLowerCase();
@@ -1568,7 +1583,7 @@ function addMsg(text, type) {
     var sw = document.getElementById('sugWrap'); if(sw) sw.style.display='none';
     stats.chats++;
     localStorage.setItem('cheeseStats', JSON.stringify(stats));
-    document.getElementById('chatCount').textContent = stats.chats;
+    var cc=document.getElementById('chatCount'); if(cc) cc.textContent = stats.chats;
   }
 
   var div = document.createElement('div');
@@ -1580,6 +1595,7 @@ function addMsg(text, type) {
     div.textContent = text;
   } else {
     var content = document.createElement('div');
+    content.className = 'msg-text';
     content.textContent = text;
     div.appendChild(content);
     // Footer with time + copy
@@ -1604,12 +1620,17 @@ function addMsg(text, type) {
 
   cb.appendChild(div);
   cb.scrollTop = cb.scrollHeight;
+  // Simpan ke currentMsgs (bukan typing/err)
+  if(type !== 'typing' && type !== 'err' && text) {
+    currentMsgs.push({type: type, text: text});
+  }
   return div;
 }
 
 function clearChat() {
   chatStarted = false;
   chatHistory = [];
+  currentMsgs = [];
   localStorage.removeItem('cheeseChatHistory');
   document.getElementById('chatBox').innerHTML = '<div class="empty-state" id="emptyState"><div class="empty-emoji">🧀</div><div style="font-family:Outfit,sans-serif;font-weight:700;font-size:.98rem;">Cheese AI siap!</div><div style="font-size:.79rem;color:var(--muted);max-width:230px;line-height:1.5;">Ketik pertanyaan atau pilih topik di bawah.</div></div>';
   var sw = document.getElementById('sugWrap'); if(sw) sw.style.display='block';
@@ -1653,14 +1674,22 @@ function quickAsk(t) {
   sendMessage();
 }
 
+function getTodayStr() {
+  var now = new Date();
+  var opts = { weekday:'long', year:'numeric', month:'long', day:'numeric', timeZone:'Asia/Jakarta' };
+  try { return now.toLocaleDateString('id-ID', opts); } catch(e) { return now.toDateString(); }
+}
+
 function getSystemPrompt() {
   var nm = aiSettings.nickname || 'Cheese AI';
+  var today = getTodayStr();
+  var dateInfo = 'Hari ini adalah ' + today + '. ';
   var styles = {
-    gaul:   'Kamu adalah '+nm+', asisten AI dengan bahasa Indonesia gaul dan santai. Gunakan kata sehari-hari yang natural.'+(!aiSettings.emoji?' (Jangan pakai emoji)':''),
-    santai: 'Kamu adalah '+nm+', asisten santai dan ramah. Bahasa Indonesia casual.'+(!aiSettings.emoji?' Jangan pakai emoji.':''),
-    formal: 'Kamu adalah '+nm+', asisten AI profesional. Jawab dengan bahasa Indonesia yang baik, jelas, dan informatif. Seperti AI asisten pada umumnya.'+(!aiSettings.emoji?' Jangan pakai emoji.':''),
-    lucu:   'Kamu adalah '+nm+', asisten super humoris. Selalu sisipkan humor/jokes di setiap jawaban.'+(!aiSettings.emoji?' Jangan pakai emoji.':''),
-    singkat:'Kamu adalah '+nm+'. Jawab singkat, padat, maksimal 3 kalimat.'+(!aiSettings.emoji?' Jangan pakai emoji.':'')
+    gaul:   dateInfo+'Kamu adalah '+nm+', asisten AI dengan bahasa Indonesia gaul dan santai. Gunakan kata sehari-hari yang natural.'+(!aiSettings.emoji?' (Jangan pakai emoji)':''),
+    santai: dateInfo+'Kamu adalah '+nm+', asisten santai dan ramah. Bahasa Indonesia casual.'+(!aiSettings.emoji?' Jangan pakai emoji.':''),
+    formal: dateInfo+'Kamu adalah '+nm+', asisten AI profesional. Jawab dengan bahasa Indonesia yang baik, jelas, dan informatif. Seperti AI asisten pada umumnya.'+(!aiSettings.emoji?' Jangan pakai emoji.':''),
+    lucu:   dateInfo+'Kamu adalah '+nm+', asisten super humoris. Selalu sisipkan humor/jokes di setiap jawaban.'+(!aiSettings.emoji?' Jangan pakai emoji.':''),
+    singkat:dateInfo+'Kamu adalah '+nm+'. Jawab singkat, padat, maksimal 3 kalimat.'+(!aiSettings.emoji?' Jangan pakai emoji.':'')
   };
   var base = (styles[aiSettings.style]||styles.santai) + ' Kamu bagian dari Cheese Platform — platform gaming & AI lokal Indonesia.';
   if(aiSettings.warmth) base += ' Jadilah lebih hangat, ramah, dan menarik dalam setiap respons.';
@@ -1678,7 +1707,7 @@ async function sendMessage() {
   var text = input.value.trim();
   if(!text) return;
   if(!validateInput(text)) { addMsg('⚠️ Input tidak valid atau mengandung karakter berbahaya!','err'); input.value=''; return; }
-  if(!checkRateLimit()) { addMsg('⚠️ Terlalu cepat bos! Tunggu sebentar ya... 😅','err'); return; }
+  if(!checkRateLimit()) { addMsg('⚠️ TerlaAnda cepat! Mohon tunggu sebentar... 😅','err'); return; }
   if(!canSendMsg()){ showPaywall(); return; }
 
   input.value = '';
@@ -1691,7 +1720,7 @@ async function sendMessage() {
 
   var apiKey = localStorage.getItem('cheeseApiKey') || '';
 
-  // Selalu pakai backend (API key aman di Cloudflare Worker)
+  // SelaAnda pakai backend (API key aman di Cloudflare Worker)
   chatHistory.push({role:'user', content:text});
   try {
     var res = await fetch(BACKEND_URL + '/chat', {
@@ -1700,22 +1729,18 @@ async function sendMessage() {
       body: JSON.stringify({
         messages: (function(){
           var sys = getSystemPrompt();
-          var hist = chatHistory.slice();
-          if(hist.length && hist[0].role === 'user') {
-            hist[0] = {role:'user', content: sys + '\n\n' + hist[0].content};
-          } else {
-            hist.unshift({role:'user', content: sys});
-          }
+          var hist = [{role:'system', content: sys}].concat(chatHistory.slice());
           return hist;
         })(),
-        max_tokens: 1024
+        max_tokens: 512
       })
     });
     var data = await res.json();
     if(typingEl && typingEl.parentNode) typingEl.remove();
     if(data.error) {
       chatHistory.pop();
-      addMsg('Error: ' + (data.error.message || data.error || 'Unknown error'), 'err');
+      var errMsg = data.error || 'Unknown error';
+      addMsg(errMsg, 'err');
     } else {
       var reply = data.reply || (data.choices && data.choices[0] ? data.choices[0].message.content : '');
       chatHistory.push({role:'assistant', content:reply});
@@ -1723,11 +1748,22 @@ async function sendMessage() {
       saveChatHistory();
       saveCurrentConversation();
       sfxReceive();
+      // Update AI Engine display
+      if(data.engine) {
+        var engineNames = {
+          'gemini-2.0-flash': 'Gemini 2.0 Flash',
+          'groq-llama3.3': 'Groq LLaMA 3.3',
+          'openrouter-mistral': 'OpenRouter Mistral'
+        };
+        var el = document.getElementById('aiEngineDisplay');
+        if(el) el.textContent = engineNames[data.engine] || data.engine;
+        localStorage.setItem('lastEngine', engineNames[data.engine] || data.engine);
+      }
     }
   } catch(e) {
     if(typingEl && typingEl.parentNode) typingEl.remove();
     chatHistory.pop();
-    addMsg('AI lagi sibuk bos, coba lagi sebentar! 🙏', 'err');
+    addMsg('🔴 Koneksi ke AI gagal. Periksa koneksi internet Anda dan coba lagi.', 'err');
   }
   if(false) { // offline brain tetap ada sebagai fallback
     // Offline brain
@@ -1751,32 +1787,165 @@ function handleImgUpload(event) {
   var file = event.target.files[0];
   if(!file) return;
   if(!file.type.startsWith('image/')) { addMsg('⚠️ File harus berupa gambar!','err'); return; }
-  if(file.size > 5*1024*1024) { addMsg('⚠️ Ukuran foto max 5MB ya bos!','err'); return; }
+  if(file.size > 5*1024*1024) { addMsg('⚠️ Ukuran foto maksimal 5MB.','err'); return; }
   var reader = new FileReader();
   reader.onload = function(e) {
-    if(!chatStarted) {
-      chatStarted = true;
-      var es = document.getElementById('emptyState'); if(es) es.remove();
-      var sw = document.getElementById('sugWrap'); if(sw) sw.style.display='none';
-    }
-    var cb = document.getElementById('chatBox');
-    var wrap = document.createElement('div');
-    wrap.className = 'msg user';
-    wrap.style.padding = '6px'; wrap.style.maxWidth = '60%';
-    var img = document.createElement('img');
-    img.src = e.target.result;
-    img.style.cssText = 'width:100%;border-radius:10px;display:block;';
-    wrap.appendChild(img);
-    cb.appendChild(wrap);
-    cb.scrollTop = cb.scrollHeight;
-    var typingEl = addMsg('','typing');
-    setTimeout(function(){
-      if(typingEl && typingEl.parentNode) typingEl.remove();
-      addMsg('Foto diterima bos! 📸 Fitur analisis gambar AI coming soon — sambil nunggu, ceritain isi fotonya ke gue! 🧀','ai');
-    }, 800);
+    var base64 = e.target.result;
+    var mimeType = file.type;
+    // Tampilkan modal caption dulu
+    showImgCaptionModal(base64, mimeType);
   };
   reader.readAsDataURL(file);
   event.target.value = '';
+}
+
+function closeImgModal(){var m=document.getElementById('imgCaptionModal');if(m)m.remove();}
+
+var _pendingImgBase64 = ''; var _pendingImgMime = '';
+
+function closeImgModal(){var m=document.getElementById('imgCaptionModal');if(m)m.remove();}
+
+function showImgCaptionModal(base64, mimeType) {
+  _pendingImgBase64 = base64;
+  _pendingImgMime = mimeType;
+  var old = document.getElementById('imgCaptionModal');
+  if(old) old.remove();
+
+  var modal = document.createElement('div');
+  modal.id = 'imgCaptionModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px);';
+
+  var inner = document.createElement('div');
+  inner.style.cssText = 'background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-width:500px;overflow:hidden;display:flex;flex-direction:column;max-height:90vh;';
+
+  // Header
+  var header = document.createElement('div');
+  header.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid var(--border);';
+  var htitle = document.createElement('span');
+  htitle.style.cssText = 'font-family:Outfit,sans-serif;font-weight:800;font-size:.95rem;';
+  htitle.textContent = '📸 Kirim Foto ke AI';
+  var hclose = document.createElement('button');
+  hclose.textContent = '✕';
+  hclose.style.cssText = 'background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:4px 8px;';
+  hclose.onclick = closeImgModal;
+  header.appendChild(htitle);
+  header.appendChild(hclose);
+
+  // Foto preview
+  var imgWrap = document.createElement('div');
+  imgWrap.style.cssText = 'background:#000;display:flex;align-items:center;justify-content:center;max-height:50vh;overflow:hidden;';
+  var imgEl = document.createElement('img');
+  imgEl.src = base64;
+  imgEl.style.cssText = 'max-width:100%;max-height:50vh;object-fit:contain;display:block;';
+  imgWrap.appendChild(imgEl);
+
+  // Input area
+  var inputArea = document.createElement('div');
+  inputArea.style.cssText = 'display:flex;align-items:flex-end;gap:8px;padding:10px 12px;border-top:1px solid var(--border);background:var(--surface);';
+
+  var inp = document.createElement('textarea');
+  inp.id = 'imgCaptionInput';
+  inp.placeholder = 'Tulis pertanyaan tentang foto ini...';
+  inp.rows = 1;
+  inp.style.cssText = 'flex:1;resize:none;padding:10px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text);font-family:Nunito,sans-serif;font-size:.92rem;outline:none;max-height:100px;overflow-y:auto;line-height:1.4;';
+  inp.oninput = function(){
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+  };
+  inp.onkeydown = function(e){
+    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendImgToAI(_pendingImgBase64, _pendingImgMime); }
+  };
+
+  var btnKirim = document.createElement('button');
+  btnKirim.innerHTML = '▶';
+  btnKirim.style.cssText = 'width:42px;height:42px;border-radius:50%;border:none;background:var(--accent);color:#000;font-size:1rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:900;';
+  btnKirim.onclick = function(){ sendImgToAI(_pendingImgBase64, _pendingImgMime); };
+
+  inputArea.appendChild(inp);
+  inputArea.appendChild(btnKirim);
+
+  inner.appendChild(header);
+  inner.appendChild(imgWrap);
+  inner.appendChild(inputArea);
+  modal.appendChild(inner);
+  document.body.appendChild(modal);
+  setTimeout(function(){ inp.focus(); }, 150);
+}
+
+function sendImgToAI(base64, mimeType) {
+  var inp = document.getElementById('imgCaptionInput');
+  var caption = inp ? inp.value.trim() : '';
+  closeImgModal();
+
+  if(!chatStarted) {
+    chatStarted = true;
+    var es = document.getElementById('emptyState'); if(es) es.remove();
+    var sw = document.getElementById('sugWrap'); if(sw) sw.style.display='none';
+  }
+
+  var cb = document.getElementById('chatBox');
+  if(!cb) return;
+
+  // Bubble foto user — bisa di-tap untuk lihat fullscreen
+  var wrap = document.createElement('div');
+  wrap.className = 'msg user';
+  wrap.style.cssText = 'padding:4px;max-width:60%;cursor:pointer;';
+
+  var imgEl = document.createElement('img');
+  imgEl.src = base64;
+  imgEl.style.cssText = 'width:100%;border-radius:12px;display:block;';
+  imgEl.title = 'Tap untuk lihat penuh';
+  imgEl.onclick = function(){ openImgViewer(base64); };
+  wrap.appendChild(imgEl);
+
+  if(caption) {
+    var capEl = document.createElement('div');
+    capEl.style.cssText = 'font-size:.85rem;margin-top:5px;padding:2px 6px;color:var(--text);font-family:Nunito,sans-serif;';
+    capEl.textContent = caption;
+    wrap.appendChild(capEl);
+  }
+
+  cb.appendChild(wrap);
+  cb.scrollTop = cb.scrollHeight;
+
+  // Typing indicator
+  var typingEl = addMsg('','typing');
+  var b64data = base64.split(',')[1];
+  var prompt = caption || 'Jelaskan isi gambar ini secara detail dalam bahasa Indonesia.';
+
+  fetch(BACKEND+'/vision', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ image: b64data, mimeType: mimeType, prompt: prompt })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    if(typingEl && typingEl.parentNode) typingEl.remove();
+    if(data.result) {
+      addMsg(data.result, 'ai');
+    } else {
+      addMsg('⚠️ Gagal analisis: '+(data.error||'Unknown error'), 'err');
+    }
+  })
+  .catch(function(){
+    if(typingEl && typingEl.parentNode) typingEl.remove();
+    addMsg('⚠️ Koneksi gagal, coba lagi.', 'err');
+  });
+}
+
+// Fullscreen image viewer
+function openImgViewer(src) {
+  var old = document.getElementById('imgFullViewer');
+  if(old) old.remove();
+  var viewer = document.createElement('div');
+  viewer.id = 'imgFullViewer';
+  viewer.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:99999;display:flex;align-items:center;justify-content:center;cursor:zoom-out;';
+  viewer.onclick = function(){ viewer.remove(); };
+  var img = document.createElement('img');
+  img.src = src;
+  img.style.cssText = 'max-width:95vw;max-height:90vh;border-radius:10px;object-fit:contain;';
+  viewer.appendChild(img);
+  document.body.appendChild(viewer);
 }
 
 // ============================================================
@@ -1848,16 +2017,16 @@ var STYLES = [
   {id:'singkat',label:'⚡ Singkat'},
 ];
 var FEATURES50 = [
-  '📸 Kirim Foto ke AI','🎙️ Pesan Suara','🎨 Generate Gambar AI','🏆 Leaderboard Global','👥 Multiplayer Game',
-  '🎁 Daily Reward','🔔 Push Notification','💬 Forum Chat Room','🌙 Tema Tambahan','⚔️ Battle 2D',
-  '📊 Statistik Detail','🎯 Daily Challenge','🔖 Bookmark Chat','📤 Export Chat','🌐 Multi Bahasa AI',
-  '🤝 Referral System','💰 Poin & Reward','🛒 Toko Poin','📱 App Mobile Native','🔐 2FA Login',
-  '🎭 Avatar Custom','📝 AI Nulis Artikel','🔍 AI Search Web','📅 AI Reminder','🧮 AI Kalori Tracker',
-  '🎵 Musik Background Game','🏅 Achievement Badge','📣 Pengumuman Platform','🌍 Peta Dunia Game','🧪 AI Lab Eksperimental',
-  '💌 Pesan Pribadi Antar User','🖼️ Gallery Gambar AI','⏱️ Speedrun Mode','🎲 10+ Game Baru','🧩 Puzzle Foto Sendiri',
-  '🤖 AI Karakter Custom','📻 AI Podcast Full','🗺️ Roadmap Voting','💎 Top Up PUBG / Genshin','🏪 Marketplace Item',
-  '🎓 AI Tutor Pelajaran','💪 Fitness & Kalori Tracker','🌈 Animasi Kustom','🔧 Developer API Access','🌟 VIP Member Premium',
-  '📈 Analitik Admin','🛡️ Anti Cheat Leaderboard','🔗 Share Profil ke Sosmed','🎪 Event Berhadiah','🧀 Cheese NFT Koleksi',
+  '🎙️ Pesan Suara ke AI','🎨 Generate Gambar AI','🏆 Leaderboard Global','👥 Multiplayer Game','🎁 Daily Reward',
+  '🔔 Push Notification','💬 Forum Chat Room','🌙 Tema Tambahan','⚔️ Battle 2D Upgrade','📊 Statistik Detail',
+  '🎯 Daily Challenge','🔖 Bookmark Chat','🌐 50+ Bahasa AI','🤝 Referral System','💰 Poin & Reward',
+  '🛒 Toko Poin','📱 App Mobile Native','🔐 2FA Login','📝 AI Nulis Artikel','📅 AI Reminder',
+  '🧮 AI Kalori Tracker','🎵 Musik Background Game','🏅 Achievement Badge','📣 Pengumuman Platform','🌍 Peta Dunia Game',
+  '🧪 AI Lab Eksperimental','💌 Pesan Pribadi Antar User','🖼️ Gallery Gambar AI','⏱️ Speedrun Mode','🎲 10+ Game Baru',
+  '🧩 Puzzle Foto Sendiri','🤖 AI Karakter Custom','📻 AI Podcast Full','🗺️ Roadmap Voting','💎 Top Up PUBG / Genshin',
+  '🏪 Marketplace Item','🎓 AI Tutor Pelajaran','💪 Fitness Tracker','🌈 Animasi Kustom','🔧 Developer API Access',
+  '🌟 VIP Member Premium','📈 Analitik Admin','🛡️ Anti Cheat Leaderboard','🔗 Share Profil ke Sosmed','🎪 Event Berhadiah',
+  '🧀 Cheese NFT Koleksi','🗂️ Folder Riwayat Chat','🎬 AI Video Summary','🌡️ Mood Tracker AI','🤯 AI Debat Mode',
 ];
 
 function renderSettings() {
@@ -1867,7 +2036,7 @@ function renderSettings() {
   var apiStatus = document.getElementById('apiKeyStatus');
   if(apiStatus) {
     if(API_KEY && API_KEY.length > 10) {
-      apiStatus.textContent = '✅ API key aktif — Groq AI online!';
+      apiStatus.textContent = '✅ API key aktif — AI siap digunakan.';
       apiStatus.style.color = 'var(--green)';
     } else {
       apiStatus.textContent = 'Belum diisi — pakai mode offline (Cheese Brain)';
@@ -2102,25 +2271,25 @@ function showFeedbackPrompt(){
 // 8. STREAK REWARD
 function checkStreakReward(){
   var days = JSON.parse(localStorage.getItem('cheeseDays')||'[]');
-  if(days.length === 3) showToast('🔥 3 hari berturut! Keren bos!', 'success', 3000);
-  if(days.length === 7) showToast('🏆 7 hari streak! Lo luar biasa!', 'success', 3000);
+  if(days.length === 3) showToast('🔥 3 hari berturut! Keren.', 'success', 3000);
+  if(days.length === 7) showToast('🏆 7 hari streak! Anda luar biasa!', 'success', 3000);
   if(days.length === 30) showToast('💎 30 hari streak! LEGEND!', 'success', 4000);
 }
 
 // ===== ONBOARDING =====
 var OB_SLIDES = [
-  {emoji:'🧀', title:'Selamat Datang!', desc:'Cheese Platform — tempat gaming, AI chat, dan top up game favorit lo semua dalam satu app!'},
+  {emoji:'🧀', title:'Selamat Datang!', desc:'Cheese Platform — tempat gaming, AI chat, dan top up game favorit Anda semua dalam satu app!'},
   {emoji:'🤖', title:'Chat AI Canggih', desc:'Tanya apa aja ke Cheese AI! Mau belajar, ngobrol santai, atau minta bantuan coding — semua bisa!'},
-  {emoji:'🎮', title:'5 Mini Games', desc:'Main Snake, Dino Run, Battle 2D, Puzzle 15, dan Quiz. Kumpulin highscore lo!'},
+  {emoji:'🎮', title:'5 Mini Games', desc:'Main Snake, Dino Run, Battle 2D, Puzzle 15, dan Quiz. Kumpulin highscore Anda!'},
   {emoji:'💎', title:'Top Up Murah', desc:'Top up diamond ML, UC PUBG, dan game lainnya dengan harga terjangkau langsung dari app ini!'},
-  {emoji:'🚀', title:'Siap Jelajahi?', desc:'Gratis 10 pesan AI per 3 jam. Upgrade ke Cheese Full cuma Rp 2.000 untuk akses unlimited 24 jam!'},
+  {emoji:'🚀', title:'Siap Jelajahi?', desc:'Gratis 10 pesan AI per 3 jam. Upgrade ke Cheese Full seharga Rp 2.000 untuk akses tak terbatas selama 24 jam.'},
 ];
 var obIdx = 0;
 
 function showOnboarding(){
   if(localStorage.getItem('cheeseOnboarded')) return;
   var el = document.getElementById('onboardingScreen');
-  if(!el) return; // element doesn't exist, skip
+  if(!el) return; // element not found, skip
   el.style.display='flex';
   renderObSlide();
 }
@@ -2189,10 +2358,29 @@ function renderProfile(){
   var u = getUser();
   if(!u) return;
 
-  // Avatar
-  var saved = localStorage.getItem('cheeseAvatar') || u.name.charAt(0).toUpperCase();
+  // Avatar — support foto atau emoji
+  var savedPhoto = localStorage.getItem('cheeseAvatarPhoto');
+  var savedEmoji = localStorage.getItem('cheeseAvatar') || u.name.charAt(0).toUpperCase();
   var av = document.getElementById('profileAvatar');
-  if(av){ av.textContent = saved; av.style.fontSize = saved.length>1?'1.6rem':'1.8rem'; }
+  var avImg = document.getElementById('profileAvatarImg');
+  if(savedPhoto){
+    if(av) av.style.display='none';
+    if(avImg){ avImg.src=savedPhoto; avImg.style.display='block'; }
+  } else {
+    if(avImg) avImg.style.display='none';
+    if(av){ av.style.display='flex'; av.textContent=savedEmoji; av.style.fontSize=savedEmoji.length>1?'1.6rem':'1.8rem'; }
+  }
+
+  // Sync avatar kecil di sidebar & topbar
+  ['sidebarAvatar','topbarAvatar'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    if(savedPhoto){
+      el.innerHTML='<img src="'+savedPhoto+'" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;"/>';
+    } else {
+      el.textContent = savedEmoji;
+    }
+  });
 
   // Name
   var pn = document.getElementById('profileName');
@@ -2248,6 +2436,49 @@ function renderBadges(stats){
   }).join('');
 }
 
+
+function onAvatarTap() {
+  var photo = localStorage.getItem('cheeseAvatarPhoto');
+  if(photo) {
+    openAvatarViewer();
+  } else {
+    openAvatarPicker();
+  }
+}
+
+function openAvatarViewer() {
+  var modal = document.getElementById('avatarViewerModal');
+  if(!modal) return;
+  var photo = localStorage.getItem('cheeseAvatarPhoto');
+  var emoji = localStorage.getItem('cheeseAvatar');
+  var u = getUser();
+  var name = localStorage.getItem('cheeseName') || (u ? u.name : '');
+
+  var img = document.getElementById('avatarViewerImg');
+  var em = document.getElementById('avatarViewerEmoji');
+  var nm = document.getElementById('avatarViewerName');
+
+  if(photo) {
+    img.src = photo;
+    img.style.display = 'block';
+    em.style.display = 'none';
+  } else {
+    img.style.display = 'none';
+    em.style.display = 'block';
+    em.textContent = emoji || (u ? u.name.charAt(0).toUpperCase() : '?');
+  }
+  if(nm) nm.textContent = name;
+  modal.style.display = 'flex';
+  // Animasi masuk
+  var circle = document.getElementById('avatarViewerCircle');
+  if(circle){ circle.style.transform='scale(0.5)';circle.style.opacity='0';circle.style.transition='all .3s cubic-bezier(.34,1.56,.64,1)'; setTimeout(function(){ circle.style.transform='scale(1)';circle.style.opacity='1'; },10); }
+}
+
+function closeAvatarViewer() {
+  var modal = document.getElementById('avatarViewerModal');
+  if(modal) modal.style.display = 'none';
+}
+
 function openAvatarPicker(){
   document.getElementById('avatarModal').style.display='flex';
   sfxClick();
@@ -2255,10 +2486,26 @@ function openAvatarPicker(){
 
 function setAvatar(emoji){
   localStorage.setItem('cheeseAvatar', emoji);
+  localStorage.removeItem('cheeseAvatarPhoto');
   document.getElementById('avatarModal').style.display='none';
   renderProfile();
   showToast('Avatar diubah ke '+emoji, 'success');
   sfxCorrect();
+}
+
+function uploadAvatarPhoto(input){
+  var file = input.files[0];
+  if(!file) return;
+  if(file.size > 2*1024*1024){ showToast('Foto terlalu besar (maks 2MB)', 'error'); return; }
+  var reader = new FileReader();
+  reader.onload = function(e){
+    localStorage.setItem('cheeseAvatarPhoto', e.target.result);
+    document.getElementById('avatarModal').style.display='none';
+    renderProfile();
+    showToast('Foto profil berhasil diubah!', 'success');
+    sfxCorrect();
+  };
+  reader.readAsDataURL(file);
 }
 
 function openEditName(){
@@ -2272,7 +2519,7 @@ function openEditName(){
 function saveNewName(){
   var inp = document.getElementById('newNameInput');
   var name = inp ? inp.value.trim() : '';
-  if(!name){ showToast('Nama tidak boleh kosong!','error'); return; }
+  if(!name){ showToast('Nama tidak boleh kosong.','error'); return; }
   localStorage.setItem('cheeseName', name);
   document.getElementById('editNameModal').style.display='none';
   renderProfile();
@@ -2301,14 +2548,14 @@ function showToast(msg, type='info', duration=2500){
 // 2. EXPORT CHAT
 function exportChat(){
   var cb = document.getElementById('chatBox');
-  if(!cb){ showToast('Tidak ada chat untuk di-export!','error'); return; }
+  if(!cb){ showToast('Tidak ada percakapan untuk diekspor.','error'); return; }
   var msgs = cb.querySelectorAll('.msg:not(.typing)');
-  if(!msgs.length){ showToast('Chat masih kosong!','error'); return; }
+  if(!msgs.length){ showToast('Percakapan masih kosong.','error'); return; }
   var text = 'CHEESE AI CHAT EXPORT\n' + new Date().toLocaleString('id-ID') + '\n' + '='.repeat(40) + '\n\n';
   msgs.forEach(function(m){
     var isUser = m.classList.contains('user');
     var content = m.querySelector('span') ? m.querySelector('span').textContent : m.textContent;
-    text += (isUser ? 'Kamu' : 'Cheese AI') + ':\n' + content.trim() + '\n\n';
+    text += (isUser ? 'Anda' : 'Cheese AI') + ':\n' + content.trim() + '\n\n';
   });
   var blob = new Blob([text], {type:'text/plain'});
   var a = document.createElement('a');
@@ -2375,14 +2622,14 @@ function quickPrompt(text){
 // 7. TIPS OF THE DAY
 var TIPS = [
   'Gunakan fitur AI Podcast untuk dengerin konten sambil santai! 🎙️',
-  'Ganti gaya bicara AI di Pengaturan sesuai mood lo! 🤖',
-  'Skor game tersimpan otomatis, cek highscore lo di setiap game! 🏆',
-  'Quick prompts di chat bisa bantu lo ngedit jawaban AI dengan cepat! ⚡',
+  'Ganti gaya bicara AI di Pengaturan sesuai mood Anda! 🤖',
+  'Skor game tersimpan otomatis, cek highscore Anda di setiap game! 🏆',
+  'Quick prompts di chat bisa bantu Anda ngedit jawaban AI dengan cepat! ⚡',
   'Bisa export chat history ke file .txt di menu Pengaturan! 📤',
   'Top Up diamond ML & FF bisa dilakukan langsung di tab Top Up! 💎',
-  'Ganti warna aksen platform di Pengaturan sesuai selera lo! 🎨',
+  'Ganti warna aksen platform di Pengaturan sesuai selera Anda! 🎨',
   'Pakai mode baca di Pengaturan buat font yang lebih nyaman di mata! 👁️',
-  'Reset limit chat gratis setiap 3 jam atau upgrade Cheese Full! ⏱️',
+  'Limit chat gratis direset setiap 3 jam. Upgrade ke Cheese Full untuk akses tak terbatas. ⏱️',
   'AI Cheese bisa bantu coding, nulis, jawab soal, dan banyak lagi! 💻',
 ];
 var tipIdx = Math.floor(Math.random() * TIPS.length);
@@ -2438,6 +2685,10 @@ function showSplash(){
 
 // Init fitur baru saat app ready
 function initNewFeatures(){
+  // Load last AI engine dari localStorage
+  var lastEngine = localStorage.getItem('lastEngine');
+  var el = document.getElementById('aiEngineDisplay');
+  if(el && lastEngine) el.textContent = lastEngine;
   showTip();
   var savedFont = localStorage.getItem('cheeseFontSize');
   if(savedFont) setFontSize(savedFont);
@@ -2936,7 +3187,7 @@ function closePaywall(){
 }
 
 function paywallWA(){
-  var msg = 'Halo min! Saya mau upgrade Cheese Full Rp 2.000 untuk akses unlimited 24 jam. Username: ' + (localStorage.getItem('cheeseName')||'User');
+  var msg = 'Halo Admin! Saya ingin upgrade ke Cheese Full seharga Rp 2.000 untuk akses tak terbatas 24 jam. Username: ' + (localStorage.getItem('cheeseName')||'User');
   window.open('https://wa.me/' + OWNER_WA + '?text=' + encodeURIComponent(msg), '_blank');
 }
 
@@ -2960,7 +3211,7 @@ function submitUnlockCode(){
   } else if(TOPUP_CODES.indexOf(code) !== -1){
     var usedCodes = JSON.parse(localStorage.getItem('cheeseUsedCodes')||'[]');
     if(usedCodes.indexOf(code) !== -1){
-      showToast('❌ Kode sudah pernah dipakai!', 'error');
+      showToast('❌ Kode ini sudah pernah digunakan.', 'error');
       sfxDie();
       return;
     }
@@ -2977,7 +3228,7 @@ function submitUnlockCode(){
   } else if(TOPUP_CODES.indexOf(code) !== -1){
     var usedCodes = JSON.parse(localStorage.getItem('cheeseUsedCodes')||'[]');
     if(usedCodes.indexOf(code) !== -1){
-      showToast('❌ Kode sudah pernah dipakai!', 'error');
+      showToast('❌ Kode ini sudah pernah digunakan.', 'error');
       sfxDie();
       return;
     }
@@ -2997,10 +3248,10 @@ function submitUnlockCode(){
     saveUsage(u);
     closePaywall();
     updateUsageUI();
-    showToast('✅ Unlock berhasil! Unlimited 24 jam aktif!', 'success', 3000);
+    showToast('✅ Berhasil! Akses Unlimited 24 jam telah aktif.', 'success', 3000);
     sfxCorrect();
   } else {
-    showToast('❌ Kode salah!', 'error');
+    showToast('❌ Kode tidak valid.', 'error');
     sfxDie();
   }
 }
@@ -3034,7 +3285,7 @@ function submitFeedback(rating){
   var lastRated = localStorage.getItem('cheeseLastRated');
   if(lastRated === today){
     document.getElementById('feedbackModal').style.display='none';
-    showToast('⭐ Lo udah rating hari ini bos! Besok lagi ya 😄', 'err', 3000);
+    showToast('⭐ Anda udah rating hari ini. Besok lagi ya 😄', 'err', 3000);
     sfxClick();
     return;
   }
@@ -3048,7 +3299,7 @@ function submitFeedback(rating){
   document.getElementById('feedbackModal').style.display='none';
   showToast('⭐ Thanks, rating '+rating+'/5 tersimpan! Avg: '+avg+'⭐', 'success', 3000);
   sfxCorrect();
-  pushNotif('⭐ Lo kasih rating '+rating+'/5 hari ini!');
+  pushNotif('⭐ Anda kasih rating '+rating+'/5 hari ini!');
 }
 
 function hoverStars(n){
@@ -3080,7 +3331,7 @@ function initBattle2P(canvas){
   var gameOver2P = false;
 
   var p1 = {x:40, y:H/2-18, w:24, h:36, hp:5, maxHp:5, color:'#f5c842',
-    bullets:[], lastShot:0, cd:350, vx:0, vy:0, speed:3, name:'Kamu'};
+    bullets:[], lastShot:0, cd:350, vx:0, vy:0, speed:3, name:'Anda'};
   var ai = {x:W-64, y:H/2-18, w:24, h:36, hp:5, maxHp:5, color:'#ff4d4d',
     bullets:[], lastShot:0, cd:900, vx:0, vy:0, speed:2, name:'AI 🤖',
     dir:1, changeDirTimer:0};
@@ -3228,7 +3479,7 @@ function initBattle2P(canvas){
     ctx.font='bold 24px Outfit,sans-serif'; ctx.textAlign='center';
     ctx.fillText(won?'KAMU MENANG! 🏆':'AI MENANG! 🤖', W/2, H/2-16);
     ctx.fillStyle='#e8edf2'; ctx.font='13px Nunito,sans-serif';
-    ctx.fillText(won?'GG! AI kalah dari lo 💪':'Coba lagi, lo bisa!', W/2, H/2+14);
+    ctx.fillText(won?'GG! AI kalah dari Anda 💪':'Coba lagi, Anda bisa!', W/2, H/2+14);
     var ov=document.getElementById('battle2POver'); if(ov) ov.style.display='flex';
     document.removeEventListener('keydown',onKeyDown);
     document.removeEventListener('keyup',onKeyUp);
@@ -3292,7 +3543,7 @@ function shareApp(){
     navigator.share({title:'Cheese Platform', text:text});
   } else {
     navigator.clipboard.writeText(text).then(function(){
-      showToast('Link dicopy! Share ke temen lo!','success');
+      showToast('Link dicopy! Share ke temen Anda!','success');
     });
   }
   sfxCorrect();
@@ -3320,16 +3571,16 @@ function clearChatConfirm(){
 
 function copyAllChat(){
   var cb = document.getElementById('chatBox');
-  if(!cb){ showToast('Chat kosong!','error'); return; }
+  if(!cb){ showToast('Percakapan kosong.','error'); return; }
   var msgs = cb.querySelectorAll('.msg');
   var lines = [];
   msgs.forEach(function(m){
     var isUser = m.classList.contains('user');
     var span = m.querySelector('span');
     var txt = span ? span.textContent.trim() : '';
-    if(txt) lines.push((isUser?'Kamu':'AI') + ': ' + txt);
+    if(txt) lines.push((isUser?'Anda':'AI') + ': ' + txt);
   });
-  if(!lines.length){ showToast('Chat masih kosong!','error'); return; }
+  if(!lines.length){ showToast('Percakapan masih kosong.','error'); return; }
   navigator.clipboard.writeText(lines.join('\n\n')).then(function(){
     showToast('Semua chat dicopy!','success');
   });
@@ -3338,7 +3589,7 @@ function copyAllChat(){
 
 function chatStats(){
   var cb = document.getElementById('chatBox');
-  if(!cb){ showToast('Chat kosong!','error'); return; }
+  if(!cb){ showToast('Percakapan kosong.','error'); return; }
   var msgs = cb.querySelectorAll('.msg');
   var totalWords = 0;
   msgs.forEach(function(m){
@@ -3371,14 +3622,14 @@ function scheduleDonatePopup(){
 
 var TIPS_v27 = [
   'Gunakan AI Podcast untuk dengerin konten sambil santai!',
-  'Ganti gaya bicara AI di Pengaturan sesuai mood lo!',
-  'Skor game tersimpan otomatis di profil lo!',
-  'Quick prompts di chat bisa bantu lo dengan cepat!',
+  'Ganti gaya bicara AI di Pengaturan sesuai mood Anda!',
+  'Skor game tersimpan otomatis di profil Anda!',
+  'Quick prompts di chat bisa bantu Anda dengan cepat!',
   'Bisa export chat history ke file .txt di Pengaturan!',
   'Top Up diamond ML dan FF bisa langsung dari app ini!',
   'Ganti warna aksen platform di Pengaturan!',
   'Cheese Platform dibuat oleh K Studio dengan cinta!',
-  'Reset limit chat gratis setiap 3 jam!',
+  'Limit chat gratis direset setiap 3 jam.',
   'Dukung K Studio lewat tombol Dukung di pojok kanan!',
 ];
 var tipIdx27 = Math.floor(Math.random()*TIPS_v27.length);
@@ -3501,7 +3752,7 @@ function initDino() {
 
   var canvas=document.getElementById('gc');
   var ctx=canvas.getContext('2d');
-  dinoState={dino:{x:60,y:110,vy:0,jumping:false,h:36,w:28},obs:[],speed:2.8,frame:0,score:0,dead:false,ground:110,ctx:ctx};
+  dinoState={dino:{x:60,y:110,vy:0,jumping:false,h:36,w:28},obs:[],speed:5.5,frame:0,score:0,dead:false,ground:110,ctx:ctx};
   if(dinoRAF) cancelAnimationFrame(dinoRAF);
   document.onkeydown=function(e){if(e.code==='Space'){e.preventDefault();dinoJump();}};
   canvas.onclick=dinoJump;
@@ -3524,7 +3775,7 @@ function dinoLoop(){
   s.frame++;s.score+=0.08;
   gameScore=Math.floor(s.score);
   var el=document.getElementById('gs');if(el)el.textContent=gameScore;
-  s.speed=2.8+s.score*0.003;
+  s.speed=5.5+s.score*0.008;
   d.vy+=0.55;d.y+=d.vy;
   if(d.y>=s.ground){d.y=s.ground;if(d.jumping&&d.vy>2)sfxLand();d.vy=0;d.jumping=false;}
   s.obs.forEach(function(o){o.x-=s.speed;});
@@ -3711,7 +3962,7 @@ var quizBank=[
   {q:"Apa singkatan dari 'DNS'?",opts:["Dynamic Network System","Domain Name System","Data Node Server","Digital Name Service"],ans:1},
   {q:"Berapa FPS yang nyaman untuk gaming?",opts:["15 FPS","30 FPS","60 FPS","10 FPS"],ans:2},
   {q:"Siapa yang menyanyikan 'Riptide'?",opts:["Ed Sheeran","Vance Joy","John Mayer","James Bay"],ans:1},
-  {q:"Apa nama game online buatan Valve?",opts:["League of Legends","Dota 2","Smite","Heroes of the Storm"],ans:1},
+  {q:"Apa nama game online buatan Valve?",opts:["Leakami of Legends","Dota 2","Smite","Heroes of the Storm"],ans:1},
   {q:"RAM berapa yang standar untuk HP gaming?",opts:["2GB","4GB","8GB","1GB"],ans:2},
   {q:"Apa bahasa resmi India?",opts:["Hindi & Inggris","Urdu","Bengali","Tamil"],ans:0},
   {q:"Siapa yang membuat WhatsApp?",opts:["Mark Zuckerberg","Jan Koum & Brian Acton","Jack Dorsey","Kevin Systrom"],ans:1},
@@ -3719,7 +3970,28 @@ var quizBank=[
   {q:"Berapa jumlah kartu dalam satu deck standar?",opts:["48","52","54","56"],ans:1},
   {q:"Siapa penyanyi 'Flowers'?",opts:["Taylor Swift","Ariana Grande","Miley Cyrus","Selena Gomez"],ans:2},
   {q:"Framework JavaScript buatan Meta?",opts:["Vue","Angular","Svelte","React"],ans:3},
-  {q:"Apa kepanjangan dari IoT?",opts:["Internet of Things","Input Output Technology","Integrated Open Tech","Internet Object Transfer"],ans:0},
+  {q:"Apa kepanjangan dari IoT?",opts:["Internet of Things","Input Output Technology","Integrated Open Tech","Internet Object Transfer"],ans:0},,
+  // === QUIZ BARU ===
+  {q:"Apa nama AI chatbot buatan Anthropic?",opts:["ChatGPT","Gemini","Claude","Copilot"],ans:2},
+  {q:"Berapa resolusi layar Full HD?",opts:["1280x720","1920x1080","2560x1440","3840x2160"],ans:1},
+  {q:"Siapa yang menciptakan karakter Naruto?",opts:["Eiichiro Oda","Masashi Kishimoto","Akira Toriyama","Hajime Isayama"],ans:1},
+  {q:"Apa nama planet yang memiliki cincin paling indah?",opts:["Jupiter","Uranus","Neptunus","Saturnus"],ans:3},
+  {q:"Bahasa pemrograman yang dipakai untuk membuat iOS app?",opts:["Java","Kotlin","Swift","Python"],ans:2},
+  {q:"Siapa pencipta One Piece?",opts:["Masashi Kishimoto","Eiichiro Oda","Tite Kubo","Akira Toriyama"],ans:1},
+  {q:"Apa nama game survival buatan Mojang selain Minecraft?",opts:["Terraria","Valheim","Minecraft Dungeons","Roblox"],ans:2},
+  {q:"Berapa jumlah tulang dalam tubuh manusia dewasa?",opts:["196","206","216","226"],ans:1},
+  {q:"Apa singkatan dari 'GHz' dalam prosesor?",opts:["Gigahertz","Gigabyte","Gigawatt","Gigabit"],ans:0},
+  {q:"Siapa pemeran Iron Man di MCU?",opts:["Chris Evans","Chris Hemsworth","Robert Downey Jr.","Benedict Cumberbatch"],ans:2},
+  {q:"Game open world buatan Rockstar selain GTA?",opts:["The Witcher","Red Dead Redemption","Cyberpunk 2077","Elden Ring"],ans:1},
+  {q:"Apa nama satelit alami bumi?",opts:["Mars","Pluto","Bulan","Titan"],ans:2},
+  {q:"Siapa yang menyanyikan 'As It Was'?",opts:["Shawn Mendes","Justin Bieber","Harry Styles","Niall Horan"],ans:2},
+  {q:"Apa kepanjangan dari 'GIF'?",opts:["Graphics Image Format","Graphics Interchange Format","Global Image File","General Image Format"],ans:1},
+  {q:"Negara dengan luas wilayah terbesar di dunia?",opts:["Amerika Serikat","Kanada","Rusia","China"],ans:2},
+  {q:"Siapa pencipta Dragon Ball?",opts:["Eiichiro Oda","Masashi Kishimoto","Akira Toriyama","Naoki Urasawa"],ans:2},
+  {q:"Apa nama model AI terbaru dari OpenAI (2024)?",opts:["GPT-3","GPT-4o","BERT","LLaMA"],ans:1},
+  {q:"Berapa suhu normal tubuh manusia?",opts:["35°C","36-37°C","38°C","39°C"],ans:1},
+  {q:"Siapa CEO Apple saat ini?",opts:["Steve Jobs","Jony Ive","Tim Cook","Craig Federighi"],ans:2},
+  {q:"Apa nama game horror populer buatan Capcom?",opts:["Silent Hill","Outlast","Resident Evil","The Evil Within"],ans:2}
 ];
 function initQuiz(){
   document.getElementById('gameContent').innerHTML='<div id="quizArea" class="quiz-wrap"></div>';
@@ -3767,7 +4039,7 @@ function setPodTopic(t) { document.getElementById('podcastTopic').value=t; sfxCl
 
 async function generatePodcast() {
   var topic = document.getElementById('podcastTopic').value.trim();
-  if(!topic){ alert('Isi topik dulu bos!'); return; }
+  if(!topic){ alert('Isi topik dulu.'); return; }
   var style = document.getElementById('podStyle').value;
   var dur = document.getElementById('podDuration').value;
   var styleMap={berita:'seperti anchor berita TV profesional',santai:'santai seperti ngobrol di kafe, bahasa gaul Indonesia',motivasi:'penuh semangat seperti motivator terkenal',edukasi:'mendalam dan informatif seperti dosen menyenangkan',komedi:'lucu dan menghibur dengan humor segar'};
@@ -3791,7 +4063,7 @@ async function generatePodcast() {
     var text=data.reply||(data.choices&&data.choices[0]?data.choices[0].message.content:'Gagal generate.');
     displayPodcast(topic,text);
   }catch(e){
-    displayPodcast(topic,'🎙️ Cheese AI Podcast\n\nTopik: '+topic+'\n\n[Gagal konek ke server. Cek internet bos!]');
+    displayPodcast(topic,'🎙️ Cheese AI Podcast\n\nTopik: '+topic+'\n\n[Gagal konek ke server. Cek internet.]');
   }
   btn.textContent='🎙️ Generate Podcast'; btn.disabled=false;
 }
@@ -3835,8 +4107,8 @@ function replayPodHistory(i){ if(podHistory[i]) displayPodcast(podHistory[i].top
 
 var podProgressInterval=null;
 function speakPodcast(){
-  if(!podcastText){alert('Generate podcast dulu bos!');return;}
-  if(!('speechSynthesis' in window)){alert('Browser lo ga support Text-to-Speech!');return;}
+  if(!podcastText){alert('Silakan generate podcast terlebih dahulu!');return;}
+  if(!('speechSynthesis' in window)){alert('Browser Anda ga support Text-to-Speech!');return;}
   stopPodcast();
   podcastSpeech=new SpeechSynthesisUtterance(podcastText);
   podcastSpeech.lang='id-ID'; podcastSpeech.rate=1.0; podcastSpeech.pitch=1.0;
@@ -3880,9 +4152,7 @@ function copyPodcast(){
     if(btn){btn.textContent='✓ Copied!';setTimeout(function(){btn.textContent='📋 Copy';},2000);}
   }).catch(function(){});
 }
-</script>
 
-<script>
 // ===== v2.8 — 5 FITUR BARU =====
 
 // FITUR 1: Daily Streak
@@ -3906,7 +4176,7 @@ try{ notifs = JSON.parse(localStorage.getItem('cheeseNotifs')||'[]'); }catch(e){
   var el = document.getElementById('streakCount');
   if(el) el.textContent = streak;
   if(streak>1 && last!==today){
-    pushNotif('🔥 Streak '+streak+' hari! Keren bos!');
+    pushNotif('🔥 Streak '+streak+' hari! Keren.');
   }
 })();
 
@@ -3950,16 +4220,16 @@ applyTheme();
 // FITUR 4: Export Chat
 function exportChat(){
   var cb = document.getElementById('chatBox');
-  if(!cb){ showToast('Belum ada chat bos!','err',2000); return; }
+  if(!cb){ showToast('Belum ada percakapan.','err',2000); return; }
   var msgs = [];
   cb.querySelectorAll('.msg').forEach(function(m){
     if(m.classList.contains('typing')) return;
     var isUser = m.classList.contains('user');
     var div = m.querySelector('div:first-child');
     var txt = div ? div.textContent.trim() : m.textContent.trim();
-    if(txt) msgs.push((isUser?'[Kamu]':'[Cheese AI]')+': '+txt);
+    if(txt) msgs.push((isUser?'[Anda]':'[Cheese AI]')+': '+txt);
   });
-  if(!msgs.length){ showToast('Belum ada chat bos!','err',2000); return; }
+  if(!msgs.length){ showToast('Belum ada percakapan.','err',2000); return; }
   var blob = new Blob([msgs.join('\n\n')], {type:'text/plain'});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -4024,8 +4294,8 @@ function clearNotifs(){
 
 // Push welcome notif on load
 setTimeout(function(){
-  pushNotif('👋 Selamat datang di Cheese Platform v2.9!');
-  pushNotif('🆕 5 fitur baru: Streak, Dark/Light, Export Chat, Notif, v3.0 Countdown!');
+  pushNotif('👋 Selamat datang di Cheese Platform v3.1!');
+  pushNotif('🆕 v3.1: Gemini 2.0 Flash + OpenRouter + UI Formal!');
 }, 1500);
 
 renderNotifs();
@@ -4102,7 +4372,7 @@ function togglePass(id, btn) {
     <div style="background:var(--surface);border-radius:24px;padding:28px 24px;width:100%;max-width:340px;text-align:center;">
       <div style="font-size:2rem;margin-bottom:10px;">⭐</div>
       <div style="font-family:Outfit,sans-serif;font-weight:800;font-size:1rem;margin-bottom:6px;">Gimana Cheese Platform?</div>
-      <div style="font-size:.8rem;color:var(--muted);margin-bottom:6px;">Rating lo bantu kami berkembang!</div>
+      <div style="font-size:.8rem;color:var(--muted);margin-bottom:6px;">Rating Anda bantu kami berkembang!</div>
       <div id="feedbackAvgDisplay" style="font-size:.78rem;color:var(--accent);font-weight:700;margin-bottom:14px;"></div>
       <div style="display:flex;justify-content:center;gap:8px;margin-bottom:16px;" id="starRow">
         <button onclick="submitFeedback(1)" onmouseover="hoverStars(1)" onmouseout="resetStars()" style="font-size:2rem;background:none;border:none;cursor:pointer;transition:.2s;" id="star1">⭐</button>
@@ -4120,7 +4390,7 @@ function togglePass(id, btn) {
     <div style="background:var(--surface);border-radius:24px;padding:28px 24px;width:100%;max-width:380px;text-align:center;">
       <div style="font-size:3rem;margin-bottom:12px;">🔒</div>
       <div style="font-family:Outfit,sans-serif;font-weight:800;font-size:1.2rem;margin-bottom:8px;">Limit Tercapai!</div>
-      <div style="font-size:.83rem;color:var(--muted);margin-bottom:6px;">30 pesan gratis lo udah habis.</div>
+      <div style="font-size:.83rem;color:var(--muted);margin-bottom:6px;">30 pesan gratis Anda udah habis.</div>
       <div id="paywallTimer" style="font-size:.8rem;color:var(--accent);font-weight:700;margin-bottom:20px;"></div>
       <div style="background:linear-gradient(135deg,rgba(245,200,66,.08),rgba(245,200,66,.03));border:1px solid rgba(245,200,66,.2);border-radius:16px;padding:16px;margin-bottom:14px;">
         <div style="font-family:Outfit,sans-serif;font-weight:800;font-size:1rem;color:var(--accent);margin-bottom:4px;">⭐ Cheese Full</div>
@@ -4146,7 +4416,7 @@ function togglePass(id, btn) {
       <div style="text-align:center;margin-bottom:20px;">
         <div style="font-size:2.5rem;margin-bottom:8px;">&#10084;</div>
         <div style="font-family:Outfit,sans-serif;font-weight:800;font-size:1.2rem;margin-bottom:6px;">Dukung K Studio!</div>
-        <div style="font-size:.82rem;color:var(--muted);line-height:1.5;">Cheese Platform dibuat dengan cinta oleh K Studio.<br>Dukungan lo sangat berarti buat pengembangan selanjutnya!</div>
+        <div style="font-size:.82rem;color:var(--muted);line-height:1.5;">Cheese Platform dibuat dengan cinta oleh K Studio.<br>Dukungan Anda sangat berarti buat pengembangan selanjutnya!</div>
       </div>
       <div style="background:linear-gradient(135deg,rgba(255,107,157,.1),rgba(255,71,87,.05));border:1px solid rgba(255,107,157,.2);border-radius:16px;padding:16px;margin-bottom:16px;text-align:center;">
         <div style="font-size:.75rem;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;font-weight:700;">Donasi via Sociabuzz</div>
@@ -4189,5 +4459,23 @@ function togglePass(id, btn) {
       <button onclick="document.getElementById('qrisModal').style.display='none'" style="font-size:.75rem;color:var(--muted);background:none;border:none;cursor:pointer;">Tutup</button>
     </div>
   </div>
+
+  <!-- AVATAR VIEWER MODAL -->
+  <div id="avatarViewerModal" onclick="closeAvatarViewer()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:9999;align-items:center;justify-content:center;flex-direction:column;">
+    <div style="position:relative;max-width:340px;width:90%;" onclick="event.stopPropagation()">
+      <!-- Close btn -->
+      <button onclick="closeAvatarViewer()" style="position:absolute;top:-44px;right:0;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;z-index:1;">✕</button>
+      <!-- Avatar lingkaran besar -->
+      <div id="avatarViewerCircle" style="width:100%;aspect-ratio:1;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#f5c842,#ff6b35);display:flex;align-items:center;justify-content:center;font-size:5rem;border:4px solid rgba(245,200,66,0.5);box-shadow:0 0 60px rgba(245,200,66,0.3);">
+        <span id="avatarViewerEmoji"></span>
+        <img id="avatarViewerImg" style="display:none;width:100%;height:100%;object-fit:cover;" />
+      </div>
+      <!-- Nama user -->
+      <div id="avatarViewerName" style="text-align:center;margin-top:16px;font-family:Outfit,sans-serif;font-weight:800;font-size:1.2rem;color:#fff;"></div>
+      <!-- Tombol ganti -->
+      <button onclick="closeAvatarViewer();openAvatarPicker();" style="display:block;width:100%;margin-top:16px;padding:12px;border-radius:14px;border:none;background:rgba(245,200,66,0.15);color:var(--accent);font-family:Outfit,sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;border:1.5px solid rgba(245,200,66,0.3);">📷 Ganti Foto / Avatar</button>
+    </div>
+  </div>
+
 </body>
-    </html>
+            </html>
