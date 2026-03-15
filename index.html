@@ -4,11 +4,13 @@
   <meta name="monetag" content="5e10d309cec0ed1a77fac12b0f173892">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🧀</text></svg>">
       <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 <meta charset="UTF-8"/>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://epic-tiger-11.k-studio.deno.net https://fonts.googleapis.com https://fonts.gstatic.com https://wttr.in https://image.pollinations.ai https://www.highperformanceformat.com https://5gvci.com data: blob:;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>Cheese Platform v3.33</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'; this.onload=null;"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/></noscript>
 <style>
 :root{--bg:#080b10;--surface:#0e1318;--surface2:#141c24;--surface3:#1a2430;--border:rgba(255,255,255,0.07);--accent:#f5c842;--accent2:#ff6b35;--text:#e8edf2;--muted:#5a6a7a;--green:#00e5a0;--red:#ff4d4d;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -129,8 +131,8 @@ body.ai-active .topbar{display:none !important;}
 .msg{max-width:76%;padding:10px 14px;border-radius:16px;font-size:.86rem;line-height:1.65;word-break:break-word;animation:msgIn .22s ease;}
 .msg{animation:msgIn .22s cubic-bezier(.2,.8,.3,1) both;}
 @keyframes msgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-.msg.user{align-self:flex-end;background:var(--accent);color:#080b10;border-radius:16px 16px 4px 16px;font-weight:600;}
-.msg.ai{align-self:flex-start;background:#1a2430;border:1px solid rgba(255,255,255,0.08);border-radius:16px 16px 16px 4px;white-space:pre-wrap;color:var(--text);}
+.msg.user{align-self:flex-end;background:var(--accent);color:#080b10;border-radius:16px 16px 4px 16px;font-weight:600;word-break:break-word;overflow-wrap:anywhere;}
+.msg.ai{align-self:flex-start;background:#1a2430;border:1px solid rgba(255,255,255,0.08);border-radius:16px 16px 16px 4px;white-space:pre-wrap;color:var(--text);word-break:break-word;overflow-wrap:anywhere;}
 .msg.typing{align-self:flex-start;background:var(--surface2);border:1px solid var(--border);border-radius:16px 16px 16px 4px;padding:13px 16px;}
 .msg.err{align-self:center;background:rgba(255,77,77,.08);border:1px solid rgba(255,77,77,.15);color:#ff6b6b;font-size:.78rem;border-radius:10px;text-align:center;max-width:90%;}
 .typing-dots{display:inline-flex;gap:4px;align-items:center;}
@@ -552,7 +554,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
   </div>
   <button id="otpSubmitBtn" class="auth-btn" onclick="submitOTP()" style="margin-top:12px;">Verifikasi</button>
   <div style="display:flex;justify-content:space-between;margin-top:10px;">
-    <button id="resendOTPBtn" onclick="resendOTP()" style="background:none;border:none;color:var(--accent);font-size:.82rem;cursor:pointer;font-family:Nunito,sans-serif;text-decoration:underline;">Kirim Ulang</button>
+    <button id="resendOTPBtn" onclick="resendOTP()" style="background:none;border:none;color:var(--accent);font-size:.82rem;cursor:pointer;font-family:Nunito,sans-serif;text-decoration:underline;">Kirim Ulang (<span id="resendTimer">60</span>s)</button>
     <button onclick="hideOTPForm()" style="background:none;border:none;color:var(--muted);font-size:.82rem;cursor:pointer;font-family:Nunito,sans-serif;">← Kembali</button>
   </div>
 </div>
@@ -1631,6 +1633,8 @@ function deleteConversation(id) {
 }
 
 function newConversation() {
+  // Stop AI jika sedang streaming
+  if(typeof stopStreaming === 'function') stopStreaming();
   if(chatStarted) saveCurrentConversation();
   currentMsgs = [];
   currentConvId = null;
@@ -1646,7 +1650,13 @@ function newConversation() {
 function openRiwayat() {
   if(chatStarted) saveCurrentConversation();
   var panel = document.getElementById('riwayatPanel');
-  if(panel) { panel.style.display = 'flex'; renderRiwayat(); }
+  if(panel) {
+    panel.style.display = 'flex';
+    // Loading state
+    var list = document.getElementById('riwayatList');
+    if(list) list.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted);font-size:.82rem;">⏳ Memuat riwayat...</div>';
+    setTimeout(renderRiwayat, 50); // render setelah DOM update
+  }
 }
 
 function closeRiwayat() {
@@ -1954,6 +1964,7 @@ function submitOTP() {
       
       // Update verified status di currentUser lokal
       if (currentUser) {
+        // Verified hanya set setelah backend konfirmasi (tidak bisa dimanipulasi via localStorage saja)
         currentUser.verified = true;
         localStorage.setItem('cheeseCurrentUser', JSON.stringify(currentUser));
       }
@@ -2001,6 +2012,16 @@ function submitOTP() {
 }
 
 var _resendCooldown = 0;
+function startResendTimer(){
+  var t=document.getElementById('resendTimer'),b=document.getElementById('resendOTPBtn');
+  if(!t||!b) return;
+  var s=60; b.disabled=true; b.style.opacity='0.5'; t.textContent=s;
+  var iv=setInterval(function(){
+    s--; if(t) t.textContent=s;
+    if(s<=0){clearInterval(iv);if(b){b.disabled=false;b.style.opacity='1';}if(t) t.textContent='60';}
+  },1000);
+}
+
 function resendOTP() {
   if (!window._pendingOTPEmail) return;
   var now = Date.now();
@@ -2104,8 +2125,11 @@ function doLogin() {
 }
 
 function doGuestLogin() {
+  var guestBtn = document.querySelector('.google-btn');
+  if(guestBtn){ guestBtn.disabled=true; guestBtn.textContent='Memuat...'; }
   var deviceId = getDeviceId();
   var savedEmail = localStorage.getItem('cheeseGuestEmail');
+  function resetBtn(){ if(guestBtn){ guestBtn.disabled=false; guestBtn.textContent='Lanjut sebagai Tamu'; } }
 
   // Fungsi untuk lanjut login dengan email yang sudah ditentukan
   function proceedGuest(guestEmail) {
@@ -2123,22 +2147,15 @@ function doGuestLogin() {
     enterApp();
   }
 
-  // Tanya backend dulu - apakah device ini sudah punya guest email?
-  fetch(BACKEND_URL + '/guest/identify', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({deviceId: deviceId})
-  }).then(function(r){ return r.json(); }).then(function(data){
-    if (data.guestEmail) {
-      // Pakai email dari backend (permanen walau localStorage clear)
-      proceedGuest(data.guestEmail);
-    } else {
-      // Fallback ke localStorage atau buat baru
-      proceedGuest(savedEmail || getOrCreateGuestEmail());
-    }
+  var timedOut=false;
+  var timer=setTimeout(function(){ timedOut=true; resetBtn(); proceedGuest(savedEmail||getOrCreateGuestEmail()); },5000);
+  fetch(BACKEND_URL+'/guest/identify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({deviceId:deviceId})})
+  .then(function(r){return r.json();}).then(function(data){
+    if(timedOut) return; clearTimeout(timer);
+    proceedGuest(data.guestEmail||savedEmail||getOrCreateGuestEmail());
   }).catch(function(){
-    // Offline - pakai localStorage
-    proceedGuest(savedEmail || getOrCreateGuestEmail());
+    if(timedOut) return; clearTimeout(timer);
+    proceedGuest(savedEmail||getOrCreateGuestEmail());
   });
 }
 
@@ -2304,7 +2321,8 @@ function detectJailbreak(text) {
 }
 
 function validateInput(text) {
-  if(!text || text.trim().length === 0) return false;
+  if(!text || typeof text !== 'string' || text.trim().length === 0) return false;
+  if(text.trim().length < 1) return false;
   if(text.length > 1500) return false;
   if(/\x3cscript[\s>]/i.test(text)) return false;
   if(/javascript\s*:/i.test(text)) return false;
@@ -2647,7 +2665,7 @@ function saveChatHistory() {
       var txt = span ? span.textContent.trim() : m.textContent.trim();
       if(txt) msgs.push({type: isUser ? 'user' : 'ai', text: txt});
     });
-    localStorage.setItem('cheeseChatHistory', JSON.stringify(msgs.slice(-40)));
+    localStorage.setItem('cheeseChatHistory', JSON.stringify(msgs.slice(-20))); // Max 20 pesan
   } catch(e){}
 }
 
@@ -2699,7 +2717,11 @@ function getSystemPrompt() {
   return base;
 }
 
+var _sendDebounce = false;
 function sendMessage() {
+  if(_sendDebounce) return;
+  _sendDebounce = true;
+  setTimeout(function(){ _sendDebounce = false; }, 1000);
   var input = document.getElementById('userInput');
   var sendBtn = document.getElementById('sendBtn');
   var text = input.value.trim();
@@ -2716,7 +2738,7 @@ function sendMessage() {
 
   input.value = '';
   input.disabled = true;
-  sendBtn.disabled = false;
+  sendBtn.disabled = true; // Disable dulu cegah double-send
   sendBtn.classList.add('stop-mode');
   sendBtn.onclick = stopStreaming;
   sendBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="#fff"><rect x="3" y="3" width="10" height="10" rx="2"/></svg>';
@@ -2749,6 +2771,11 @@ function sendMessage() {
     })
   }).then(function(res){ return res.json(); }).then(function(data){
     if(typingEl && typingEl.parentNode) typingEl.remove();
+    if(_streamingStopped){
+      input.disabled=false; sendBtn.disabled=false;
+      sendBtn.classList.remove('stop-mode'); sendBtn.onclick=sendMessage; sendBtn.innerHTML='&#9658;';
+      return;
+    }
     if(data.error) {
       chatHistory.pop();
       if(data.error === 'limit_exceeded') {
@@ -2759,6 +2786,8 @@ function sendMessage() {
       }
     } else {
       var reply = data.reply || (data.choices && data.choices[0] ? data.choices[0].message.content : '');
+      // XSS: strip script tags dari reply AI
+      reply = reply.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/javascript:/gi,'').replace(/on\w+\s*=/gi,'');
       if(!validateBackendResponse(data)) { reply = 'Respons tidak valid dari server.'; }
       chatHistory.push({role:'assistant', content:reply});
       // Streaming typewriter effect
@@ -2778,15 +2807,17 @@ function sendMessage() {
           sfxReceive();
         }
       }
-      // Update limit - single source of truth
       incrementUsage();
+      if(_premiumStatus && _premiumStatus.remaining!==undefined && _premiumStatus.remaining>0) _premiumStatus.remaining--;
       var limitEl = document.getElementById('dashLimit');
-      if(limitEl && _premiumStatus && _premiumStatus.remaining !== undefined) limitEl.textContent = _premiumStatus.remaining;
-      loadDashboard();
+      if(limitEl) limitEl.textContent = Math.max(0, _premiumStatus&&_premiumStatus.remaining!==undefined?_premiumStatus.remaining:0);
       updateProfileStatus();
       if(data.engine) {
         var aiNameEl = document.getElementById('aiNameDisplay');
         if(aiNameEl) aiNameEl.textContent = aiSettings.nickname || 'Cheese AI';
+        var engineEl = document.getElementById('aiEngineDisplay');
+        if(engineEl) engineEl.textContent = data.engine;
+        window.lastEngine = data.engine;
       }
     }
     input.disabled = false;
@@ -2859,6 +2890,7 @@ function showImgCaptionModal(base64, mimeType) {
 
   var imgEl = document.createElement('img');
   imgEl.src = base64;
+        imgEl.onerror=function(){this.onerror=null;this.alt='Gagal memuat gambar';this.style.cssText='padding:20px;color:var(--muted);font-size:.8rem;';};
   imgEl.style.cssText = 'width:48px;height:48px;border-radius:10px;object-fit:cover;display:block;cursor:pointer;border:1.5px solid var(--border);';
   imgEl.onclick = function(){ openImgViewer(base64); };
   thumb.appendChild(imgEl);
@@ -4783,32 +4815,18 @@ function saveUsage(u){ localStorage.setItem('cheeseUsage', JSON.stringify(u)); }
 
 function canSendMsg(){
   if(isUnlocked()) return true;
-  // Kalau belum pernah fetch backend di sesi ini, fetch dulu
+  // Selalu andalkan backend sebagai source of truth
   if(_premiumStatus.checkedAt === 0){
     fetchMyStatus();
-    // Sementara pakai localStorage, tapi reset dulu kalau kosong
-    var u = getUsage();
-    var now = Date.now();
-    if(!u.resetAt || now > u.resetAt){
-      // Jangan reset - tunggu backend
-      return true; // biarkan kirim, backend yang nentuin limit
-    }
-    return (u.count||0) < FREE_LIMIT;
+    // Belum ada data backend - izinkan kirim, backend yang enforce
+    return true;
   }
-  // Pakai data dari backend (sumber kebenaran)
+  // Backend sudah di-fetch - pakai data backend
   if(_premiumStatus.remaining !== undefined && _premiumStatus.remaining >= 0){
     return _premiumStatus.remaining > 0;
   }
-  // Fallback localStorage
-  var u = getUsage();
-  var now = Date.now();
-  if(!u.resetAt || now > u.resetAt){
-    u.count = 0;
-    u.resetAt = now + RESET_HOURS*3600*1000;
-    saveUsage(u);
-  }
-  var effectiveLimit = u.limit || FREE_LIMIT;
-  return (u.count||0) < effectiveLimit;
+  // Fallback: izinkan, backend akan blokir kalau limit habis
+  return true;
 }
 
 function incrementUsage(){
@@ -6291,6 +6309,23 @@ document.addEventListener('paste', function(e) {
 }, {passive: false});
 
 
+// Stop polling saat tab tidak aktif (memory leak fix)
+document.addEventListener('visibilitychange', function() {
+  if(document.hidden) {
+    if(window._statusInterval) { clearInterval(window._statusInterval); window._statusInterval = null; }
+    if(window._usageTimer) { clearInterval(window._usageTimer); window._usageTimer = null; }
+  } else {
+    // Tab aktif lagi - refresh status
+    fetchMyStatus();
+  }
+});
+window.addEventListener('beforeunload', function() {
+  if(window._statusInterval) clearInterval(window._statusInterval);
+  if(window._usageTimer) clearInterval(window._usageTimer);
+  if(window._sessionTimer) clearInterval(window._sessionTimer);
+});
+
+
 // Simpan login time
 var _origEnterApp = typeof enterApp === 'function' ? enterApp : null;
 
@@ -6449,6 +6484,20 @@ function typewriterChar(el, text, onDone) {
   typewriterStream(el, text, onDone);
 }
 
+function clearNotifs(){localStorage.removeItem('cheeseNotifs');var el=document.getElementById('notifList');if(el)el.innerHTML='<div style="text-align:center;color:var(--muted);font-size:.8rem;padding:20px 0;">Belum ada notifikasi</div>';showToast('Notifikasi dihapus','info',1500);}
+function exportChat(){if(!currentMsgs||!currentMsgs.length){showToast('Tidak ada chat untuk di-export','err',2000);return;}var txt=currentMsgs.map(function(m){return '['+(m.type==='user'?'Kamu':'AI')+'] '+m.text;}).join('\n\n');var blob=new Blob([txt],{type:'text/plain'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='cheese-chat-'+new Date().toLocaleDateString('id-ID').replace(/[/]/g,'-')+'.txt';a.click();showToast('Chat di-export!','success',2000);}
+function openDonate(){window.open('https://sociabuzz.com/kstudio/tribe','_blank');}
+function shareApp(){var url='https://k-studio1.github.io/Cheese-Platform/';if(navigator.share){navigator.share({title:'Cheese Platform',text:'Cobain Cheese Platform!',url:url}).catch(function(){});}else{navigator.clipboard.writeText(url).then(function(){showToast('Link disalin!','success',2000);}).catch(function(){});}}
+function scrollToBottom(){var cb=document.getElementById('chatBox');if(cb)cb.scrollTop=cb.scrollHeight;}
+function setPodTopic(t){var el=document.getElementById('podcastTopic');if(el){el.value=t;el.focus();}}
+function copyPodcast(){if(!window._podcastText){showToast('Generate podcast dulu!','err',2000);return;}navigator.clipboard.writeText(window._podcastText).then(function(){showToast('Disalin!','success',2000);}).catch(function(){});}
+function generatePodcast(){var topic=document.getElementById('podcastTopic');if(!topic||!topic.value.trim()){showToast('Isi topik dulu!','err',2000);return;}var btn=document.getElementById('podGenBtn');if(btn)btn.disabled=true;showToast('Generating...','info',2000);fetch(BACKEND_URL+'/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:'Buat podcast singkat tentang: '+topic.value.trim()}],token:localStorage.getItem('cheeseToken')||''})}).then(function(r){return r.json();}).then(function(data){if(btn)btn.disabled=false;if(data.reply){window._podcastText=data.reply;var res=document.getElementById('podcastResult');var disp=document.getElementById('podcastTextDisplay');var ttl=document.getElementById('podTitle');if(res)res.style.display='block';if(disp)disp.textContent=data.reply;if(ttl)ttl.textContent=topic.value.trim().slice(0,40);sfxCorrect();}}).catch(function(){if(btn)btn.disabled=false;showToast('Gagal generate','err',2000);});}
+function speakPodcast(){if(!window._podcastText){showToast('Generate podcast dulu!','err',2000);return;}if(window.speechSynthesis.speaking){window.speechSynthesis.cancel();return;}var utt=new SpeechSynthesisUtterance(window._podcastText);utt.lang='id-ID';utt.rate=0.95;var btn=document.getElementById('podPlayBtn');if(btn)btn.textContent='||';utt.onend=function(){if(btn)btn.textContent='>';};window.speechSynthesis.speak(utt);}
+function stopPodcast(){window.speechSynthesis.cancel();var btn=document.getElementById('podPlayBtn');if(btn)btn.textContent='>';}
+function togglePodcastPlay(){if(window.speechSynthesis.speaking){window.speechSynthesis.cancel();speakPodcast();}else{speakPodcast();}}
+function restartPodcast(){window.speechSynthesis.cancel();speakPodcast();}
+
+
 // ============================================================
 // DEVICE FINGERPRINT - ID unik persistent per device/browser
 // ============================================================
@@ -6481,7 +6530,8 @@ function getDeviceId() {
     hash = ((hash << 5) - hash) + raw.charCodeAt(i);
     hash = hash & hash;
   }
-  var deviceId = 'dev_' + Math.abs(hash).toString(36) + Date.now().toString(36);
+  // Tidak pakai Date.now() agar deviceId konsisten di device yang sama
+  var deviceId = 'dev_' + Math.abs(hash).toString(36).padEnd(8,'0');
   localStorage.setItem('cheeseDeviceId', deviceId);
   return deviceId;
 }
@@ -6586,7 +6636,7 @@ function adminResetUser() {
   <!-- FEEDBACK MODAL -->
   
   <!-- PAYWALL MODAL -->
-  <div id="paywallModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9100;align-items:center;justify-content:center;padding:20px;">
+  <div id="paywallModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:10000;align-items:center;justify-content:center;padding:20px;">
     <div style="background:var(--surface);border-radius:24px;padding:28px 24px;width:100%;max-width:380px;text-align:center;">
       <div style="font-size:3rem;margin-bottom:12px;">🔒</div>
       <div style="font-family:Outfit,sans-serif;font-weight:800;font-size:1.2rem;margin-bottom:8px;">Limit Tercapai!</div>
@@ -6727,4 +6777,4 @@ function adminResetUser() {
   }
 </script>
 </body>
-              </html>
+                                                                              </html>
