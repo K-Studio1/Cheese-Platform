@@ -5,7 +5,7 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🧀</text></svg>">
       <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <meta charset="UTF-8"/>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://quiet-butterfly-31.k-studio.deno.net https://fonts.googleapis.com https://fonts.gstatic.com https://wttr.in https://image.pollinations.ai data: blob:;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://healthy-hare-63.k-studio.deno.net https://fonts.googleapis.com https://fonts.gstatic.com https://wttr.in https://image.pollinations.ai data: blob:;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>Cheese Platform v3.3</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
@@ -449,11 +449,36 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
   border-right: none;
 }
 .msg-text.streaming::after {
-  content: '';
+  content: none;
+}
+/* Cursor streaming mirip ChatGPT */
+.stream-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--accent, #f5c842);
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  border-radius: 1px;
+  animation: blink-cursor 0.55s ease-in-out infinite;
+}
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+/* Stop button - muncul saat AI ngetik */
+.send-btn.stop-mode {
+  background: #ff4d4d !important;
+  animation: pulse-stop 1s ease-in-out infinite;
+}
+@keyframes pulse-stop {
+  0%,100% { box-shadow: 0 0 0 0 rgba(255,77,77,0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(255,77,77,0); }
 }
 </style>
 
@@ -641,6 +666,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
             <div style="font-size:.68rem;color:var(--muted);margin-bottom:3px;">Iklan Tersisa</div>
             <div style="font-family:Outfit,sans-serif;font-weight:900;font-size:1.3rem;color:var(--accent);" id="dashAd">—</div>
             <div style="font-size:.62rem;color:var(--muted);">hari ini</div>
+            <button onclick="doWatchAd()" style="margin-top:6px;width:100%;padding:5px 8px;border-radius:8px;border:none;background:rgba(245,200,66,0.15);color:var(--accent);font-size:.65rem;font-weight:700;cursor:pointer;font-family:Nunito,sans-serif;">📺 Tonton +1 Limit</button>
           </div>
           <div style="background:var(--surface2);border-radius:12px;padding:10px 12px;">
             <div style="font-size:.68rem;color:var(--muted);margin-bottom:3px;">Status</div>
@@ -1103,11 +1129,45 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
       <div class="settings-card">
         <div class="settings-card-title">🗺️ Roadmap</div>
         <div style="margin-top:12px;">
-          <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:.83rem;font-weight:700;">v3.3 — Memory + History + OTP + Verifikasi Email</span><span style="font-size:.72rem;color:#5865f2;font-weight:700;">100%</span></div><div style="height:6px;background:var(--surface3);border-radius:10px;overflow:hidden;"><div style="height:100%;width:100%;background:#5865f2;border-radius:10px;"></div></div></div>
-          <div style="margin-top:12px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:.83rem;font-weight:700;">v3.3 — Google Login + Xendit Payment 🔜</span><span style="font-size:.72rem;color:var(--muted);font-weight:700;">5%</span></div><div style="height:6px;background:var(--surface3);border-radius:10px;overflow:hidden;"><div style="height:100%;width:5%;background:#5865f2;border-radius:10px;"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:.83rem;font-weight:700;">v3.3 — Security + Streaming + Auth + Backend</span><span style="font-size:.72rem;color:#00e5a0;font-weight:700;">100%</span></div><div style="height:6px;background:var(--surface3);border-radius:10px;overflow:hidden;"><div style="height:100%;width:100%;background:#00e5a0;border-radius:10px;"></div></div></div>
+          <div style="margin-top:12px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:.83rem;font-weight:700;">v3.4 — Imagen3 + Duitku + Battle KOF + PWA 🔜</span><span style="font-size:.72rem;color:var(--muted);font-weight:700;">10%</span></div><div style="height:6px;background:var(--surface3);border-radius:10px;overflow:hidden;"><div style="height:100%;width:10%;background:#5865f2;border-radius:10px;"></div></div></div>
         </div>
       </div>
       <div class="sec-sub">Kustomisasi Cheese Platform sesuai selera Anda!</div>
+      <!-- ADMIN PANEL - Dev Only -->
+      <div class="settings-card" id="adminPanelSection" style="display:none;border-color:rgba(245,200,66,0.3);">
+        <div class="settings-card-title">👑 Admin Panel</div>
+        <div class="settings-card-sub">Hanya untuk K Studio Developer</div>
+
+        <!-- Kirim Notifikasi -->
+        <div style="margin-bottom:16px;">
+          <div style="font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px;">Kirim Notifikasi</div>
+          <input type="text" class="settings-input" id="adminNotifTitle" placeholder="Judul notifikasi" style="margin-bottom:8px;"/>
+          <input type="text" class="settings-input" id="adminNotifMsg" placeholder="Isi pesan notifikasi"/>
+          <select id="adminNotifType" style="width:100%;padding:9px 12px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text);font-family:Nunito,sans-serif;margin-top:8px;">
+            <option value="info">ℹ️ Info</option>
+            <option value="success">✅ Success</option>
+            <option value="warning">⚠️ Warning</option>
+            <option value="error">❌ Error</option>
+          </select>
+          <button class="settings-save-btn" onclick="adminSendNotif()" style="margin-top:10px;width:100%;">📢 Kirim ke Semua User</button>
+        </div>
+
+        <!-- Hapus Notifikasi -->
+        <div style="margin-bottom:16px;">
+          <div style="font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px;">Hapus Notifikasi</div>
+          <input type="text" class="settings-input" id="adminNotifId" placeholder="ID notifikasi"/>
+          <button class="settings-save-btn" onclick="adminDeleteNotif()" style="margin-top:8px;width:100%;background:rgba(255,77,77,0.15);color:#ff4d4d;border:1px solid rgba(255,77,77,0.3);">🗑️ Hapus Notifikasi</button>
+        </div>
+
+        <!-- Reset User Limit -->
+        <div>
+          <div style="font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px;">Reset Limit User</div>
+          <input type="email" class="settings-input" id="adminResetEmail" placeholder="Email user yang mau direset"/>
+          <button class="settings-save-btn" onclick="adminResetUser()" style="margin-top:8px;width:100%;background:rgba(255,107,53,0.15);color:#ff6b35;border:1px solid rgba(255,107,53,0.3);">⚡ Reset Limit User</button>
+        </div>
+      </div>
+
 
       <!-- API KEY -->
       
@@ -1345,12 +1405,12 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
 // GLOBALS & STATE
 // ============================================================
 // ============================================================
-// BACKEND URL — ganti dengan URL Cloudflare Worker Anda!
+// BACKEND URL -- ganti dengan URL Cloudflare Worker Anda!
 // Contoh: 'https://cheese-api.namalo.workers.dev'
 // ============================================================
-var BACKEND_URL = 'https://quiet-butterfly-31.k-studio.deno.net';
+var BACKEND_URL = 'https://healthy-hare-63.k-studio.deno.net';
 
-var API_KEY = ''; // Tidak dipakai lagi — API key aman di backend
+var API_KEY = ''; // Tidak dipakai lagi -- API key aman di backend
 var soundOn = true;
 var audioCtx = null;
 var currentUser = null;
@@ -1604,7 +1664,7 @@ function renderRiwayat() {
   });
 }
 // ============================================================
-// INIT — load from localStorage
+// INIT -- load from localStorage
 // ============================================================
 (function init() {
   // Animate splash bar
@@ -1642,15 +1702,68 @@ function renderRiwayat() {
   API_KEY = ''; // handled by backend
 
   var savedToken = localStorage.getItem('cheeseToken');
+
+  // Kalau guest - refresh token via /guest/identify dulu
+  if(currentUser && currentUser.isGuest) {
+    var deviceId = getDeviceId();
+    fetch(BACKEND_URL + '/guest/identify', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({deviceId: deviceId})
+    }).then(function(r){ return r.json(); }).then(function(data){
+      if(data.guestEmail) {
+        // Pastikan email konsisten dengan backend
+        currentUser.email = data.guestEmail;
+        localStorage.setItem('cheeseGuestEmail', data.guestEmail);
+        localStorage.setItem('cheeseCurrentUser', JSON.stringify(currentUser));
+        // Re-register untuk dapat token baru kalau token expired
+        if(!savedToken) {
+          return fetch(BACKEND_URL + '/auth/register', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({email: data.guestEmail})
+          }).then(function(r){ return r.json(); }).then(function(rd){
+            if(rd.token) localStorage.setItem('cheeseToken', rd.token);
+          });
+        }
+      }
+    }).catch(function(){}).finally(function(){
+      finishSplash();
+      enterApp();
+    });
+    return;
+  }
+
   if(savedToken && currentUser) {
     fetch(BACKEND_URL + '/auth/verify', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({token: savedToken})
     }).then(function(r){ return r.json(); }).then(function(data){
-      if(data.valid) { currentUser = data.user; }
-      else { localStorage.removeItem('cheeseToken'); localStorage.removeItem('cheeseCurrentUser'); }
+      if(data.valid) {
+        currentUser = Object.assign(currentUser, data.user);
+        localStorage.setItem('cheeseCurrentUser', JSON.stringify(currentUser));
+      } else {
+        localStorage.removeItem('cheeseToken');
+        if(currentUser && currentUser.email && !currentUser.isGuest) {
+          localStorage.setItem('cheeseLastEmail', currentUser.email);
+        }
+        currentUser = null;
+        localStorage.removeItem('cheeseCurrentUser');
+      }
       finishSplash();
-      if(currentUser) enterApp();
+      if(currentUser) {
+        enterApp();
+      } else {
+        var lastEmail = localStorage.getItem('cheeseLastEmail');
+        if(lastEmail) {
+          setTimeout(function(){
+            var emailInput = document.getElementById('loginEmail');
+            if(emailInput) {
+              emailInput.value = lastEmail;
+              showToast('Sesi habis. Silakan login ulang.', 'err', 3000);
+            }
+          }, 500);
+        }
+      }
     }).catch(function(){
       finishSplash();
       if(currentUser) enterApp();
@@ -1724,17 +1837,49 @@ function doRegister() {
   if(pass.length < 6) { showAuthErr('registerError','Password minimal 6 karakter!'); return; }
   if(!checkRegisterLimit()) { showAuthErr('registerError','Terlalu banyak pendaftaran! Coba lagi nanti. 🚫'); return; }
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAuthErr('registerError','Format email tidak valid!'); return; }
-  fetch(BACKEND_URL + '/auth/register', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({name:name, email:email, password:pass})
-  }).then(function(r){ return r.json(); }).then(function(data){
-    if(data.error) { showAuthErr('registerError', data.error); return; }
-    localStorage.setItem('cheeseToken', data.token);
-    localStorage.setItem('cheeseCurrentUser', JSON.stringify(data.user));
-    // Simpan email untuk OTP
-    window._pendingOTPEmail = email;
-    showOTPForm('register');
-  }).catch(function(){ showAuthErr('registerError','Koneksi gagal. Coba lagi!'); });
+  // Validasi email benar-benar ada (cek MX record via API)
+  var regBtn = document.querySelector('#registerForm .auth-btn');
+  if(regBtn){ regBtn.disabled=true; regBtn.textContent='Mendaftar...'; }
+
+  // Cek email valid dulu via simple DNS check (gratis)
+  var emailDomain = email.split('@')[1];
+  var knownDomains = ['gmail.com','yahoo.com','outlook.com','hotmail.com','icloud.com','live.com','protonmail.com','yandex.com','mail.com','gmx.com'];
+  var isKnownDomain = knownDomains.indexOf(emailDomain.toLowerCase()) >= 0;
+
+  function proceedRegister() {
+    fetch(BACKEND_URL + '/auth/register', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({name:name, email:email, password:pass})
+    }).then(function(r){ return r.json(); }).then(function(data){
+      if(regBtn){ regBtn.disabled=false; regBtn.textContent='Daftar Sekarang'; }
+      if(data.error) {
+        var errMsg = data.error;
+        if(errMsg.toLowerCase().includes('sudah terdaftar')) {
+          errMsg = '❌ Email ini sudah terdaftar. Silakan login!';
+        }
+        showAuthErr('registerError', errMsg); return;
+      }
+      localStorage.setItem('cheeseToken', data.token);
+      localStorage.setItem('cheeseCurrentUser', JSON.stringify(data.user));
+      currentUser = data.user;
+      window._pendingOTPEmail = email;
+      showOTPForm('register');
+      showToast('📧 Kode OTP dikirim ke ' + email, 'success', 3000);
+    }).catch(function(){
+      if(regBtn){ regBtn.disabled=false; regBtn.textContent='Daftar Sekarang'; }
+      showAuthErr('registerError','Koneksi gagal. Cek internet kamu!');
+    });
+  }
+
+  // Kalau domain tidak dikenal, verifikasi dulu
+  if (!isKnownDomain) {
+    // Coba kirim OTP dulu - kalau email tidak valid, Brevo akan gagal kirim
+    // Backend akan handle ini
+    proceedRegister();
+  } else {
+    // Domain dikenal (gmail, yahoo, dll) - langsung daftar
+    proceedRegister();
+  }
 }
 
 
@@ -1783,13 +1928,43 @@ function submitOTP() {
     }).then(function(r){ return r.json(); }).then(function(data){
       if (data.error) { 
         btn.disabled = false; btn.textContent = 'Verifikasi';
-        document.getElementById('otpError').textContent = data.error; 
+        var otpErrMsg = data.error;
+        if(data.error.toLowerCase().includes('otp') && data.error.toLowerCase().includes('tidak')) {
+          otpErrMsg = '❌ Kode OTP salah atau kadaluarsa. Coba kirim ulang.';
+        }
+        document.getElementById('otpError').textContent = otpErrMsg;
+        document.getElementById('otpError').style.color = '#ff5050';
         return; 
       }
-      // Sukses - langsung masuk app
+      // Sukses - enable button dulu biar ga stuck
+      btn.disabled = false; btn.textContent = 'Verifikasi';
+      
+      // Update verified status di currentUser lokal
+      if (currentUser) {
+        currentUser.verified = true;
+        localStorage.setItem('cheeseCurrentUser', JSON.stringify(currentUser));
+      }
+      
+      // Langsung masuk app tanpa fetch tambahan
       document.getElementById('otpSection').style.display = 'none';
+      showToast('✅ Email terverifikasi! Selamat datang ' + (currentUser ? currentUser.name : '') + '! 🎉', 'success', 3000);
       enterApp();
-      showToast('Email terverifikasi! Selamat datang 🎉', 'success', 3000);
+      
+      // Update data dari backend di background (tidak blocking)
+      var token = localStorage.getItem('cheeseToken') || '';
+      if (token) {
+        setTimeout(function(){
+          fetch(BACKEND_URL + '/auth/verify', {
+            method: 'POST', headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({token: token})
+          }).then(function(r){ return r.json(); }).then(function(vdata){
+            if (vdata.valid && vdata.user) {
+              currentUser = Object.assign(currentUser || {}, vdata.user);
+              localStorage.setItem('cheeseCurrentUser', JSON.stringify(currentUser));
+            }
+          }).catch(function(){});
+        }, 1000);
+      }
     }).catch(function(){
       btn.disabled = false; btn.textContent = 'Verifikasi';
       document.getElementById('otpError').textContent = 'Koneksi gagal. Coba lagi!';
@@ -1863,7 +2038,15 @@ function showForgotPassword() {
     body: JSON.stringify({ email: email })
   }).then(function(r){ return r.json(); }).then(function(data){
     if(forgotBtn) { forgotBtn.textContent = 'Lupa Password?'; forgotBtn.disabled = false; }
-    if (data.error) { showAuthErr('loginError', data.error); return; }
+    if (data.error) {
+      // Pesan error spesifik
+      var errMsg = data.error;
+      if (data.error.toLowerCase().includes('tidak terdaftar') || data.error.includes('404') || data.error.includes('not found')) {
+        errMsg = '❌ Email ' + email + ' tidak terdaftar. Silakan daftar dulu!';
+      }
+      showAuthErr('loginError', errMsg); return;
+    }
+    showToast('📧 Kode OTP dikirim ke ' + email, 'success', 3000);
     showOTPForm('forgot');
   }).catch(function(){
     if(forgotBtn) { forgotBtn.textContent = 'Lupa Password?'; forgotBtn.disabled = false; }
@@ -1875,50 +2058,75 @@ function doLogin() {
   var email = document.getElementById('loginEmail').value.trim();
   var pass = document.getElementById('loginPass').value;
   if(!email || !pass) { showAuthErr('loginError','Isi semua field!'); return; }
+  if(isLoginLocked()) return;
   if(!checkLoginAttempts(email)) { showAuthErr('loginError','Terlalu banyak percobaan! Tunggu 1 menit. 🚫'); return; }
   if (!validateEmail(email)) { showAuthErr('loginError','Format email tidak valid!'); return; }
   if (!validatePassword(pass)) { showAuthErr('loginError','Password minimal 6 karakter!'); return; }
+  var loginBtn = document.querySelector('#loginForm .auth-btn');
+  if(loginBtn){ loginBtn.disabled=true; loginBtn.textContent='Masuk...'; }
   fetch(BACKEND_URL + '/auth/login', {
     method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({email:email.toLowerCase().trim(), password:pass})
   }).then(function(r){ return r.json(); }).then(function(data){
-    if(data.error) { showAuthErr('loginError', data.error); return; }
+    if(loginBtn){ loginBtn.disabled=false; loginBtn.textContent='Masuk Sekarang'; }
+    if(data.error) {
+      var errMsg = data.error;
+      if(errMsg.toLowerCase().includes('email atau password salah')) {
+        recordFailedLogin();
+        errMsg = '❌ Email atau password salah. Belum punya akun? Daftar dulu!';
+      }
+      showAuthErr('loginError', errMsg); return;
+    }
     localStorage.setItem('cheeseToken', data.token);
     localStorage.setItem('cheeseCurrentUser', JSON.stringify(data.user));
+    localStorage.removeItem('cheeseLastEmail');
     currentUser = data.user;
-    enterApp();
-  }).catch(function(){ showAuthErr('loginError','Koneksi gagal. Coba lagi!'); });
+    clearFailedLogins();
+      enterApp();
+    showToast('Selamat datang, ' + data.user.name + '! 👋', 'success', 2500);
+  }).catch(function(){
+    if(loginBtn){ loginBtn.disabled=false; loginBtn.textContent='Masuk Sekarang'; }
+    showAuthErr('loginError','Koneksi gagal. Cek internet kamu!');
+  });
 }
 
 function doGuestLogin() {
-  // Cek apakah sudah ada guest session sebelumnya
-  var existing = null;
-  try { existing = JSON.parse(localStorage.getItem('cheeseCurrentUser')); } catch(e){}
-  
-  if (existing && existing.isGuest && existing.email && /^guest_[a-z0-9]{6}@cheese\.id$/.test(existing.email)) {
-    // Pakai guest email yang sama biar limit tidak reset
-    currentUser = existing;
-  } else {
-    // Buat guest email baru yang acak
-    var rand = Math.random().toString(36).slice(2, 8).toLowerCase();
-    var guestEmail = 'guest_' + rand + '@cheese.id';
-    currentUser = {name:'Tamu', email: guestEmail, isGuest: true};
+  var deviceId = getDeviceId();
+  var savedEmail = localStorage.getItem('cheeseGuestEmail');
+
+  // Fungsi untuk lanjut login dengan email yang sudah ditentukan
+  function proceedGuest(guestEmail) {
+    localStorage.setItem('cheeseGuestEmail', guestEmail);
+    currentUser = {name: 'Tamu', email: guestEmail, isGuest: true};
+    localStorage.setItem('cheeseCurrentUser', JSON.stringify(currentUser));
+    // Register ke backend
+    fetch(BACKEND_URL + '/auth/register', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email: guestEmail})
+    }).then(function(r){ return r.json(); }).then(function(data){
+      if (data.token) localStorage.setItem('cheeseToken', data.token);
+    }).catch(function(){});
+    enterApp();
   }
-  
-  // Daftarkan ke backend
-  fetch(BACKEND_URL + '/auth/register', {
+
+  // Tanya backend dulu - apakah device ini sudah punya guest email?
+  fetch(BACKEND_URL + '/guest/identify', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({email: currentUser.email})
+    body: JSON.stringify({deviceId: deviceId})
   }).then(function(r){ return r.json(); }).then(function(data){
-    if (data.token) {
-      localStorage.setItem('cheeseToken', data.token);
-      currentUser.token = data.token;
+    if (data.guestEmail) {
+      // Pakai email dari backend (permanen walau localStorage clear)
+      proceedGuest(data.guestEmail);
+    } else {
+      // Fallback ke localStorage atau buat baru
+      proceedGuest(savedEmail || getOrCreateGuestEmail());
     }
-  }).catch(function(){});
-  
-  localStorage.setItem('cheeseCurrentUser', JSON.stringify(currentUser));
-  enterApp();
+  }).catch(function(){
+    // Offline - pakai localStorage
+    proceedGuest(savedEmail || getOrCreateGuestEmail());
+  });
 }
 
 function doLogout() {
@@ -1942,7 +2150,7 @@ function doLogoutAll() {
   showToast('✅ Berhasil logout dari semua perangkat!', 'success', 2500);
 }
 
-function enterApp() { fetchMyStatus(); setInterval(fetchMyStatus, 2*60*1000);
+function enterApp() { fetchMyStatus(); setInterval(fetchMyStatus, 2*60*1000); setTimeout(renderAdminPanel, 2000);
   document.getElementById('authScreen').style.display = 'none';
   document.getElementById('appScreen').style.display = 'block';
   var init = currentUser.name.charAt(0).toUpperCase();
@@ -2084,13 +2292,13 @@ function detectJailbreak(text) {
 
 function validateInput(text) {
   if(!text || text.trim().length === 0) return false;
-  if(text.length > 2000) return false;
+  if(text.length > 1500) return false;
   if(/\x3cscript[\s>]/i.test(text)) return false;
   if(/javascript\s*:/i.test(text)) return false;
   if(/vbscript\s*:/i.test(text)) return false;
   if(/data\s*:\s*text\/html/i.test(text)) return false;
-  if(/(UNION.*SELECT|DROP.*TABLE)/i.test(text)) return false;
-  if(/ /.test(text)) return false;
+  if(/(UNION[\s\S]{0,20}SELECT|DROP[\s\S]{0,20}TABLE)/i.test(text)) return false;
+  if(text.indexOf('\x00') > -1) return false;
   return true;
 }
 
@@ -2134,16 +2342,16 @@ function checkSpam(text) {
 var cheeseBrain = {
   knowledge:[
     {keys:["halo","hai","hello","hey","hi","pagi","siang","malam"],ans:["Heyy. Gimana kabar? 😄🧀","Halo! Cheese AI siap membantu! 🧀✨","Haiii! Seneng banget Anda mampir! 🔥"]},
-    {keys:["siapa Anda","nama Anda","Anda apa","lo siapa","cheese ai"],ans:["Gue Cheese AI 🧀! AI buatan Cheese Platform — tau banyak hal dari politik, game, teknologi, sampe kesehatan! 💪"]},
+    {keys:["siapa Anda","nama Anda","Anda apa","lo siapa","cheese ai"],ans:["Gue Cheese AI 🧀! AI buatan Cheese Platform -- tau banyak hal dari politik, game, teknologi, sampe kesehatan! 💪"]},
     {keys:["cheese platform","platform ini","website ini","fitur apa"],ans:["Cheese Platform punya: AI Chat, 4 game live (Snake, Dino, Puzzle, Quiz), Top Up ML & FF, Podcast, dan Settings lengkap! 🚀🧀"]},
     {keys:["joke","lucu","ngakak","humor","bercanda"],ans:["Kenapa programmer suka kopi? Karena gak bisa kerja tanpa Java! ☕😂","Debugging itu kayak jadi detektif di film kriminal di mana Anda sendiri yang jadi pelakunya! 🕵️😂"]},
-    {keys:["politik","presiden","prabowo","jokowi","pemilu","dpri","pemerintah","partai","demokrasi","korupsi"],ans:["Soal politik Indonesia — Presiden Prabowo Subianto menjabat sejak Oktober 2024, sekarang tahun 2026. Sistem kita demokrasi dengan pemilu 5 tahunan. Isu sering dibahas: korupsi, infrastruktur, dan kesejahteraan rakyat. Ingin membahas yang mana? 🗳️"]},
+    {keys:["politik","presiden","prabowo","jokowi","pemilu","dpri","pemerintah","partai","demokrasi","korupsi"],ans:["Soal politik Indonesia -- Presiden Prabowo Subianto menjabat sejak Oktober 2024, sekarang tahun 2026. Sistem kita demokrasi dengan pemilu 5 tahunan. Isu sering dibahas: korupsi, infrastruktur, dan kesejahteraan rakyat. Ingin membahas yang mana? 🗳️"]},
     {keys:["kalori defisit","kalori","diet","turun berat badan","berat badan","cutting","tdee","bmr"],ans:["Kalori defisit = kalori makan LEBIH SEDIKIT dari kalori bakar!\n\n📊 Tips:\n✅ Defisit ideal: 300-500 kal/hari\n✅ Hitung TDEE dulu\n✅ Perbanyak protein\n✅ Jangan defisit terlaAnda ekstrem\n\nContoh: TDEE 2000 kal → makan 1500-1700 kal/hari 💪"]},
     {keys:["olahraga","gym","fitness","protein","otot","kardio"],ans:["Tips fitness:\n💪 Latihan beban 3-4x seminggu\n🏃 Kardio 2-3x seminggu\n🥩 Protein 1.6-2g/kg berat badan\n😴 Tidur 7-8 jam\n💧 Air 2-3 liter/hari"]},
-    {keys:["game populer","mobile legend","free fire","valorant","minecraft","pubg"],ans:["Game populer 2026:\n🥇 Mobile Legends — MOBA raja Asia Tenggara\n🥈 Free Fire — Battle royale HP mid-range\n🥉 Valorant — FPS kompetitif\n🎮 Minecraft — Sandbox legendaris\n\nAnda memainkan yang mana? 🎮"]},
+    {keys:["game populer","mobile legend","free fire","valorant","minecraft","pubg"],ans:["Game populer 2026:\n🥇 Mobile Legends -- MOBA raja Asia Tenggara\n🥈 Free Fire -- Battle royale HP mid-range\n🥉 Valorant -- FPS kompetitif\n🎮 Minecraft -- Sandbox legendaris\n\nAnda memainkan yang mana? 🎮"]},
     {keys:["coding","programming","belajar coding","javascript","python","html","css"],ans:["Roadmap web dev bos:\n1️⃣ HTML & CSS (tampilan)\n2️⃣ JavaScript (interaktif)\n3️⃣ Framework: React/Vue\n4️⃣ Backend: Node.js/Python\n5️⃣ Database: MySQL/MongoDB\n\nBelajar gratis di: freeCodeCamp, The Odin Project! 💻"]},
     {keys:["investasi","kripto","bitcoin","nabung","saham","reksa dana"],ans:["Tips investasi pemula:\n1️⃣ Dana darurat dulu (3-6 bulan pengeluaran)\n2️⃣ Reksa dana pasar uang untuk pemula\n3️⃣ Saham blue chip kalau mau lebih berisiko\n4️⃣ Diversifikasi!\n5️⃣ Kripto hanya uang siap hilang 💰"]},
-    {keys:["motivasi","semangat","galau","sedih","down","mager"],ans:["Bos, setiap orang sukses pernah ngerasa kayak Anda sekarang. Yang bedain mereka — mereka tetap jalan meski susah. Anda PASTI bisa! 💪🔥"]},
+    {keys:["motivasi","semangat","galau","sedih","down","mager"],ans:["Bos, setiap orang sukses pernah ngerasa kayak Anda sekarang. Yang bedain mereka -- mereka tetap jalan meski susah. Anda PASTI bisa! 💪🔥"]},
     {keys:["makasih","thanks","terima kasih","thx"],ans:["Sama-sama. 🧀🔥","No problem! Gue selaAnda siap! 😄✨"]},
     {keys:["bye","dadah","cabut","sampai jumpa"],ans:["Dadah. Balik lagi ya! 🧀👋"]},
     {keys:["topup","diamond","beli diamond","isi diamond"],ans:["Top Up di Cheese Platform:\n💎 ML Diamond mulai Rp 19.000\n🔥 FF Diamond mulai Rp 9.000\n\nCek menu Top Up! QRIS segera hadir! 🚀"]},
@@ -2161,7 +2369,7 @@ var cheeseBrain = {
     {keys:["canva","figma","desain","design","ui ux","logo"],ans:["Tools desain recommended:\n🎨 Canva - mudah untuk pemula (gratis!)\n🖌️ Figma - UI/UX profesional\n🖼️ Photoshop - editing foto\n\nMulai dari Canva dulu. 🎨"]},
     {keys:["interview","cv","resume","lamaran kerja","magang"],ans:["Tips interview kerja:\n📄 CV: 1 halaman, jelas, no typo\n👔 Pakaian rapi\n🧠 Research perusahaan dulu\n💬 STAR method untuk jawab pertanyaan\n\nSemangat! Anda pasti bisa! 💪"]},
     {keys:["revan","kevin","k studio","siapa yang buat","pembuat","developer"],ans:["Cheese Platform dibuat oleh Kevin (K Studio) 🧀🔥\n\nK Studio adalah studio indie yang fokus bikin platform gaming & AI keren untuk Indonesia! Support K Studio dengan donasi di Settings ya. ❤️"]},
-    {keys:["versi","update","v3.3","changelog","fitur baru"],ans:["Cheese Platform v3.3 — update terbaru:\n🤖 Gemini 3.1 Flash Lite + Gemini 2.5 Pro\n🔄 9 engine AI dengan auto-fallback\n🦙 Llama 4 Scout + Llama 3.3 70b + Llama 3.2 Vision\n🔍 Web search Serper + analisis Gemini\n🖼️ Image generation Pollinations (gratis) + HF fallback\n👁️ Vision — analisis gambar multi-engine\n👤 Auth system (register & login)\n💎 Premium 50/hari & Developer mode\n📺 Rewarded ads (+1 limit)\n⭐ Rating system global\n⚡ Cache 30 menit\n🌐 Backend: quick-rook-60\n\nTerus diperbarui! 🧀"]},
+    {keys:["versi","update","v3.3","v3.4","changelog","fitur baru","roadmap"],ans:["📋 Cheese Platform Roadmap:\n\n✅ v3.3 -- 100% DONE\n🛡️ Security 3-layer system\n⚡ Limit sync dari backend\n🤖 AI Chat full screen + drawer riwayat\n🔗 Backend 22 endpoint connected\n🎮 Battle VS AI -- ML layout\n📡 Streaming AI response\n🔐 Auth OTP lengkap\n\n🔄 v3.4 -- 10% (Coming Soon)\n🖼️ Fix Imagen3 generate gambar\n💳 Duitku payment gateway\n⚔️ Battle upgrade KOF style\n📱 PWA + offline mode\n🎙️ Voice input chat\n📤 Export chat PDF/TXT\n🌐 CORS whitelist Zarchiver"]},
     {keys:["snake","dino","battle","puzzle","quiz","tips game"],ans:["Game di Cheese Platform:\n🐍 Snake - spiral dari pinggir ke tengah!\n🦕 Dino - timing lompat yang pas!\n⚔️ Battle 2D - gunakan power-up!\n🧩 Puzzle 15 - mulai dari pojok!\n⚡ Quiz - baca soal pelan-pelan!\n\nMau tips detail game mana? 🎮"]},
     {keys:["ai","chatgpt","openai","groq","llama","artificial intelligence"],ans:["Dunia AI lagi booming! 🤖\n\nModel populer:\n• ChatGPT (OpenAI) - paling terkenal\n• Gemini (Google) - integrasi Google\n• Claude (Anthropic) - fokus safety\n• Groq + LLaMA - SUPER CEPAT (yang Cheese AI pake!)\n\nMau tau lebih dalam? 💡"]},
     {keys:["indonesia","jakarta","bandung","surabaya","bali","kota"],ans:["Indonesia negara luar biasa! 🇮🇩\n\nFakta seru:\n🏝️ 17.000+ pulau\n🗣️ 700+ bahasa daerah\n🌴 Keanekaragaman hayati terkaya ke-2 di dunia\n🏙️ Jakarta ibu kota (sementara Nusantara di Kalimantan sedang dibangun!)\n\nAnda berasal dari mana?"]},
@@ -2468,7 +2676,7 @@ function getSystemPrompt() {
     lucu:   dateInfo+'Kamu adalah '+nm+', asisten super humoris. Selalu sisipkan humor/jokes di setiap jawaban.'+(!aiSettings.emoji?' Jangan pakai emoji.':''),
     singkat:dateInfo+'Kamu adalah '+nm+'. Jawab singkat, padat, maksimal 3 kalimat.'+(!aiSettings.emoji?' Jangan pakai emoji.':'')
   };
-  var base = (styles[aiSettings.style]||styles.santai) + ' Kamu bagian dari Cheese Platform — platform gaming & AI lokal Indonesia.';
+  var base = (styles[aiSettings.style]||styles.santai) + ' Kamu bagian dari Cheese Platform -- platform gaming & AI lokal Indonesia.';
   if(aiSettings.warmth) base += ' Jadilah lebih hangat, ramah, dan menarik dalam setiap respons.';
   if(aiSettings.moreEmoji) base += ' Gunakan lebih banyak emoji di setiap pesan.';
   if(aiSettings.userName) base += ' Nama pengguna adalah '+aiSettings.userName+', panggil dengan nama ini.';
@@ -2478,7 +2686,7 @@ function getSystemPrompt() {
   return base;
 }
 
-async function sendMessage() {
+function sendMessage() {
   var input = document.getElementById('userInput');
   var sendBtn = document.getElementById('sendBtn');
   var text = input.value.trim();
@@ -2495,7 +2703,10 @@ async function sendMessage() {
 
   input.value = '';
   input.disabled = true;
-  sendBtn.disabled = true;
+  sendBtn.disabled = false;
+  sendBtn.classList.add('stop-mode');
+  sendBtn.onclick = stopStreaming;
+  sendBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="#fff"><rect x="3" y="3" width="10" height="10" rx="2"/></svg>';
   addMsg(text, 'user');
   trackStat('chatTotal');
   var typingEl = addMsg('', 'typing');
@@ -2505,21 +2716,20 @@ async function sendMessage() {
 
   // SelaAnda pakai backend (API key aman di Cloudflare Worker)
   chatHistory.push({role:'user', content:text});
-  try {
-    var res = await fetch(BACKEND_URL + '/chat', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        messages: (function(){
-          var sys = getSystemPrompt();
-          var hist = [{role:'system', content: sys}].concat(chatHistory.slice());
-          return hist;
-        })(),
-        token: localStorage.getItem('cheeseToken') || '',
-        max_tokens: 512
-      })
-    });
-    var data = await res.json();
+
+  fetch(BACKEND_URL + '/chat', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      messages: (function(){
+        var sys = getSystemPrompt();
+        var hist = [{role:'system', content: sys}].concat(chatHistory.slice());
+        return hist;
+      })(),
+      token: localStorage.getItem('cheeseToken') || '',
+      max_tokens: 512
+    })
+  }).then(function(res){ return res.json(); }).then(function(data){
     if(typingEl && typingEl.parentNode) typingEl.remove();
     if(data.error) {
       chatHistory.pop();
@@ -2531,13 +2741,13 @@ async function sendMessage() {
       }
     } else {
       var reply = data.reply || (data.choices && data.choices[0] ? data.choices[0].message.content : '');
+      if(!validateBackendResponse(data)) { reply = 'Respons tidak valid dari server.'; }
       chatHistory.push({role:'assistant', content:reply});
       // Streaming typewriter effect
       var aiDiv = addMsg('', 'ai');
       if (aiDiv) {
         var msgTextEl = aiDiv.querySelector('.msg-text');
         if (msgTextEl) {
-          // Pilih mode: per kata kalau panjang, per karakter kalau pendek
           var streamFn = reply.length > 150 ? typewriterStream : typewriterChar;
           streamFn(msgTextEl, reply, function() {
             saveChatHistory();
@@ -2550,63 +2760,30 @@ async function sendMessage() {
           sfxReceive();
         }
       }
-      // Decrement limit locally & update UI
-      if(_premiumStatus && _premiumStatus.remaining !== undefined && _premiumStatus.remaining > 0){
-        _premiumStatus.remaining = Math.max(0, _premiumStatus.remaining - 1);
-      }
+      // Update limit - single source of truth
+      incrementUsage();
       var limitEl = document.getElementById('dashLimit');
       if(limitEl && _premiumStatus && _premiumStatus.remaining !== undefined) limitEl.textContent = _premiumStatus.remaining;
       loadDashboard();
       updateProfileStatus();
-      // Update AI Engine display
       if(data.engine) {
-        var engineNames = {
-          'gemini-3.1-flash-lite': 'Gemini 3.1 Flash Lite',
-          'gemini-3.1-flash-lite-search': 'Gemini 3.1 Flash Lite + Search',
-          'gemini-3.1-pro': 'Gemini 3.1 Pro',
-          'gemini-3.1-pro-search': 'Gemini 3.1 Pro + Search',
-          'serper+gemini': 'Web Search + Gemini',
-          'serper+llama4': 'Web Search + Llama 4',
-          'gemini-3.1-flash-lite-cached': 'Gemini 3.1 Flash Lite (cache)',
-          'gemini-3.1-pro-cached': 'Gemini 3.1 Pro (cache)',
-          'llama-4-scout': 'Llama 4 Scout',
-          'llama-3.3-70b': 'Llama 3.3 70B',
-          'qwen-2.5-72b': 'Qwen 2.5 72B',
-          'deepseek-v3': 'DeepSeek V3',
-        };
-        var engEl = document.getElementById('aiEngineDisplay');
-        var engName = engineNames[data.engine] || data.engine;
-        if(engEl) engEl.textContent = engName;
-        localStorage.setItem('lastEngine', engName);
+        var aiNameEl = document.getElementById('aiNameDisplay');
+        if(aiNameEl) aiNameEl.textContent = aiSettings.nickname || 'Cheese AI';
       }
     }
-  } catch(e) {
+    input.disabled = false;
+    sendBtn.disabled = false;
+    updateUsageUI();
+  }).catch(function(e){
     if(typingEl && typingEl.parentNode) typingEl.remove();
-    var lastMsg = chatHistory[chatHistory.length-1];
-    var cb = document.getElementById('chatBox');
-    var aiMsgs = cb ? cb.querySelectorAll('.msg.ai') : [];
-    var lastAiMsg = aiMsgs[aiMsgs.length-1];
-    // Cek apakah error terjadi SETELAH AI sudah jawab (engine display error dll)
-    // Caranya: cek apakah pesan terakhir di chatBox adalah dari AI
-    if(lastAiMsg && lastMsg && lastMsg.role === 'assistant'){
-      // AI sudah jawab, error dari proses lain - abaikan
-    } else {
-      chatHistory.pop();
-      // Cek apakah mungkin limit habis
-      fetchMyStatus().then && fetchMyStatus();
-    }
-  }
-  if(false) { // offline brain tetap ada sebagai fallback
-    // Offline brain
-    setTimeout(function(){
-      if(typingEl && typingEl.parentNode) typingEl.remove();
-      var reply = cheeseBrain.getReply(text);
-      addMsg(reply, 'ai');
-      saveChatHistory();
-      saveCurrentConversation();
-      sfxReceive();
-    }, 600 + Math.random()*400);
-  }
+    chatHistory.pop();
+    addMsg('❌ Gagal terhubung ke server. Cek koneksi internet kamu!', 'err');
+    input.disabled = false;
+    sendBtn.disabled = false;
+    sendBtn.classList.remove('stop-mode');
+    sendBtn.onclick = sendMessage;
+    sendBtn.innerHTML = '&#9658;';
+  });
 
   input.disabled = false;
   sendBtn.disabled = false;
@@ -2718,7 +2895,7 @@ function sendImgToAI(base64, mimeType) {
   var cb = document.getElementById('chatBox');
   if(!cb) return;
 
-  // Bubble foto user — bisa di-tap untuk lihat fullscreen
+  // Bubble foto user -- bisa di-tap untuk lihat fullscreen
   var wrap = document.createElement('div');
   wrap.className = 'msg user';
   wrap.style.cssText = 'padding:4px;max-width:60%;cursor:pointer;';
@@ -2869,10 +3046,10 @@ function renderSettings() {
   var apiStatus = document.getElementById('apiKeyStatus');
   if(apiStatus) {
     if(API_KEY && API_KEY.length > 10) {
-      apiStatus.textContent = '✅ API key aktif — AI siap digunakan.';
+      apiStatus.textContent = '✅ API key aktif -- AI siap digunakan.';
       apiStatus.style.color = 'var(--green)';
     } else {
-      apiStatus.textContent = 'Belum diisi — pakai mode offline (Cheese Brain)';
+      apiStatus.textContent = 'Belum diisi -- pakai mode offline (Cheese Brain)';
       apiStatus.style.color = 'var(--muted)';
     }
   }
@@ -2924,7 +3101,7 @@ function saveApiKey() {
   var st = document.getElementById('apiKeyStatus');
   if(st) {
     if(API_KEY.length > 10) { st.textContent = '✅ API key disimpan!'; st.style.color='var(--green)'; }
-    else { st.textContent = 'Belum diisi — pakai mode offline'; st.style.color='var(--muted)'; }
+    else { st.textContent = 'Belum diisi -- pakai mode offline'; st.style.color='var(--muted)'; }
   }
 }
 
@@ -3092,8 +3269,8 @@ function checkStreakReward(){
 
 // ===== ONBOARDING =====
 var OB_SLIDES = [
-  {emoji:'🧀', title:'Selamat Datang!', desc:'Cheese Platform — tempat gaming, AI chat, dan top up game favorit Anda semua dalam satu app!'},
-  {emoji:'🤖', title:'Chat AI Canggih', desc:'Tanya apa aja ke Cheese AI! Mau belajar, ngobrol santai, atau minta bantuan coding — semua bisa!'},
+  {emoji:'🧀', title:'Selamat Datang!', desc:'Cheese Platform -- tempat gaming, AI chat, dan top up game favorit Anda semua dalam satu app!'},
+  {emoji:'🤖', title:'Chat AI Canggih', desc:'Tanya apa aja ke Cheese AI! Mau belajar, ngobrol santai, atau minta bantuan coding -- semua bisa!'},
   {emoji:'🎮', title:'5 Mini Games', desc:'Main Snake, Dino Run, Battle 2D, Puzzle 15, dan Quiz. Kumpulin highscore Anda!'},
   {emoji:'💎', title:'Top Up Murah', desc:'Top up diamond ML, UC PUBG, dan game lainnya dengan harga terjangkau langsung dari app ini!'},
   {emoji:'🚀', title:'Siap Jelajahi?', desc:'Guest: 10 pesan/5 jam. Akun: 20 pesan/5 jam. Premium: 50 pesan/hari selama 3 hari.'},
@@ -3154,7 +3331,12 @@ function isUnlocked(){
   return _premiumStatus.isPremium || _premiumStatus.isDev;
 }
 
+var _lastFetchStatus = 0;
 function fetchMyStatus() {
+  // Cooldown 3 detik biar tidak konflik dengan decrement lokal
+  var now = Date.now();
+  if (now - _lastFetchStatus < 3000) return;
+  _lastFetchStatus = now;
   var token = localStorage.getItem('cheeseToken') || '';
   var url = BACKEND_URL + '/mystatus' + (token ? '?token=' + encodeURIComponent(token) : '');
   fetch(url).then(function(r){ return r.json(); }).then(function(data){
@@ -3163,10 +3345,19 @@ function fetchMyStatus() {
     // Sync usage ke localStorage dari backend (sumber kebenaran)
     if(typeof data.remaining === 'number' && data.remaining >= 0){
       var limit = data.limitMax || (data.isDev ? 1000 : data.isPremium ? 50 : data.isGuest ? 10 : 20);
+      FREE_LIMIT = limit;
       var used = limit - data.remaining;
       var u = getUsage();
-      u.count = Math.max(u.count || 0, used);
-      if(data.resetIn) u.resetAt = Date.now() + data.resetIn;
+      // Hanya update kalau backend punya nilai yang lebih tinggi (hindari override decrement lokal)
+      if(used > (u.count||0)) {
+        u.count = used;
+      }
+      u.limit = limit;
+      if(data.isPremium || data.isDev) {
+        if(!u.resetAt || u.resetAt < Date.now()) u.resetAt = Date.now() + 24*60*60*1000;
+      } else if(data.resetIn && (!u.resetAt || u.resetAt < Date.now())) {
+        u.resetAt = Date.now() + data.resetIn;
+      }
       saveUsage(u);
     }
     var pb = document.getElementById('premiumBadge');
@@ -3181,7 +3372,20 @@ function fetchMyStatus() {
   }).catch(function(){});
 }
 
+function pingBackend() {
+  var statusEl = document.getElementById('dashStatus');
+  fetch(BACKEND_URL + '/ping').then(function(r){ return r.json(); }).then(function(data){
+    if(statusEl) {
+      statusEl.textContent = data.status === 'ok' ? 'Online v' + (data.version || '3.7') : 'Error';
+      statusEl.style.color = data.status === 'ok' ? 'var(--green)' : '#ff4444';
+    }
+  }).catch(function(){
+    if(statusEl) { statusEl.textContent = 'Offline'; statusEl.style.color = '#ff4444'; }
+  });
+}
+
 function loadDashboard() {
+  pingBackend();
   fetch(BACKEND_URL + '/mystatus?token=' + encodeURIComponent(localStorage.getItem('cheeseToken') || '')).then(function(r){ return r.json(); }).then(function(data){
     var limitEl = document.getElementById('dashLimit');
     var adEl = document.getElementById('dashAd');
@@ -3194,7 +3398,6 @@ function loadDashboard() {
       else if(data.isPremium) { tierEl.textContent = '💎 Premium'; tierEl.style.background = 'rgba(88,101,242,.2)'; tierEl.style.color = '#5865f2'; }
       else { tierEl.textContent = '🧀 Normal'; }
     }
-    if(statusEl) { statusEl.textContent = 'Online'; statusEl.style.color = 'var(--green)'; }
   }).catch(function(){
     var statusEl = document.getElementById('dashStatus');
     if(statusEl) { statusEl.textContent = 'Offline'; statusEl.style.color = '#ff4444'; }
@@ -3386,7 +3589,7 @@ function renderProfile(){
   var u = getUser();
   if(!u) return;
 
-  // Avatar — support foto atau emoji
+  // Avatar -- support foto atau emoji
   var savedPhoto = localStorage.getItem('cheeseAvatarPhoto');
   var savedEmoji = localStorage.getItem('cheeseAvatar') || u.name.charAt(0).toUpperCase();
   var av = document.getElementById('profileAvatar');
@@ -4584,14 +4787,14 @@ function canSendMsg(){
     u.resetAt = now + RESET_HOURS*3600*1000;
     saveUsage(u);
   }
-  return (u.count||0) < FREE_LIMIT;
+  var effectiveLimit = u.limit || FREE_LIMIT;
+  return (u.count||0) < effectiveLimit;
 }
 
 function incrementUsage(){
   var u = getUsage();
   u.count = (u.count||0) + 1;
   saveUsage(u);
-  if(_premiumStatus.remaining > 0) _premiumStatus.remaining--;
   updateUsageUI();
 }
 
@@ -4609,12 +4812,15 @@ function updateUsageUI(){
   }
 
   var left;
-  if(_premiumStatus.checkedAt > 0 && _premiumStatus.remaining !== undefined){
-    left = _premiumStatus.remaining;
-  } else {
-    var u = getUsage();
-    var used = u.count||0;
-    left = Math.max(0, FREE_LIMIT - used);
+  var u = getUsage();
+  var effectiveLimit = u.limit || (_premiumStatus && _premiumStatus.limitMax) || FREE_LIMIT;
+  // Hitung dari localStorage (paling akurat karena langsung diupdate)
+  left = Math.max(0, effectiveLimit - (u.count||0));
+  // Tapi kalau backend punya nilai lebih rendah, pakai backend
+  if(_premiumStatus && _premiumStatus.checkedAt > 0 && typeof _premiumStatus.remaining === 'number' && _premiumStatus.remaining >= 0) {
+    var backendLeft = _premiumStatus.remaining;
+    left = Math.min(left, backendLeft);
+    if(_premiumStatus.limitMax) FREE_LIMIT = _premiumStatus.limitMax;
   }
 
   if(left === 0){
@@ -4774,7 +4980,7 @@ function openGenerateModal(){
 function closeGenerateModal(){
   document.getElementById('generateModal').style.display = 'none';
 }
-async function doGenerateImage(){
+function doGenerateImage(){
   var prompt = document.getElementById('generatePrompt').value.trim();
   if(!prompt){ showToast('Isi prompt dulu!', 'err', 2000); return; }
   var btn = document.getElementById('generateBtn');
@@ -4782,28 +4988,33 @@ async function doGenerateImage(){
   btn.disabled = true;
   status.textContent = '⏳ Generating... (30-60 detik)';
   document.getElementById('generateResult').style.display = 'none';
-  try {
-    var res = await fetch(BACKEND_URL + '/imagine', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({prompt: prompt})
-    });
-    var data = await res.json();
+  
+  fetch(BACKEND_URL + '/imagine', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({prompt: prompt})
+  }).then(function(res){ return res.json(); }).then(function(data){
     btn.disabled = false;
     if(data.error){ status.textContent = '❌ ' + data.error; return; }
     status.textContent = '✅ Selesai!';
     var img = document.getElementById('generateImg');
-    img.src = data.image;
+    if(data.mimeType && data.mimeType.includes('png')) {
+      img.src = 'data:image/png;base64,' + data.image;
+    } else if(data.image && data.image.startsWith('data:')) {
+      img.src = data.image;
+    } else {
+      img.src = 'data:image/jpeg;base64,' + data.image;
+    }
     document.getElementById('generateResult').style.display = 'block';
     // Kirim gambar ke chat
-    var imgMsg = '<img src="' + data.image + '" style="max-width:100%;border-radius:12px;margin-top:6px;" />';
     addMsg('🎨 Generate: ' + prompt, 'user');
-    addMsg(imgMsg, 'ai-img');
+    addMsg('<img src="' + img.src + '" style="max-width:100%;border-radius:12px;margin-top:6px;" />', 'ai-img');
     closeGenerateModal();
-    showToast('Gambar berhasil digenerate! 🎨', 'success', 2500);
-  } catch(e) {
+    showToast('✅ Gambar berhasil dibuat!', 'success', 2500);
+  }).catch(function(err){
     btn.disabled = false;
-    status.textContent = '❌ Gagal. Coba lagi!';
-  }
+    status.textContent = '❌ Gagal generate gambar. Coba lagi!';
+    console.error('Generate error:', err);
+  });
 }
 
 function paywallWA(){
@@ -4969,7 +5180,7 @@ function initBattle2P(canvas){
     ctx.fillRect(p.x+14,p.y+8,5,5);
     // HP bar background
     ctx.fillStyle='rgba(0,0,0,.5)'; ctx.fillRect(p.x,p.y-9,p.w,5);
-    // HP bar fill — color changes low hp
+    // HP bar fill -- color changes low hp
     ctx.fillStyle = p.hp>2 ? p.color : '#ff4d4d';
     ctx.fillRect(p.x,p.y-9,p.w*(p.hp/p.maxHp),5);
     // Name
@@ -5660,7 +5871,7 @@ function renderAiDrawer(){
 
 
 // ============================================================
-// SECURITY LAYER 1 — Input Validation & Sanitization
+// SECURITY LAYER 1 -- Input Validation & Sanitization
 // ============================================================
 function sanitizeStr(str) {
   if (typeof str !== 'string') return '';
@@ -5668,7 +5879,7 @@ function sanitizeStr(str) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .slice(0, 4000);
+    .slice(0, 1500);
 }
 
 function validateEmail(email) {
@@ -5699,7 +5910,7 @@ function safeLoginPayload(email, password) {
 }
 
 // ============================================================
-// SECURITY LAYER 2 — Request Integrity & Session Guard
+// SECURITY LAYER 2 -- Request Integrity & Session Guard
 // ============================================================
 var _reqNonce = 0;
 
@@ -5805,7 +6016,7 @@ function loadStatsFromBackend() {
 
 
 // ============================================================
-// SECURITY LAYER 3 — Anti-Bot, Advanced Rate Limiting, Payload Integrity
+// SECURITY LAYER 3 -- Anti-Bot, Advanced Rate Limiting, Payload Integrity
 // ============================================================
 
 // 3.1 Anti-Bot: Mouse/Touch activity tracker
@@ -5826,7 +6037,7 @@ function isLikelyHuman() {
   return _humanScore > 3 || (Date.now() - _lastActivity < 30000);
 }
 
-// 3.2 Advanced Rate Limiting — per endpoint
+// 3.2 Advanced Rate Limiting -- per endpoint
 var _endpointLimits = {};
 function checkEndpointLimit(endpoint, maxCalls, windowMs) {
   var now = Date.now();
@@ -5837,7 +6048,7 @@ function checkEndpointLimit(endpoint, maxCalls, windowMs) {
   return true;
 }
 
-// 3.3 Input Length Guard — cegah payload terlalu besar
+// 3.3 Input Length Guard -- cegah payload terlalu besar
 function guardPayload(obj, maxSize) {
   maxSize = maxSize || 10000;
   var str = JSON.stringify(obj);
@@ -5848,7 +6059,7 @@ function guardPayload(obj, maxSize) {
   return true;
 }
 
-// 3.4 Token Rotation Warning — peringatkan kalau token lama
+// 3.4 Token Rotation Warning -- peringatkan kalau token lama
 function checkTokenAge() {
   var token = getSecureToken();
   if (!token) return;
@@ -5886,6 +6097,180 @@ window.fetch = function(url, options) {
   return _origFetch.apply(this, arguments);
 };
 
+// ============================================================
+// LAYER 4 SECURITY -- Tambahan Proteksi Client-Side
+// ============================================================
+
+// --- 4.1 SESSION TIMEOUT -- auto logout setelah 30 menit tidak aktif ---
+var _lastActivity = Date.now();
+var SESSION_TIMEOUT_MS = 60 * 60 * 1000; // 60 menit
+var _sessionTimer = null;
+
+function _resetActivityTimer() {
+  _lastActivity = Date.now();
+}
+
+function _checkSessionTimeout() {
+  var now = Date.now();
+  // Hanya cek kalau user sudah login (bukan guest, bukan splash)
+  var authScreen = document.getElementById('authScreen');
+  var appScreen = document.getElementById('appScreen');
+  var isLoggedIn = appScreen && appScreen.style.display !== 'none';
+  if (isLoggedIn && (now - _lastActivity) > SESSION_TIMEOUT_MS) {
+    showToast('Sesi kamu habis karena tidak aktif. Silakan login ulang.', 'err', 4000);
+    setTimeout(function() { doLogout(); }, 1500);
+  }
+}
+
+// Track user activity
+['click','keydown','touchstart','scroll','mousemove'].forEach(function(ev) {
+  document.addEventListener(ev, _resetActivityTimer, {passive: true});
+});
+_sessionTimer = setInterval(_checkSessionTimeout, 60 * 1000); // cek tiap 1 menit
+
+// --- 4.2 INPUT THROTTLE -- delay minimum antar pesan (anti-bot) ---
+var _lastSendTime = 0;
+var SEND_THROTTLE_MS = 1500; // minimum 1.5 detik antar pesan
+
+var _origSendMessage = null; // akan di-set setelah sendMessage didefinisikan
+function throttledSend() {
+  var now = Date.now();
+  if (now - _lastSendTime < SEND_THROTTLE_MS) {
+    showToast('Pelan-pelan ya! Tunggu sebentar...', 'warn', 1200);
+    return;
+  }
+  _lastSendTime = now;
+  if (typeof sendMessage === 'function') sendMessage();
+}
+
+// --- 4.3 TOKEN INTEGRITY CHECK -- validasi format token sebelum setiap request ---
+function isValidToken(token) {
+  if (!token || typeof token !== 'string') return false;
+  if (token.length < 10 || token.length > 512) return false;
+  // Token tidak boleh mengandung karakter HTML/JS berbahaya
+  if (/<|>|script|javascript/i.test(token)) return false;
+  return true;
+}
+
+// Wrap semua request -- inject token validation
+var _secOrigFetch = window.fetch;
+window.fetch = function(url, options) {
+  // Validasi token kalau ada di body
+  if (options && options.body) {
+    try {
+      var body = typeof options.body === 'string' ? JSON.parse(options.body) : options.body;
+      if (body && body.token && !isValidToken(body.token)) {
+        logSuspicious('Invalid token format in request to: ' + (typeof url === 'string' ? url.slice(0,60) : url));
+        body.token = '';
+        options.body = JSON.stringify(body);
+      }
+    } catch(e) {}
+  }
+  return _secOrigFetch.apply(this, arguments);
+};
+
+// --- 4.4 PAYLOAD SIZE GUARD -- blokir request body > 8KB (anti-data stuffing) ---
+var _payloadOrigFetch = window.fetch;
+window.fetch = function(url, options) {
+  if (options && options.body) {
+    var bodyStr = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
+    if (bodyStr && bodyStr.length > 8192) {
+      logSuspicious('Oversized payload blocked: ' + bodyStr.length + ' bytes to ' + (typeof url === 'string' ? url.slice(0,60) : ''));
+      return Promise.reject(new Error('Payload too large'));
+    }
+  }
+  return _payloadOrigFetch.apply(this, arguments);
+};
+
+// --- 4.5 LOGIN BRUTE FORCE LOCKOUT -- lockout IP-level via local state ---
+var _loginLockUntil = parseInt(localStorage.getItem('_loginLockUntil') || '0');
+
+function isLoginLocked() {
+  var now = Date.now();
+  if (_loginLockUntil > now) {
+    var remaining = Math.ceil((_loginLockUntil - now) / 1000);
+    showToast('Terlalu banyak percobaan login. Coba lagi dalam ' + remaining + ' detik.', 'err', 3000);
+    return true;
+  }
+  return false;
+}
+
+function recordFailedLogin() {
+  var key = '_failedLogins';
+  var now = Date.now();
+  var attempts = JSON.parse(localStorage.getItem(key) || '[]');
+  // Hapus attempt > 10 menit yang lalu
+  attempts = attempts.filter(function(t) { return now - t < 10 * 60 * 1000; });
+  attempts.push(now);
+  localStorage.setItem(key, JSON.stringify(attempts));
+  if (attempts.length >= 5) {
+    // Lockout 5 menit setelah 5 gagal dalam 10 menit
+    _loginLockUntil = now + 5 * 60 * 1000;
+    localStorage.setItem('_loginLockUntil', String(_loginLockUntil));
+    logSuspicious('Login brute force lockout triggered');
+    showToast('Akun dikunci 5 menit karena terlalu banyak percobaan login.', 'err', 5000);
+  }
+}
+
+function clearFailedLogins() {
+  localStorage.removeItem('_failedLogins');
+  localStorage.removeItem('_loginLockUntil');
+  _loginLockUntil = 0;
+}
+
+// --- 4.6 RESPONSE TAMPERING DETECTION -- cek response dari backend ---
+function validateBackendResponse(data) {
+  if (!data || typeof data !== 'object') return false;
+  // Reply tidak boleh mengandung script injection
+  var reply = data.reply || '';
+  if (/<script|javascript:/i.test(reply)) {
+    logSuspicious('Suspicious content in backend response');
+    return false;
+  }
+  return true;
+}
+
+// --- 4.7 DEVTOOLS DETECTION (soft) -- warn saja, tidak block ---
+(function() {
+  var threshold = 160;
+  var devtoolsOpen = false;
+  function checkDevtools() {
+    var widthDiff = window.outerWidth - window.innerWidth;
+    var heightDiff = window.outerHeight - window.innerHeight;
+    if (widthDiff > threshold || heightDiff > threshold) {
+      if (!devtoolsOpen) {
+        devtoolsOpen = true;
+        logSuspicious('DevTools possibly opened');
+      }
+    } else {
+      devtoolsOpen = false;
+    }
+  }
+  setInterval(checkDevtools, 3000);
+})();
+
+// --- 4.8 CLIPBOARD HIJACK PROTECTION -- sanitasi paste input ---
+document.addEventListener('paste', function(e) {
+  var el = document.activeElement;
+  if (!el || (el.tagName !== 'INPUT' && el.tagName !== 'TEXTAREA')) return;
+  // Kalau ada HTML dalam clipboard, strip ke plain text saja
+  var clipData = e.clipboardData || window.clipboardData;
+  if (!clipData) return;
+  var html = clipData.getData('text/html');
+  if (html && /<script|javascript:|on\w+=/i.test(html)) {
+    e.preventDefault();
+    var plain = clipData.getData('text/plain') || '';
+    // Insert plain text saja
+    try {
+      document.execCommand('insertText', false, plain.slice(0, 1500));
+    } catch(err) {
+      el.value = (el.value || '') + plain.slice(0, 1500);
+    }
+    logSuspicious('Clipboard HTML injection blocked');
+  }
+}, {passive: false});
+
+
 // Simpan login time
 var _origEnterApp = typeof enterApp === 'function' ? enterApp : null;
 
@@ -5893,58 +6278,276 @@ var _origEnterApp = typeof enterApp === 'function' ? enterApp : null;
 // ============================================================
 // STREAMING AI RESPONSE - Typewriter Effect
 // ============================================================
-function typewriterStream(el, text, onDone) {
-  var i = 0;
-  var speed = Math.max(8, Math.min(25, Math.floor(6000 / text.length))); // adaptive speed
-  el.innerHTML = '';
-  el.classList.add('streaming');
+// ============================================================
+// SMOOTH STREAMING -- mirip ChatGPT
+// Teknik: token queue + requestAnimationFrame + live markdown render
+// ============================================================
 
-  // Parse markdown dulu, lalu stream per kata
-  var words = text.split(' ');
-  var wordIdx = 0;
-  var built = '';
+var _streamingStopped = false;
+var _streamingRAF = null;
+var _currentTypingInterval = null; // kept for compat
 
-  function nextWord() {
-    if (wordIdx >= words.length) {
-      // Selesai - render markdown final
-      el.innerHTML = renderMarkdown(text);
-      el.classList.remove('streaming');
-      if (onDone) onDone();
-      return;
-    }
-    built += (wordIdx > 0 ? ' ' : '') + words[wordIdx];
-    wordIdx++;
-    // Render sementara dengan teks biasa dulu biar cepat
-    el.textContent = built + (wordIdx < words.length ? '▊' : '');
-    // Scroll ke bawah
-    var cb = document.getElementById('chatBox');
-    if (cb) cb.scrollTop = cb.scrollHeight;
-    setTimeout(nextWord, speed);
+function stopStreaming() {
+  _streamingStopped = true;
+  if (_streamingRAF) { cancelAnimationFrame(_streamingRAF); _streamingRAF = null; }
+  if (_currentTypingInterval) { clearTimeout(_currentTypingInterval); _currentTypingInterval = null; }
+  var sendBtn = document.getElementById('sendBtn');
+  if (sendBtn) {
+    sendBtn.classList.remove('stop-mode');
+    sendBtn.onclick = sendMessage;
+    sendBtn.disabled = false;
+    sendBtn.innerHTML = '&#9658;';
   }
-  nextWord();
+  var input = document.getElementById('userInput');
+  if (input) input.disabled = false;
 }
 
-// Versi per karakter untuk response pendek
-function typewriterChar(el, text, onDone) {
-  var i = 0;
-  var delay = text.length > 200 ? 12 : text.length > 100 ? 18 : 25;
+// Fungsi utama -- smooth streaming mirip ChatGPT
+// Render per-token (3-5 karakter) pakai requestAnimationFrame
+function typewriterStream(el, fullText, onDone) {
+  _streamingStopped = false;
+
+  var sendBtn = document.getElementById('sendBtn');
+  // Stop button sudah diset di sendMessage saat user kirim -- tidak perlu set ulang
+
   el.innerHTML = '';
   el.classList.add('streaming');
 
-  function next() {
-    if (i >= text.length) {
-      el.innerHTML = renderMarkdown(text);
-      el.classList.remove('streaming');
-      if (onDone) onDone();
+  var tokens = tokenize(fullText); // split jadi array token natural
+  var idx = 0;
+  var built = '';
+  var cb = document.getElementById('chatBox');
+
+  // Kecepatan per token -- mirip ChatGPT ~30-50ms per token
+  // Untuk teks pendek sedikit lebih lambat agar terasa natural
+  var baseDelay = fullText.length < 80 ? 35 :
+                  fullText.length < 300 ? 22 :
+                  fullText.length < 800 ? 14 : 8;
+
+  // Render satu batch token per frame
+  var BATCH = fullText.length > 1000 ? 3 : fullText.length > 400 ? 2 : 1;
+
+  var lastRender = 0;
+
+  function frame(ts) {
+    if (_streamingStopped) {
+      finalize(true);
       return;
     }
-    el.textContent = text.slice(0, i + 1) + '▊';
-    i++;
-    var cb = document.getElementById('chatBox');
-    if (cb) cb.scrollTop = cb.scrollHeight;
-    setTimeout(next, delay);
+    if (idx >= tokens.length) {
+      finalize(false);
+      return;
+    }
+
+    // Rate-limit render -- jangan lebih dari 1 batch per baseDelay ms
+    if (ts - lastRender < baseDelay) {
+      _streamingRAF = requestAnimationFrame(frame);
+      return;
+    }
+    lastRender = ts;
+
+    // Tambah batch token
+    for (var b = 0; b < BATCH && idx < tokens.length; b++) {
+      built += tokens[idx];
+      idx++;
+    }
+
+    // Live render -- pakai textContent saat belum ada markdown,
+    // pakai renderMarkdown setelah ada tanda markdown
+    var hasMarkdown = built.indexOf('**') > -1 || built.indexOf('```') > -1 ||
+                      built.indexOf('# ') > -1 || built.indexOf('- ') > -1 ||
+                      built.indexOf('`') > -1;
+
+    if (hasMarkdown) {
+      el.innerHTML = renderMarkdown(built) + '<span class="stream-cursor">▊</span>';
+    } else {
+      el.textContent = built;
+      el.insertAdjacentHTML('beforeend', '<span class="stream-cursor">▊</span>');
+    }
+
+    // Auto scroll -- hanya kalau user di bawah (tidak scroll ke atas)
+    if (cb) {
+      var atBottom = cb.scrollHeight - cb.scrollTop - cb.clientHeight < 80;
+      if (atBottom) cb.scrollTop = cb.scrollHeight;
+    }
+
+    _streamingRAF = requestAnimationFrame(frame);
   }
-  next();
+
+  function finalize(stopped) {
+    el.innerHTML = renderMarkdown(stopped ? (built || fullText) : fullText);
+    el.classList.remove('streaming');
+    if (sendBtn) {
+      sendBtn.classList.remove('stop-mode');
+      sendBtn.onclick = sendMessage;
+      sendBtn.innerHTML = '&#9658;';
+    }
+    _streamingRAF = null;
+    if (onDone) onDone();
+  }
+
+  _streamingRAF = requestAnimationFrame(frame);
+}
+
+// Tokenize teks jadi array token natural (kata + spasi + punctuation)
+// mirip cara LLM output token
+function tokenize(text) {
+  var tokens = [];
+  var i = 0;
+  while (i < text.length) {
+    // Newline -- token sendiri
+    if (text[i] === '\n') {
+      tokens.push('\n');
+      i++;
+      continue;
+    }
+    // Spasi -- gabung dengan kata berikutnya (mirip tokenizer LLM)
+    if (text[i] === ' ') {
+      var tok = ' ';
+      i++;
+      // ambil sampai 4 char kata berikutnya
+      var wlen = 0;
+      while (i < text.length && text[i] !== ' ' && text[i] !== '\n' && wlen < 4) {
+        tok += text[i]; i++; wlen++;
+      }
+      tokens.push(tok);
+      continue;
+    }
+    // Kata biasa -- ambil sampai spasi/newline, maks 5 char
+    var word = '';
+    var wmax = 5;
+    while (i < text.length && text[i] !== ' ' && text[i] !== '\n' && wmax > 0) {
+      word += text[i]; i++; wmax--;
+    }
+    if (word) tokens.push(word);
+  }
+  return tokens;
+}
+
+// typewriterChar kept for compatibility -- pakai typewriterStream
+function typewriterChar(el, text, onDone) {
+  typewriterStream(el, text, onDone);
+}
+
+// ============================================================
+// DEVICE FINGERPRINT - ID unik persistent per device/browser
+// ============================================================
+function getDeviceId() {
+  // Coba ambil dari localStorage dulu
+  var stored = localStorage.getItem('cheeseDeviceId');
+  if (stored && stored.length >= 16) return stored;
+
+  // Buat dari kombinasi browser properties yang stabil
+  var canvas = document.createElement('canvas');
+  var ctx = canvas.getContext('2d');
+  ctx.textBaseline = 'top';
+  ctx.font = '14px Arial';
+  ctx.fillText('Cheese🧀', 2, 2);
+  var canvasData = canvas.toDataURL().slice(-20);
+
+  var raw = [
+    navigator.userAgent || '',
+    navigator.language || '',
+    screen.width + 'x' + screen.height,
+    screen.colorDepth || '',
+    new Date().getTimezoneOffset(),
+    navigator.hardwareConcurrency || '',
+    canvasData
+  ].join('|');
+
+  // Simple hash
+  var hash = 0;
+  for (var i = 0; i < raw.length; i++) {
+    hash = ((hash << 5) - hash) + raw.charCodeAt(i);
+    hash = hash & hash;
+  }
+  var deviceId = 'dev_' + Math.abs(hash).toString(36) + Date.now().toString(36);
+  localStorage.setItem('cheeseDeviceId', deviceId);
+  return deviceId;
+}
+
+function getOrCreateGuestEmail() {
+  // Prioritas 1: sudah ada di localStorage
+  var saved = localStorage.getItem('cheeseGuestEmail');
+  if (saved && /^guest_[a-z0-9]{6}@cheese\.id$/.test(saved)) return saved;
+
+  // Prioritas 2: buat dari device ID (deterministic - sama terus di device yang sama)
+  var deviceId = getDeviceId();
+  var hash = 0;
+  for (var i = 0; i < deviceId.length; i++) {
+    hash = ((hash << 5) - hash) + deviceId.charCodeAt(i);
+    hash = hash & hash;
+  }
+  var suffix = Math.abs(hash).toString(36).slice(0, 6).padEnd(6, '0');
+  var guestEmail = 'guest_' + suffix + '@cheese.id';
+  localStorage.setItem('cheeseGuestEmail', guestEmail);
+  return guestEmail;
+}
+
+
+// ============================================================
+// ADMIN PANEL - Hanya untuk Developer (K Studio)
+// ============================================================
+function renderAdminPanel() {
+  var adminSection = document.getElementById('adminPanelSection');
+  if (!adminSection) return;
+  // Tampilkan hanya kalau isDev
+  if (_premiumStatus && _premiumStatus.isDev) {
+    adminSection.style.display = 'block';
+  } else {
+    adminSection.style.display = 'none';
+  }
+}
+
+function adminSendNotif() {
+  var title = document.getElementById('adminNotifTitle').value.trim();
+  var msg = document.getElementById('adminNotifMsg').value.trim();
+  var type = document.getElementById('adminNotifType').value;
+  if (!title || !msg) { showToast('Isi title dan pesan!', 'err', 2000); return; }
+  var devCode = prompt('Masukkan Dev Code:');
+  if (!devCode) return;
+  fetch(BACKEND_URL + '/admin/notif', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({devCode: devCode, title: title, message: msg, type: type})
+  }).then(function(r){ return r.json(); }).then(function(data){
+    if (data.error) { showToast('❌ ' + data.error, 'err', 3000); return; }
+    showToast('✅ Notifikasi terkirim ke semua user!', 'success', 3000);
+    document.getElementById('adminNotifTitle').value = '';
+    document.getElementById('adminNotifMsg').value = '';
+  }).catch(function(){ showToast('❌ Koneksi gagal!', 'err', 2000); });
+}
+
+function adminDeleteNotif() {
+  var id = document.getElementById('adminNotifId').value.trim();
+  if (!id) { showToast('Isi ID notifikasi!', 'err', 2000); return; }
+  var devCode = prompt('Masukkan Dev Code:');
+  if (!devCode) return;
+  fetch(BACKEND_URL + '/admin/notif/delete', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({devCode: devCode, id: id})
+  }).then(function(r){ return r.json(); }).then(function(data){
+    if (data.error) { showToast('❌ ' + data.error, 'err', 3000); return; }
+    showToast('✅ Notifikasi dihapus!', 'success', 2500);
+  }).catch(function(){ showToast('❌ Koneksi gagal!', 'err', 2000); });
+}
+
+function adminResetUser() {
+  var email = document.getElementById('adminResetEmail').value.trim();
+  if (!email) { showToast('Isi email user!', 'err', 2000); return; }
+  var devCode = prompt('Masukkan Dev Code:');
+  if (!devCode) return;
+  if (!confirm('Reset limit user ' + email + '?')) return;
+  fetch(BACKEND_URL + '/admin/reset', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({devCode: devCode, email: email})
+  }).then(function(r){ return r.json(); }).then(function(data){
+    if (data.error) { showToast('❌ ' + data.error, 'err', 3000); return; }
+    showToast('✅ Limit user ' + email + ' berhasil direset!', 'success', 3000);
+    document.getElementById('adminResetEmail').value = '';
+  }).catch(function(){ showToast('❌ Koneksi gagal!', 'err', 2000); });
 }
 
 </script>
@@ -6095,5 +6698,13 @@ function typewriterChar(el, text, onDone) {
   </div>
 </div>
 
+<!-- Monetag Push Notification Service Worker -->
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+      .then(function(reg) { console.log('[Monetag] SW registered:', reg.scope); })
+      .catch(function(err) { console.warn('[Monetag] SW error:', err); });
+  }
+</script>
 </body>
   </html>
