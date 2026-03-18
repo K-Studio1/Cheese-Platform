@@ -8,7 +8,7 @@
 <meta charset="UTF-8"/>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://epic-tiger-11.k-studio.deno.net https://fonts.googleapis.com https://fonts.gstatic.com https://wttr.in https://image.pollinations.ai https://www.highperformanceformat.com https://5gvci.com data: blob:;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title>Lumina Nexus v3.4</title>
+<title>Lumina Nexus</title>
 <!-- Google Identity Services -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'; this.onload=null;"/>
@@ -1835,6 +1835,12 @@ function renderRiwayat() {
 // INIT -- load from localStorage
 // ============================================================
 (function init() {
+  // Cek Google OAuth redirect PERTAMA sebelum apapun
+  if (window.location.hash && window.location.hash.includes('access_token')) {
+    handleGoogleRedirect();
+    return; // Stop init normal, handleGoogleRedirect akan lanjutkan
+  }
+
   // Animate splash bar
   var splashBar = document.getElementById('splashBar');
   var splashEl = document.getElementById('splashScreen');
@@ -2334,95 +2340,170 @@ function doLogin() {
 var GOOGLE_CLIENT_ID = "769184556811-ordr2e6gaqalnkolan3slrvvaf3v5tgi.apps.googleusercontent.com";
 
 // ============================================================
-// GOOGLE OAUTH - GSI renderButton (paling reliable di mobile)
+// GOOGLE OAUTH - Redirect Flow (paling reliable di semua browser)
 // ============================================================
-var _googleReady = false;
-
-function initGoogleAuth() {
-  if (!window.google || !GOOGLE_CLIENT_ID) return;
-  try {
-    google.accounts.id.initialize({
-      client_id: GOOGLE_CLIENT_ID,
-      callback: handleGoogleCredential,
-      auto_select: false,
-      cancel_on_tap_outside: true,
-      use_fedcm_for_prompt: true,
-    });
-    _googleReady = true;
-    // Render tombol Google resmi di dalam custom button
-    renderGoogleButtons();
-  } catch(e) { console.warn('[Google] Init:', e.message); }
-}
-
-function renderGoogleButtons() {
-  if (!_googleReady) return;
-  // Render di container login
-  var loginContainer = document.getElementById('googleBtnLoginContainer');
-  if (loginContainer && !loginContainer.hasChildNodes()) {
-    google.accounts.id.renderButton(loginContainer, {
-      type: 'standard',
-      theme: 'filled_black',
-      size: 'large',
-      shape: 'pill',
-      width: loginContainer.offsetWidth || 300,
-      text: 'signin_with',
-      logo_alignment: 'left',
-    });
-  }
-  // Render di container register
-  var regContainer = document.getElementById('googleBtnRegisterContainer');
-  if (regContainer && !regContainer.hasChildNodes()) {
-    google.accounts.id.renderButton(regContainer, {
-      type: 'standard',
-      theme: 'filled_black',
-      size: 'large',
-      shape: 'pill',
-      width: regContainer.offsetWidth || 300,
-      text: 'signup_with',
-      logo_alignment: 'left',
-    });
-  }
-}
 
 function doGoogleLogin() {
-  if (!GOOGLE_CLIENT_ID) { showToast('Google login tidak tersedia.', 'err', 3000); return; }
-  if (!window.google || !_googleReady) {
-    showToast('Memuat Google... coba lagi sebentar.', 'info', 2000);
-    setTimeout(initGoogleAuth, 500);
+  if (!GOOGLE_CLIENT_ID) {
+    showToast('Google login tidak tersedia.', 'err', 3000);
     return;
   }
-  google.accounts.id.prompt(function(notification) {
-    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-      renderGoogleButtons();
-      showToast('Klik tombol "Lanjut dengan Google" di bawah.', 'info', 3000);
-    }
+  var state = Math.random().toString(36).slice(2);
+  localStorage.setItem('oauth_state', state);
+
+  var params = new URLSearchParams({
+    client_id: GOOGLE_CLIENT_ID,
+    redirect_uri: 'https://k-studio1.github.io/Lumina-Nexus/',
+    response_type: 'token',
+    scope: 'email profile openid',
+    state: state,
   });
+  var authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString();
+
+  // Coba popup dulu
+  var w = 480, h = 600;
+  var left = Math.round((screen.width - w) / 2);
+  var top = Math.round((screen.height - h) / 2);
+  var popup = window.open(authUrl, 'googleAuth',
+    'width='+w+',height='+h+',left='+left+',top='+top);
+
+  if (!popup || popup.closed) {
+    // Popup diblokir - pakai redirect biasa
+    window.location.href = authUrl;
+    return;
+  }
+
+  // Monitor popup
+  var iv = setInterval(function() {
+    try {
+      if (!popup || popup.closed) { clearInterval(iv); return; }
+      var href = popup.location.href;
+      if (href && href.indexOf('access_token') > -1) {
+        clearInterval(iv);
+        var hashStr = href.split('#')[1] || '';
+        popup.close();
+        var p2 = new URLSearchParams(hashStr);
+        var token = p2.get('access_token');
+        if (token) processGoogleToken(token);
+      }
+    } catch(e) { /* cross-origin, tunggu */ }
+  }, 300);
 }
 
-function handleGoogleCredential(response) {
-  var idToken = response.credential;
-  if (!idToken) { showAuthErr('loginError', 'Gagal mendapat token Google.'); return; }
-  document.querySelectorAll('.google-oauth-btn').forEach(function(b){ b.disabled = true; b.style.opacity = '0.6'; });
-  fetch(BACKEND_URL + '/auth/google', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ idToken: idToken })
-  }).then(function(r){ return r.json(); }).then(function(data) {
+function processGoogleToken(accessToken) {
+  document.querySelectorAll('.google-oauth-btn').forEach(function(b){
+    b.disabled = true; b.style.opacity = '0.6';
+  });
+  fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+    headers: { 'Authorization': 'Bearer ' + accessToken }
+  }).then(function(r){ return r.json(); })
+  .then(function(info) {
+    if (!info.email) throw new Error('No email');
+    return fetch(BACKEND_URL + '/auth/google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken: accessToken, accessToken: accessToken, email: info.email, name: info.name || info.email.split('@')[0] })
+    });
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data) {
     document.querySelectorAll('.google-oauth-btn').forEach(function(b){ b.disabled = false; b.style.opacity = '1'; });
     if (!data.success) { showAuthErr('loginError', data.error || 'Login Google gagal.'); return; }
     localStorage.setItem('luminaToken', data.token);
     localStorage.setItem('luminaCurrentUser', JSON.stringify(data.user));
+    currentUser = data.user;
     showToast(data.isNewUser ? 'Akun berhasil dibuat! 🎉' : 'Login berhasil! 👋', 'success', 2500);
-    setTimeout(function(){ initApp(data.token, data.user); }, 500);
-  }).catch(function() {
+    setTimeout(function(){ enterApp(); }, 400);
+  })
+  .catch(function(e) {
+    console.error('[Google]', e);
     document.querySelectorAll('.google-oauth-btn').forEach(function(b){ b.disabled = false; b.style.opacity = '1'; });
-    showAuthErr('loginError', 'Koneksi gagal. Cek internet kamu!');
+    showAuthErr('loginError', 'Login Google gagal. Coba lagi!');
   });
 }
 
-// Init setelah GSI load
+// Handle redirect callback dari Google
+function handleGoogleRedirect() {
+  var hash = window.location.hash;
+  if (!hash) return;
+  var params = new URLSearchParams(hash.slice(1));
+  var accessToken = params.get('access_token');
+  var state = params.get('state');
+  if (!accessToken) return;
+
+  // Validasi state
+  var savedState = localStorage.getItem('oauth_state');
+  if (savedState && state !== savedState) {
+    console.warn('[Google] State mismatch');
+    return;
+  }
+  localStorage.removeItem('oauth_state');
+
+  // Bersihkan hash dari URL
+  history.replaceState(null, '', window.location.pathname);
+
+  // Tampilkan splash dulu
+  var splashEl = document.getElementById('splashScreen');
+  if (splashEl) splashEl.style.display = 'flex';
+
+  // Tampilkan loading di tombol kalau ada
+  document.querySelectorAll('.google-oauth-btn').forEach(function(b){
+    b.disabled = true; b.style.opacity = '0.6';
+  });
+
+  // Ambil info user dari Google
+  fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+    headers: { 'Authorization': 'Bearer ' + accessToken }
+  }).then(function(r){ return r.json(); })
+  .then(function(info) {
+    if (!info.email) throw new Error('No email from Google');
+    return fetch(BACKEND_URL + '/auth/google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        idToken: accessToken,
+        accessToken: accessToken,
+        email: info.email,
+        name: info.name || info.email.split('@')[0]
+      })
+    });
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data) {
+    if (!data.success) {
+      if (splashEl) splashEl.style.display = 'none';
+      showAuthErr('loginError', data.error || 'Login Google gagal.');
+      return;
+    }
+    localStorage.setItem('luminaToken', data.token);
+    localStorage.setItem('luminaCurrentUser', JSON.stringify(data.user));
+    currentUser = data.user;
+    showToast(data.isNewUser ? 'Akun berhasil dibuat! 🎉' : 'Login berhasil! 👋', 'success', 2500);
+    // Hide splash dan masuk app
+    if (splashEl) {
+      splashEl.style.transition = 'opacity .3s';
+      splashEl.style.opacity = '0';
+      setTimeout(function(){ splashEl.style.display = 'none'; }, 300);
+    }
+    setTimeout(function(){ enterApp(); }, 400);
+  })
+  .catch(function(e) {
+    console.error('[Google]', e);
+    if (splashEl) splashEl.style.display = 'none';
+    document.querySelectorAll('.google-oauth-btn').forEach(function(b){
+      b.disabled = false; b.style.opacity = '1';
+    });
+    showAuthErr('loginError', 'Login Google gagal. Coba lagi!');
+  });
+}
+
+function initGoogleAuth() {
+  // Cek apakah ada redirect callback
+  handleGoogleRedirect();
+}
+
 window.addEventListener('load', function() {
-  setTimeout(initGoogleAuth, 800);
+  setTimeout(handleGoogleRedirect, 300);
 });
 
 
@@ -6971,4 +7052,4 @@ function adminResetUser() {
 
 
 </body>
-          </html>
+        </html>
