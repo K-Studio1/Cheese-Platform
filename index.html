@@ -8,7 +8,15 @@
 <meta charset="UTF-8"/>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://cheese-backend.k-studio1.deno.net https://www.googleapis.com https://accounts.google.com https://fonts.googleapis.com https://fonts.gstatic.com https://wttr.in https://image.pollinations.ai https://www.highperformanceformat.com https://5gvci.com data: blob:;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#0a0a0a"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Lumina Nexus"/>
+<link rel="manifest" href="manifest.json"/>
 <title>Lumina Nexus</title>
+<!-- jsPDF untuk export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <!-- Google Identity Services -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'; this.onload=null;"/>
@@ -127,11 +135,6 @@ body.ai-active .topbar{display:none !important;}
 #chatBox::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px;}
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:60px 20px;text-align:center;height:100%;}
 .empty-emoji{font-size:2.2rem;animation:float 4s ease-in-out infinite;opacity:0.6;}
-.sug-wrap{padding:8px 16px 0;border-top:none;background:transparent;}
-.sug-label{font-size:.62rem;color:rgba(255,255,255,0.25);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase;}
-.sug-list{display:flex;flex-wrap:wrap;gap:6px;}
-.sug-btn{font-size:.73rem;padding:5px 11px;border:1px solid var(--border);border-radius:20px;background:var(--surface2);color:var(--text);cursor:pointer;font-family:"DM Sans",sans-serif;transition:.2s;}
-.sug-btn:hover{border-color:rgba(255,255,255,0.2);color:#ececec;background:rgba(255,255,255,0.07);}
 .msg{max-width:80%;padding:12px 16px;border-radius:18px;font-size:.9rem;line-height:1.7;word-break:break-word;animation:msgIn .25s ease;margin-bottom:16px;}
 .msg{animation:msgIn .25s cubic-bezier(.2,.8,.3,1) both;}
 @keyframes msgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
@@ -307,8 +310,6 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
 
 
     /* TOAST */
-    .qp-btn{padding:5px 10px;border-radius:20px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:"DM Sans",sans-serif;font-weight:600;font-size:.7rem;cursor:pointer;white-space:nowrap;transition:.2s;flex-shrink:0;}
-    .qp-btn:hover{border-color:rgba(232,184,75,0.18);color:var(--accent);}
     .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface3);border:1px solid var(--border);border-radius:12px;padding:10px 18px;font-size:.8rem;font-weight:600;color:var(--text);z-index:9998;opacity:0;transition:all .3s ease;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center;}
     .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
     .toast.success{border-color:rgba(0,229,160,0.3);color:var(--green);}
@@ -627,9 +628,9 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
       </div>
       <button class="auth-btn" onclick="doLogin()">Masuk</button>
       <div class="auth-divider">atau</div>
-      <!-- GSI renderButton akan inject di sini -->
+      
       <!-- Fallback button kalau GSI belum load -->
-      <button class="google-oauth-btn" onclick="doGoogleLogin()" id="googleBtnLoginBtn"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Lanjut dengan Google</button>
+      <button class="google-oauth-btn" onclick="doGoogleLogin()" id="googleBtnLoginBtn"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Masuk dengan Google</button>
       <div class="auth-switch">
         Belum punya akun?<button onclick="switchAuthTab('register')">Daftar sekarang</button>
       </div>
@@ -658,8 +659,8 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
       </div>
       <button class="auth-btn" onclick="doRegister()">Buat Akun</button>
       <div class="auth-divider">atau</div>
-      <!-- GSI renderButton akan inject di sini -->
-      <button class="google-oauth-btn" onclick="doGoogleLogin()" id="googleBtnRegisterBtn"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Daftar dengan Google</button>
+      
+      <button class="google-oauth-btn" onclick="doGoogleLogin()" id="googleBtnRegisterBtn"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Masuk dengan Google</button>
       <div class="auth-switch">
         Sudah punya akun?<button onclick="switchAuthTab('login')">Masuk di sini</button>
       </div>
@@ -799,7 +800,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
           </div>
           <div style="background:var(--surface2);border-radius:12px;padding:10px 12px;">
             <div style="font-size:.68rem;color:var(--muted);margin-bottom:3px;">Status</div>
-            <div style="font-family:Outfit,sans-serif;font-weight:900;font-size:1.1rem;color:var(--green);" id="dashStatus">Online</div>
+            <div style="font-family:Outfit,sans-serif;font-weight:900;font-size:1.1rem;color:var(--muted);" id="dashStatus">Memuat...</div>
             <div style="font-size:.62rem;color:var(--muted);">Backend</div>
           </div>
         </div>
@@ -807,7 +808,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
       </div>
 
       <!-- Adsterra Banner 320x50 -->
-      <div style="display:flex;justify-content:center;margin:8px 0;">
+      <div style="display:flex;justify-content:center;margin:12px 0;">
         <script>
           atOptions = {
             'key' : '7d20b07b3a5cb7be15d88a899208bbb8',
@@ -868,21 +869,11 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
           <div class="empty-state" id="emptyState">
             <div class="empty-emoji">✦</div>
             <div style="font-family:Outfit,sans-serif;font-weight:700;font-size:.98rem;">Lumina AI siap!</div>
-            <div style="font-size:.79rem;color:var(--muted);max-width:230px;line-height:1.5;">Ketik pertanyaan atau pilih topik di bawah.</div>
+            <div style="font-size:.79rem;color:var(--muted);max-width:230px;line-height:1.5;">Ketik pertanyaan apa saja untuk memulai.</div>
             <div style="font-size:.68rem;color:var(--muted);max-width:230px;margin-top:8px;padding:6px 10px;background:var(--surface2);border-radius:8px;line-height:1.4;">⚠️ Lumina AI dapat melakukan kesalahan. Verifikasi informasi penting ke sumber terpercaya.</div>
           </div>
         </div>
-        <div class="sug-wrap" id="sugWrap">
-          <div class="sug-label">Topik cepat</div>
-          <div class="sug-list">
-            <button class="sug-btn" onclick="quickAsk('Apa itu kalori defisit?')">💪 Kalori defisit</button>
-            <button class="sug-btn" onclick="quickAsk('Tips rank up Mobile Legends')">🎮 Tips ML</button>
-            <button class="sug-btn" onclick="quickAsk('Situasi politik Indonesia 2026')">🗳️ Politik</button>
-            <button class="sug-btn" onclick="quickAsk('Ceritain joke lucu dong')">😂 Joke</button>
-            <button class="sug-btn" onclick="quickAsk('Cara belajar coding untuk pemula')">💻 Coding</button>
-            <button class="sug-btn" onclick="quickAsk('Tips investasi untuk pemula')">💰 Investasi</button>
-          </div>
-        </div>
+
         <button id="scrollBtn" onclick="scrollToBottom()" style="display:none;position:absolute;bottom:86px;left:50%;transform:translateX(-50%);width:36px;height:36px;border-radius:50%;border:none;background:rgba(60,60,60,0.95);color:rgba(255,255,255,0.85);cursor:pointer;z-index:50;box-shadow:0 2px 10px rgba(0,0,0,.6);align-items:center;justify-content:center;backdrop-filter:blur(10px);transition:all .2s;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
         </button>
@@ -928,6 +919,19 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
           </button>
         </div>
         </div>
+      </div>
+      <!-- Adsterra Banner 468x60 -->
+      <div style="display:flex;justify-content:center;margin:16px 0 8px;overflow:hidden;">
+        <script>
+          atOptions = {
+            'key' : 'fd90c7e2d436e66e7cbc29f451a2ec63',
+            'format' : 'iframe',
+            'height' : 60,
+            'width' : 468,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highperformanceformat.com/fd90c7e2d436e66e7cbc29f451a2ec63/invoke.js"></script>
       </div>
     </div>
 
@@ -1131,7 +1135,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
 
 
 
-      <button class="logout-btn" onclick="doLogout()">🚪 Keluar dari Akun</button>
+      <button class="logout-btn" onclick="doLogout()">Logout</button>
     </div>
 
     <!-- MODAL: GANTI PASSWORD -->
@@ -1234,7 +1238,7 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
         <div class="settings-card-sub">Suara dan nada utama Lumina AI dalam percakapan</div>
         <div class="style-grid" id="styleGridPers"></div>
         <div style="margin-top:14px;">
-          <div style="font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px;">Karakteristik Tambahan</div>
+
           <div style="display:flex;flex-direction:column;gap:10px;">
             <div class="toggle-row">
               <div>
@@ -1332,22 +1336,11 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
       <!-- API KEY -->
       
 
-      <!-- AI KARAKTERISTIK -->
-      <div class="settings-card">
-        <div class="settings-card-title">🤖 Karakteristik Lumina AI</div>
-        <div class="settings-card-sub">Atur gaya bicara AI sesuai keinginan Anda</div>
-        <div style="margin-bottom:14px;">
-          <div style="font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px;">Nama AI</div>
-          <input type="text" class="settings-input" id="aiNicknameInput" placeholder="Lumina AI v3.4" maxlength="20" oninput="saveAISettings()"/>
-        </div>
-        <div style="margin-bottom:14px;">
-          <div style="font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px;">Gaya Bicara</div>
-          <div class="style-grid" id="styleGrid"></div>
-        </div>
-        <div class="toggle-row">
-          <span class="toggle-label">Pakai Emoji di Jawaban</span>
-          <div class="toggle-wrap on" id="emojiToggle" onclick="toggleAIEmoji()"><div class="toggle-dot"></div></div>
-        </div>
+      <!-- AI KARAKTERISTIK (hidden, fungsi tetap jalan via personalisasi) -->
+      <div style="display:none;">
+        <input type="text" id="aiNicknameInput"/>
+        <div id="styleGrid"></div>
+        <div id="emojiToggle" class="toggle-wrap on"><div class="toggle-dot"></div></div>
       </div>
 
       <!-- WARNA AKSEN -->
@@ -1392,8 +1385,8 @@ canvas{border:2px solid var(--border);border-radius:12px;background:#0a0f15;disp
       <div class="settings-card">
         <div class="settings-card-title">🔒 Data & Privasi</div>
         <div style="display:flex;flex-direction:column;gap:8px;">
-          <button onclick="exportChat()" style="width:100%;padding:11px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text);font-family:"DM Sans",sans-serif;font-weight:600;font-size:.83rem;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:.2s;">
-            <span>📤</span> Export Chat ke .txt
+          <button onclick="exportChatPDF()" style="width:100%;padding:11px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text);font-family:"DM Sans",sans-serif;font-weight:600;font-size:.83rem;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:.2s;">
+            <span>📤</span> Export Chat ke PDF
           </button>
           <button onclick="clearAllData()" style="width:100%;padding:11px;border-radius:12px;border:1.5px solid rgba(255,71,87,0.25);background:rgba(255,71,87,0.05);color:var(--red);font-family:"DM Sans",sans-serif;font-weight:600;font-size:.83rem;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:.2s;">
             <span>🗑️</span> Reset Semua Data
@@ -2285,6 +2278,211 @@ function stopVoiceInput() {
   if (btn) btn.classList.remove('recording');
 }
 
+
+// ============================================================
+// i18n - Auto detect browser language
+// ============================================================
+var LANG = (navigator.language || navigator.userLanguage || 'id').toLowerCase().startsWith('id') ? 'id' : 'en';
+localStorage.setItem('luminaLang', LANG);
+
+var T = {
+  id: {
+    chat_placeholder: 'Ketik pesan...',
+    send: 'Kirim',
+    thinking: 'Lumina sedang berpikir...',
+    limit_exceeded: 'Limit habis!',
+    login_success: 'Login berhasil! 👋',
+    register_success: 'Akun berhasil dibuat! 🎉',
+    logout_confirm: 'Yakin mau logout?',
+    copy_success: 'Disalin!',
+    voice_listening: 'Mendengarkan...',
+    voice_not_supported: 'Browser tidak support voice input. Coba Chrome!',
+    error_connection: 'Gagal terhubung ke server. Cek koneksi internet kamu!',
+    export_success: 'Chat berhasil diekspor!',
+    notif_enabled: 'Notifikasi diaktifkan! ✅',
+    notif_denied: 'Izin notifikasi ditolak.',
+    welcome: 'Halo',
+    settings: 'Pengaturan',
+    profile: 'Profil',
+    home: 'Home',
+    game: 'Game',
+    topup: 'Top Up',
+    podcast: 'Podcast',
+  },
+  en: {
+    chat_placeholder: 'Type a message...',
+    send: 'Send',
+    thinking: 'Lumina is thinking...',
+    limit_exceeded: 'Limit reached!',
+    login_success: 'Login successful! 👋',
+    register_success: 'Account created! 🎉',
+    logout_confirm: 'Sure you want to logout?',
+    copy_success: 'Copied!',
+    voice_listening: 'Listening...',
+    voice_not_supported: "Browser doesn't support voice input. Try Chrome!",
+    error_connection: 'Failed to connect to server. Check your internet!',
+    export_success: 'Chat exported successfully!',
+    notif_enabled: 'Notifications enabled! ✅',
+    notif_denied: 'Notification permission denied.',
+    welcome: 'Hello',
+    settings: 'Settings',
+    profile: 'Profile',
+    home: 'Home',
+    game: 'Game',
+    topup: 'Top Up',
+    podcast: 'Podcast',
+  }
+};
+
+function t(key) {
+  return (T[LANG] && T[LANG][key]) || (T['id'][key]) || key;
+}
+
+// Apply translations ke elemen yang punya data-i18n
+function applyI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.placeholder = t(key);
+    } else {
+      el.textContent = t(key);
+    }
+  });
+}
+
+
+// ============================================================
+// EXPORT CHAT ke PDF
+// ============================================================
+function exportChatPDF() {
+  if (!chatHistory || chatHistory.length === 0) {
+    showToast('Belum ada chat untuk diekspor!', 'err', 2000);
+    return;
+  }
+  try {
+    var doc = new window.jspdf.jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+    var pageW = doc.internal.pageSize.getWidth();
+    var margin = 15;
+    var maxW = pageW - margin * 2;
+    var y = 20;
+
+    // Header
+    doc.setFillColor(10, 10, 10);
+    doc.rect(0, 0, pageW, 30, 'F');
+    doc.setTextColor(232, 184, 75);
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Lumina Nexus', margin, 14);
+    doc.setFontSize(9);
+    doc.setTextColor(150, 150, 150);
+    doc.text('Chat Export — ' + new Date().toLocaleDateString('id-ID', { dateStyle: 'full' }), margin, 22);
+    y = 38;
+
+    doc.setFontSize(10);
+    chatHistory.forEach(function(msg) {
+      if (!msg.content) return;
+      var isUser = msg.role === 'user';
+      var label = isUser ? (currentUser ? currentUser.name : 'Kamu') : 'Lumina AI';
+      var content = String(msg.content).replace(/```[\s\S]*?```/g, '[kode]').trim();
+
+      // Label
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(isUser ? 232 : 100, isUser ? 184 : 200, isUser ? 75 : 255);
+      doc.text(label + ':', margin, y);
+      y += 5;
+
+      // Content
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(40, 40, 40);
+      var lines = doc.splitTextToSize(content, maxW);
+      lines.forEach(function(line) {
+        if (y > 275) { doc.addPage(); y = 20; }
+        doc.text(line, margin, y);
+        y += 5;
+      });
+      y += 4;
+
+      if (y > 275) { doc.addPage(); y = 20; }
+    });
+
+    // Footer
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text('Generated by Lumina Nexus — k-studio1.github.io/Lumina-Nexus', margin, 290);
+
+    doc.save('lumina-chat-' + Date.now() + '.pdf');
+    showToast(t('export_success'), 'success', 2500);
+  } catch(e) {
+    console.error('[Export PDF]', e);
+    // Fallback ke TXT
+    exportChat();
+    showToast('PDF gagal, export ke TXT sebagai gantinya.', 'info', 3000);
+  }
+}
+
+
+// ============================================================
+// PUSH NOTIFICATION - Remind user chat harian
+// ============================================================
+function initPushNotif() {
+  if (!('Notification' in window)) return;
+  // Cek apakah sudah diminta sebelumnya
+  if (localStorage.getItem('luminaNotifAsked')) return;
+  // Tanya setelah user aktif 30 detik
+  setTimeout(function() {
+    if (Notification.permission === 'default') {
+      showNotifPrompt();
+    }
+  }, 30000);
+}
+
+function showNotifPrompt() {
+  // Tampilkan custom prompt (lebih friendly dari browser default)
+  var toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;border:1px solid rgba(232,184,75,0.2);border-radius:16px;padding:16px 20px;z-index:9999;max-width:320px;width:90%;box-shadow:0 4px 20px rgba(0,0,0,0.5);';
+  var notifBtnHtml = '<button style="flex:1;padding:8px;border-radius:10px;border:none;background:#e8b84b;color:#070a0f;font-weight:700;font-size:.8rem;cursor:pointer;" id="notifYesBtn">Aktifkan</button>';
+  var notifNoBtn = '<button style="flex:1;padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:none;color:#9ca3af;font-size:.8rem;cursor:pointer;" id="notifNoBtn">Nanti</button>';
+  toast.innerHTML = '<div style="font-family:Outfit,sans-serif;font-weight:700;font-size:.9rem;color:#e8b84b;margin-bottom:6px;">🔔 Aktifkan Notifikasi?</div><div style="font-size:.78rem;color:#9ca3af;margin-bottom:12px;">Dapatkan reminder chat harian & info fitur baru!</div><div style="display:flex;gap:8px;">' + notifBtnHtml + notifNoBtn + '</div>';
+  document.body.appendChild(toast);
+  document.getElementById('notifYesBtn').onclick = function(){ requestNotifPermission(toast); };
+  document.getElementById('notifNoBtn').onclick = function(){ toast.remove(); localStorage.setItem('luminaNotifAsked','1'); };
+  setTimeout(function() { if (toast.parentNode) toast.remove(); }, 15000);
+}
+
+function requestNotifPermission(toastEl) {
+  if (toastEl) toastEl.remove();
+  localStorage.setItem('luminaNotifAsked', '1');
+  Notification.requestPermission().then(function(perm) {
+    if (perm === 'granted') {
+      showToast(t('notif_enabled'), 'success', 2500);
+      scheduleNotif();
+    } else {
+      showToast(t('notif_denied'), 'err', 2000);
+    }
+  });
+}
+
+function scheduleNotif() {
+  // Kirim notifikasi 24 jam setelah aktif (kalau user belum buka app)
+  if (Notification.permission !== 'granted') return;
+  var lastNotif = parseInt(localStorage.getItem('luminaLastNotif') || '0');
+  var now = Date.now();
+  if (now - lastNotif < 20 * 60 * 60 * 1000) return; // Min 20 jam sekali
+  localStorage.setItem('luminaLastNotif', String(now));
+  setTimeout(function() {
+    // Cek apakah user sedang aktif
+    if (document.visibilityState === 'hidden') {
+      new Notification('Lumina Nexus 🌟', {
+        body: 'Halo! Kamu punya pesan baru dan limit chat sudah reset. Yuk chat lagi! 🤖',
+        icon: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"%3E%3Ccircle cx="24" cy="24" r="22" fill="%230a0a0a"/%3E%3Ccircle cx="24" cy="24" r="6" fill="%23e8b84b"/%3E%3C/svg%3E',
+        badge: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"%3E%3Ccircle cx="24" cy="24" r="22" fill="%23e8b84b"/%3E%3C/svg%3E',
+        tag: 'lumina-daily',
+        renotify: false,
+      });
+    }
+  }, 3000);
+}
+
 // Helper: return Authorization header dengan token
 function getAuthHeaders(extra) {
   var token = localStorage.getItem('luminaToken') || '';
@@ -2338,48 +2536,47 @@ var GOOGLE_CLIENT_ID = "769184556811-ordr2e6gaqalnkolan3slrvvaf3v5tgi.apps.googl
 function initGoogleAuth() {
   if (!window.google || !window.google.accounts) return;
   try {
+    // Init GSI untuk One Tap callback saja - tidak render button (pakai custom button)
     google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
       callback: onGoogleSignIn,
       auto_select: false,
       cancel_on_tap_outside: true,
     });
-    // Render tombol di kedua container
-    ['googleBtnLoginBtn','googleBtnRegisterBtn'].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (!el) return;
-      // Wrap dengan div untuk GSI renderButton
-      var wrap = document.createElement('div');
-      wrap.id = id + '_gsi';
-      el.parentNode.insertBefore(wrap, el);
-      el.style.display = 'none';
-      google.accounts.id.renderButton(wrap, {
-        type: 'standard',
-        theme: 'filled_black',
-        size: 'large',
-        shape: 'pill',
-        width: el.offsetWidth || 320,
-        text: id.includes('Register') ? 'signup_with' : 'signin_with',
-        logo_alignment: 'left',
-      });
-    });
   } catch(e) {
     console.warn('[Google]', e.message);
-    // GSI gagal - tampilkan tombol custom fallback
-    ['googleBtnLoginBtn','googleBtnRegisterBtn'].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) el.style.display = 'flex';
-    });
   }
 }
 
 function doGoogleLogin() {
-  // Fallback kalau GSI renderButton tidak jalan
-  if (!window.google) {
-    showToast('Google belum siap, coba lagi.', 'err', 2000);
+  if (!window.google || !window.google.accounts) {
+    showToast('Google belum siap, coba lagi sebentar.', 'err', 2000);
     return;
   }
-  google.accounts.id.prompt();
+  // Tampilkan loading state
+  document.querySelectorAll('.google-oauth-btn').forEach(function(b){
+    b.disabled = true; b.style.opacity = '0.6';
+    b.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Memuat...';
+  });
+  // Trigger Google One Tap
+  google.accounts.id.prompt(function(notification) {
+    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+      // One Tap tidak muncul - reset button
+      document.querySelectorAll('.google-oauth-btn').forEach(function(b){
+        b.disabled = false; b.style.opacity = '1';
+      });
+      initGoogleBtns();
+      showToast('Coba lagi atau gunakan email/password.', 'err', 3000);
+    }
+  });
+}
+
+function initGoogleBtns() {
+  var GSVG = '<svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>';
+  var loginBtn = document.getElementById('googleBtnLoginBtn');
+  if (loginBtn) loginBtn.innerHTML = GSVG + ' Lanjut dengan Google';
+  var regBtn = document.getElementById('googleBtnRegisterBtn');
+  if (regBtn) regBtn.innerHTML = GSVG + ' Daftar dengan Google';
 }
 
 function onGoogleSignIn(response) {
@@ -2404,7 +2601,7 @@ function onGoogleSignIn(response) {
     localStorage.setItem('luminaCurrentUser', JSON.stringify(data.user));
     currentUser = data.user;
     showToast(data.isNewUser ? 'Akun dibuat! 🎉' : 'Login berhasil! 👋', 'success', 2500);
-    setTimeout(function(){ enterApp(); }, 400);
+    setTimeout(function(){ enterApp(); }, 200);
   }).catch(function() {
     showAuthErr('loginError', 'Koneksi gagal. Coba lagi!');
   });
@@ -2438,7 +2635,7 @@ function doLogoutAll() {
   showToast('✅ Berhasil logout dari semua perangkat!', 'success', 2500);
 }
 
-function enterApp() { fetchMyStatus(); setInterval(fetchMyStatus, 2*60*1000); setTimeout(renderAdminPanel, 2000);
+function enterApp() { fetchMyStatus(); setInterval(fetchMyStatus, 2*60*1000); setTimeout(renderAdminPanel, 500); setTimeout(initPushNotif, 3000); setTimeout(scheduleNotif, 5000);
   document.getElementById('authScreen').style.display = 'none';
   document.getElementById('appScreen').style.display = 'block';
   var init = currentUser.name.charAt(0).toUpperCase();
@@ -2898,7 +3095,7 @@ function clearChat() {
   chatHistory = [];
   currentMsgs = [];
   localStorage.removeItem('luminaChatHistory');
-  document.getElementById('chatBox').innerHTML = '<div class="empty-state" id="emptyState"><div class="empty-emoji">✦</div><div style="font-family:Outfit,sans-serif;font-weight:700;font-size:.98rem;">Lumina AI siap!</div><div style="font-size:.79rem;color:var(--muted);max-width:230px;line-height:1.5;">Ketik pertanyaan atau pilih topik di bawah.</div></div>';
+  document.getElementById('chatBox').innerHTML = '<div class="empty-state" id="emptyState"><div class="empty-emoji">✦</div><div style="font-family:Outfit,sans-serif;font-weight:700;font-size:.98rem;">Lumina AI siap!</div><div style="font-size:.79rem;color:var(--muted);max-width:230px;line-height:1.5;">Ketik pertanyaan apa saja untuk memulai.</div></div>';
   var sw = document.getElementById('sugWrap'); if(sw) sw.style.display='block';
 }
 
@@ -2935,10 +3132,7 @@ function loadChatHistory() {
   } catch(e){}
 }
 
-function quickAsk(t) {
-  document.getElementById('userInput').value = t;
-  sendMessage();
-}
+
 
 function getTodayStr() {
   var now = new Date();
@@ -3688,7 +3882,7 @@ function pingBackend() {
   var statusEl = document.getElementById('dashStatus');
   fetch(BACKEND_URL + '/ping').then(function(r){ return r.json(); }).then(function(data){
     if(statusEl) {
-      statusEl.textContent = data.status === 'ok' ? 'Online v' + (data.version || '3.7') : 'Error';
+      statusEl.textContent = data.status === 'ok' ? 'Online v' + (data.version || '3.12') : 'Error';
       statusEl.style.color = data.status === 'ok' ? 'var(--green)' : '#ff4444';
     }
   }).catch(function(){
@@ -6961,4 +7155,4 @@ function adminResetUser() {
 
 
 </body>
-                                 </html>
+    </html>
