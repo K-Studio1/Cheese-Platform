@@ -1,46 +1,40 @@
 {
   "name": "Lumina Nexus",
   "short_name": "Lumina",
-  "description": "Platform AI generasi berikutnya — Illuminate Your Mind",
-  "start_url": "/Lumina-Nexus/",
-  "scope": "/Lumina-Nexus/",
+  "description": "Platform AI generasi berikutnya — Chat AI, Games, Top Up | by K Studio",
+  "start_url": "/Lumina-Platform/",
+  "scope": "/Lumina-Platform/",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
   "background_color": "#0a0a0a",
   "theme_color": "#0a0a0a",
   "lang": "id",
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Ccircle cx='96' cy='96' r='90' fill='%230a0a0a' stroke='%23e8b84b' stroke-width='4'/%3E%3Ccircle cx='96' cy='96' r='24' fill='%23e8b84b'/%3E%3Cline x1='96' y1='20' x2='96' y2='72' stroke='%23e8b84b' stroke-width='6' stroke-linecap='round'/%3E%3Cline x1='96' y1='120' x2='96' y2='172' stroke='%23e8b84b' stroke-width='6' stroke-linecap='round'/%3E%3Cline x1='20' y1='96' x2='72' y2='96' stroke='%23e8b84b' stroke-width='6' stroke-linecap='round'/%3E%3Cline x1='120' y1='96' x2='172' y2='96' stroke='%23e8b84b' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E",
-      "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='240' fill='%230a0a0a' stroke='%23e8b84b' stroke-width='8'/%3E%3Ccircle cx='256' cy='256' r='64' fill='%23e8b84b'/%3E%3Cline x1='256' y1='48' x2='256' y2='192' stroke='%23e8b84b' stroke-width='16' stroke-linecap='round'/%3E%3Cline x1='256' y1='320' x2='256' y2='464' stroke='%23e8b84b' stroke-width='16' stroke-linecap='round'/%3E%3Cline x1='48' y1='256' x2='192' y2='256' stroke='%23e8b84b' stroke-width='16' stroke-linecap='round'/%3E%3Cline x1='320' y1='256' x2='464' y2='256' stroke='%23e8b84b' stroke-width='16' stroke-linecap='round'/%3E%3C/svg%3E",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%230a0a0a'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23fde68a'/%3E%3Cstop offset='50%25' stop-color='%23e8b84b'/%3E%3Cstop offset='100%25' stop-color='%23c8941f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon points='256,48 432,148 432,348 256,448 80,348 80,148' fill='none' stroke='url(%23g)' stroke-width='12'/%3E%3Cline x1='256' y1='48' x2='80' y2='348' stroke='url(%23g)' stroke-width='4' opacity='0.5'/%3E%3Cline x1='432' y1='148' x2='80' y2='348' stroke='url(%23g)' stroke-width='4' opacity='0.5'/%3E%3Cline x1='256' y1='448' x2='432' y2='148' stroke='url(%23g)' stroke-width='4' opacity='0.5'/%3E%3Ccircle cx='256' cy='48' r='10' fill='%23e8b84b'/%3E%3Ccircle cx='432' cy='148' r='10' fill='%23e8b84b'/%3E%3Ccircle cx='432' cy='348' r='10' fill='%23e8b84b'/%3E%3Ccircle cx='256' cy='448' r='10' fill='%23e8b84b'/%3E%3Ccircle cx='80' cy='348' r='10' fill='%23e8b84b'/%3E%3Ccircle cx='80' cy='148' r='10' fill='%23e8b84b'/%3E%3Crect x='140' y='168' width='26' height='136' fill='url(%23g)'/%3E%3Crect x='140' y='278' width='82' height='26' fill='url(%23g)'/%3E%3Crect x='256' y='168' width='26' height='136' fill='url(%23g)'/%3E%3Crect x='352' y='168' width='26' height='136' fill='url(%23g)'/%3E%3Cpolygon points='256,168 282,168 378,304 352,304' fill='url(%23g)'/%3E%3C/svg%3E",
       "sizes": "512x512",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='30' fill='%230a0a0a'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23fde68a'/%3E%3Cstop offset='100%25' stop-color='%23c8941f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon points='96,18 162,56 162,130 96,168 30,130 30,56' fill='none' stroke='url(%23g)' stroke-width='5'/%3E%3Crect x='52' y='63' width='10' height='51' fill='url(%23g)'/%3E%3Crect x='52' y='104' width='31' height='10' fill='url(%23g)'/%3E%3Crect x='96' y='63' width='10' height='51' fill='url(%23g)'/%3E%3Crect x='132' y='63' width='10' height='51' fill='url(%23g)'/%3E%3Cpolygon points='96,63 106,63 142,114 132,114' fill='url(%23g)'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
     }
   ],
   "shortcuts": [
     {
       "name": "Chat AI",
       "short_name": "Chat",
-      "description": "Langsung ke Chat AI",
-      "url": "/Lumina-Nexus/#chat",
-      "icons": [{ "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Ccircle cx='48' cy='48' r='46' fill='%230a0a0a'/%3E%3Ctext x='48' y='62' text-anchor='middle' font-size='40'%3E🤖%3C/text%3E%3C/svg%3E", "sizes": "96x96" }]
+      "url": "/Lumina-Platform/#ai"
     },
     {
-      "name": "Games",
-      "short_name": "Game",
-      "description": "Mini Games",
-      "url": "/Lumina-Nexus/#game",
-      "icons": [{ "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Ccircle cx='48' cy='48' r='46' fill='%230a0a0a'/%3E%3Ctext x='48' y='62' text-anchor='middle' font-size='40'%3E🎮%3C/text%3E%3C/svg%3E", "sizes": "96x96" }]
+      "name": "Dusk Arena",
+      "short_name": "Battle",
+      "url": "/Lumina-Platform/#game"
     }
   ],
   "categories": ["productivity", "utilities", "entertainment"],
-  "screenshots": [],
   "prefer_related_applications": false
 }
-
