@@ -1,7 +1,7 @@
 {
   "name": "Lumina Nexus",
   "short_name": "Lumina",
-  "description": "Platform AI generasi berikutnya — Chat AI, Games, Top Up | by K Studio",
+  "description": "Platform AI generasi berikutnya — Chat AI, LuminaX Coding, Games, Top Up | by Kira",
   "start_url": "/Lumina-Platform/",
   "scope": "/Lumina-Platform/",
   "display": "standalone",
@@ -30,9 +30,19 @@
       "url": "/Lumina-Platform/#ai"
     },
     {
-      "name": "Dusk Arena",
+      "name": "LuminaX Coding",
+      "short_name": "LuminaX",
+      "url": "/Lumina-Platform/#ai"
+    },
+    {
+      "name": "Shadow Battle",
       "short_name": "Battle",
       "url": "/Lumina-Platform/#game"
+    },
+    {
+      "name": "Store",
+      "short_name": "Store",
+      "url": "/Lumina-Platform/#topup"
     }
   ],
   "categories": ["productivity", "utilities", "entertainment"],
