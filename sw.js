@@ -1,9 +1,9 @@
 // ============================================================
-// Lumina Nexus Service Worker v3.4-9
+// Lumina Nexus Service Worker v3.4-17
 // by Kira · Updated: logo baru, cache version bump
 // ============================================================
 
-var CACHE_NAME = 'lumina-v3-4-16';
+var CACHE_NAME = 'lumina-v3-4-17';
 var CDN_CACHE = 'lumina-cdn-v2';
 
 // Asset yang di-cache saat install
